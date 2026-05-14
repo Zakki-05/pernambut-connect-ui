@@ -15,8 +15,34 @@ import {
   X,
   Twitter,
   Facebook,
-  Instagram
+  Instagram,
+  MapPin,
+  Map,
+  Info
 } from 'lucide-react';
+
+const masjidsList = [
+  { id: 1, name: "Chowk Masjid", location: "Central Pernambut", description: "One of the oldest and most recognized masjids in Pernambut, serving as a major center for daily prayers and community gatherings.", image: "https://images.unsplash.com/photo-1564683214965-3619addd900d?q=80&w=600&auto=format&fit=crop" },
+  { id: 2, name: "Jamiya Masjid", location: "Pernambut Town Center", description: "A large congregational masjid widely attended for Jummah prayers and important Islamic gatherings.", image: "https://images.unsplash.com/photo-1542831371-29b0f74f9713?q=80&w=600&auto=format&fit=crop" },
+  { id: 3, name: "Mothi Masjid", location: "Tippusa Street, Pernambut", description: "A well-known neighborhood masjid recognized for its peaceful environment and active local participation.", image: "https://images.unsplash.com/photo-1585036156171-384164a8c675?q=80&w=600&auto=format&fit=crop" },
+  { id: 4, name: "Nawab Daryakhan Masjid", location: "Pernambut", description: "A historically significant masjid connected to the heritage and Islamic history of Pernambut.", image: "https://images.unsplash.com/photo-1519817914152-2a24126edda7?q=80&w=600&auto=format&fit=crop" },
+  { id: 5, name: "Masjid-E-Fazal", location: "Pernambut", description: "A frequently visited masjid serving local residents with daily prayers and Islamic activities.", image: "https://images.unsplash.com/photo-1564683214965-3619addd900d?q=80&w=600&auto=format&fit=crop" },
+  { id: 6, name: "Road Masjid-e-Ahle Hadees", location: "High Road, Pernambut", description: "A prominent Ahle Hadees masjid known for Islamic lectures, educational programs, and regional events.", image: "https://images.unsplash.com/photo-1542831371-29b0f74f9713?q=80&w=600&auto=format&fit=crop" },
+  { id: 7, name: "New Masjid-e-Ahle Hadees", location: "Pernambut", description: "An expanded prayer center serving the growing Ahle Hadees community in the area.", image: "https://images.unsplash.com/photo-1585036156171-384164a8c675?q=80&w=600&auto=format&fit=crop" },
+  { id: 8, name: "Small Masjid-e-Ahle Hadees", location: "Pernambut", description: "A smaller neighborhood masjid providing convenient daily prayer access for nearby residents.", image: "https://images.unsplash.com/photo-1519817914152-2a24126edda7?q=80&w=600&auto=format&fit=crop" },
+  { id: 9, name: "Madina Masjid", location: "Adamsa Street, Pernambut", description: "A respected local masjid known for regular congregational prayers and community activities.", image: "https://images.unsplash.com/photo-1564683214965-3619addd900d?q=80&w=600&auto=format&fit=crop" },
+  { id: 10, name: "Park Mosque", location: "Rahamadabad, Pernambut", description: "A community-centered mosque serving worshippers from surrounding residential areas.", image: "https://images.unsplash.com/photo-1542831371-29b0f74f9713?q=80&w=600&auto=format&fit=crop" },
+  { id: 11, name: "Masjid-e-Istiqamath", location: "Pernambut", description: "A dedicated prayer space focused on regular worship, discipline, and community unity.", image: "https://images.unsplash.com/photo-1585036156171-384164a8c675?q=80&w=600&auto=format&fit=crop" },
+  { id: 12, name: "Ahle Hadees Forquan Masjid", location: "Pernambut", description: "A recognized Ahle Hadees masjid involved in Islamic teaching and community engagement.", image: "https://images.unsplash.com/photo-1519817914152-2a24126edda7?q=80&w=600&auto=format&fit=crop" },
+  { id: 13, name: "Masjid-e-Hassaniya Ahle Hadees", location: "Pernambut", description: "A neighborhood prayer masjid supporting local worshippers with daily Islamic activities.", image: "https://images.unsplash.com/photo-1564683214965-3619addd900d?q=80&w=600&auto=format&fit=crop" },
+  { id: 14, name: "Ahle Hadees Jamiya Masjid", location: "Pernambut", description: "A major congregational masjid managed by the Ahle Hadees community for large gatherings and religious programs.", image: "https://images.unsplash.com/photo-1542831371-29b0f74f9713?q=80&w=600&auto=format&fit=crop" },
+  { id: 15, name: "Masjid-e-Shekul Hadees", location: "Pernambut", description: "A masjid associated with Islamic learning, religious studies, and educational activities.", image: "https://images.unsplash.com/photo-1585036156171-384164a8c675?q=80&w=600&auto=format&fit=crop" },
+  { id: 16, name: "Masjid Umar", location: "Residential Area, Pernambut", description: "A popular local masjid serving nearby families and residents with regular prayers.", image: "https://images.unsplash.com/photo-1519817914152-2a24126edda7?q=80&w=600&auto=format&fit=crop" },
+  { id: 17, name: "Masjid-e-Nauman", location: "Pernambut Township", description: "A well-established masjid recognized for its active religious and community presence.", image: "https://images.unsplash.com/photo-1564683214965-3619addd900d?q=80&w=600&auto=format&fit=crop" },
+  { id: 18, name: "Masjid-e-Kashifa", location: "Pernambut", description: "A recently established masjid supporting the growing local Muslim community.", image: "https://images.unsplash.com/photo-1542831371-29b0f74f9713?q=80&w=600&auto=format&fit=crop" },
+  { id: 19, name: "Khateeja Masjid", location: "New Town, Pernambut", description: "A peaceful neighborhood masjid serving residents of the New Town area.", image: "https://images.unsplash.com/photo-1585036156171-384164a8c675?q=80&w=600&auto=format&fit=crop" },
+  { id: 20, name: "Thouheed Masjid (TNTJ Markaz)", location: "High Road, Pernambut", description: "A major center of the Tamil Nadu Thowheed Jamaath conducting Islamic lectures, educational sessions, and public programs.", image: "https://images.unsplash.com/photo-1519817914152-2a24126edda7?q=80&w=600&auto=format&fit=crop" }
+];
 import ourStoryImg from '../our-story.png';
 
 const LandingPage = () => {
@@ -362,6 +388,77 @@ const LandingPage = () => {
                 Learn More
               </button>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Explore Masjids Section */}
+      <section id="masjids" className="py-24 bg-gray-50 relative overflow-hidden">
+        {/* Decorative Background */}
+        <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-emerald-100/40 rounded-bl-[150px] -z-10"></div>
+        <div className="absolute bottom-0 left-0 w-1/3 h-1/3 bg-primary-100/40 rounded-tr-[150px] -z-10"></div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="text-center mb-16">
+            <h2 className="text-emerald-600 font-bold tracking-widest uppercase text-sm mb-3">Explore Pernambut Masjids</h2>
+            <p className="text-3xl sm:text-5xl font-black text-gray-900 mb-6 tracking-tight">Discover Our Places of Worship</p>
+            <p className="text-gray-600 max-w-2xl mx-auto text-lg leading-relaxed">
+              Discover prominent masjids across Pernambut — places of worship, learning, unity, and community connection.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {masjidsList.map((masjid, idx) => (
+              <motion.div 
+                key={masjid.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ delay: (idx % 6) * 0.1, duration: 0.5 }}
+                className="bg-white rounded-[32px] border border-gray-100 shadow-sm hover:shadow-2xl transition-all duration-300 group overflow-hidden flex flex-col h-full relative"
+              >
+                {/* Image Header with Glassmorphism Overlay */}
+                <div className="h-56 relative overflow-hidden bg-gray-200">
+                  <div className="absolute inset-0 bg-gradient-to-t from-gray-900/90 via-gray-900/20 to-transparent z-10"></div>
+                  <img 
+                    src={masjid.image} 
+                    alt={masjid.name} 
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                    loading="lazy"
+                  />
+                  <div className="absolute bottom-5 left-6 right-6 z-20">
+                    <h3 className="text-white text-2xl font-bold mb-2 tracking-tight">{masjid.name}</h3>
+                    <div className="flex items-center text-emerald-300 font-medium text-sm">
+                      <MapPin size={16} className="mr-1.5" />
+                      {masjid.location}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Body Content */}
+                <div className="p-6 flex-grow flex flex-col">
+                  <p className="text-gray-600 text-sm leading-relaxed mb-6 flex-grow font-medium">
+                    {masjid.description}
+                  </p>
+                  
+                  {/* Action Buttons */}
+                  <div className="grid grid-cols-2 gap-3 mt-auto">
+                    <button className="flex items-center justify-center bg-emerald-50 text-emerald-700 px-3 py-3 rounded-xl text-xs font-bold hover:bg-emerald-600 hover:text-white transition-all transform hover:-translate-y-0.5">
+                      <Clock size={16} className="mr-1.5" />
+                      Prayer Timings
+                    </button>
+                    <button className="flex items-center justify-center bg-blue-50 text-blue-700 px-3 py-3 rounded-xl text-xs font-bold hover:bg-blue-600 hover:text-white transition-all transform hover:-translate-y-0.5">
+                      <Map size={16} className="mr-1.5" />
+                      Google Maps
+                    </button>
+                    <button className="col-span-2 flex items-center justify-center bg-gray-900 text-white px-4 py-3.5 rounded-xl text-sm font-bold hover:bg-gray-800 transition-all transform hover:-translate-y-0.5 shadow-md">
+                      <Info size={18} className="mr-2" />
+                      View Details
+                    </button>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
