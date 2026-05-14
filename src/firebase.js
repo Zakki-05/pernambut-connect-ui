@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { getAuth, GoogleAuthProvider, signInWithRedirect, getRedirectResult } from "firebase/auth";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -17,4 +17,5 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const googleProvider = new GoogleAuthProvider();
 
-export const signInWithGoogle = () => signInWithPopup(auth, googleProvider);
+export const signInWithGoogle = () => signInWithRedirect(auth, googleProvider);
+export const handleRedirectResult = () => getRedirectResult(auth);

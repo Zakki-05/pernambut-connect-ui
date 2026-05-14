@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Mail, Lock, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { loginWithEmail, loginWithGoogleApi } from '../services/api';
-import { signInWithGoogle } from '../firebase';
+import { signInWithGoogle, handleRedirectResult } from '../firebase';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -15,28 +15,43 @@ const Login = () => {
   const { login, user } = useAuth();
   const navigate = useNavigate();
 
+  // Check for redirect result on mount
+  useEffect(() => {
+    const checkRedirect = async () => {
+      try {
+        const result = await handleRedirectResult();
+        if (result) {
+          setIsLoading(true);
+          const token = await result.user.getIdToken();
+          const response = await loginWithGoogleApi(token);
+          const { access, user: userData } = response.data;
+          
+          login({ ...userData }, access);
+          navigate('/select-mosque');
+        }
+      } catch (err) {
+        console.error("Redirect error:", err);
+        setError('Google Sign-in failed after redirect. Please try again.');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    checkRedirect();
+  }, [login, navigate]);
+
   // If already logged in, redirect to home
   if (user) {
     return <Navigate to="/home" replace />;
   }
 
   const handleGoogleLogin = async () => {
-    setIsLoading(true);
     setError('');
     try {
-      const result = await signInWithGoogle();
-      const token = await result.user.getIdToken();
-      
-      const response = await loginWithGoogleApi(token);
-      const { access, user: userData } = response.data;
-      
-      login({ ...userData }, access);
-      navigate('/select-mosque');
+      // This will redirect the whole page to Google
+      await signInWithGoogle();
     } catch (err) {
       console.error(err);
-      setError('Google Sign-in failed. Please try again.');
-    } finally {
-      setIsLoading(false);
+      setError('Could not initiate Google Sign-in.');
     }
   };
 
