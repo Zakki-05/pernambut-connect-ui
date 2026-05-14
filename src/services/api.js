@@ -16,8 +16,8 @@ api.interceptors.request.use((config) => {
 });
 
 // ===== AUTH =====
-export const loginWithPhone = (phone_number, otp = null) =>
-  api.post('/auth/login/', { phone_number, otp });
+export const loginWithEmail = (email, otp = null) =>
+  api.post('/auth/login/', { email, otp });
 
 // ===== USER =====
 export const getProfile = () => api.get('/users/');

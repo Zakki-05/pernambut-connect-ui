@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate, Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Phone, Lock, ArrowRight } from 'lucide-react';
+import { Mail, Lock, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { loginWithPhone } from '../services/api';
+import { loginWithEmail } from '../services/api';
 
 const Login = () => {
-  const [phoneNumber, setPhoneNumber] = useState('');
+  const [email, setEmail] = useState('');
   const [otp, setOtp] = useState('');
   const [step, setStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
@@ -21,13 +21,13 @@ const Login = () => {
 
   const handleSendOtp = async (e) => {
     e.preventDefault();
-    if (phoneNumber.length < 10) return;
+    if (!email.includes('@')) return;
     setIsLoading(true);
     setError('');
     
     try {
       // Step 1: Request OTP from backend
-      await loginWithPhone(phoneNumber);
+      await loginWithEmail(email);
       setStep(2);
     } catch (err) {
       setError('Failed to send OTP. Is your backend running?');
@@ -43,11 +43,11 @@ const Login = () => {
     setError('');
     
     try {
-      // Step 2: Send both phone and OTP to verify
-      const response = await loginWithPhone(phoneNumber, otp);
+      // Step 2: Send both email and OTP to verify
+      const response = await loginWithEmail(email, otp);
       const { access, user: userData } = response.data;
       
-      login({ ...userData, phone: phoneNumber }, access);
+      login({ ...userData }, access);
       navigate('/select-mosque');
     } catch (err) {
       setError(err.response?.data?.error || 'Invalid OTP. Please try again.');
@@ -72,30 +72,28 @@ const Login = () => {
         className="bg-white rounded-3xl shadow-sm p-6 border border-gray-100"
       >
         <h2 className="text-xl font-bold text-gray-800 mb-6 text-center">
-          {step === 1 ? 'Login with Phone' : 'Verify OTP'}
+          {step === 1 ? 'Login with Email' : 'Verify OTP'}
         </h2>
 
         {step === 1 ? (
           <form onSubmit={handleSendOtp}>
             <div className="mb-6">
-              <label className="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
               <div className="flex items-center bg-gray-50 border border-gray-200 rounded-xl px-4 py-3.5 focus-within:border-primary-500 focus-within:ring-1 focus-within:ring-primary-500 transition-all">
-                <span className="text-gray-500 font-medium mr-2 border-r border-gray-300 pr-2">+91</span>
-                <Phone size={18} className="text-gray-400 mr-2" />
+                <Mail size={18} className="text-gray-400 mr-2" />
                 <input 
-                  type="tel" 
-                  placeholder="Enter 10 digit number"
+                  type="email" 
+                  placeholder="Enter your email"
                   className="bg-transparent border-none outline-none w-full text-gray-800 font-medium"
-                  value={phoneNumber}
-                  onChange={(e) => setPhoneNumber(e.target.value.replace(/\D/g, '').slice(0, 10))}
-                  maxLength={10}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   required
                 />
               </div>
             </div>
             <button 
               type="submit"
-              disabled={phoneNumber.length !== 10 || isLoading}
+              disabled={!email.includes('@') || isLoading}
               className="w-full bg-primary-600 text-white font-semibold py-4 rounded-xl flex items-center justify-center transition-colors hover:bg-primary-700 disabled:opacity-70 disabled:cursor-not-allowed shadow-md"
             >
               {isLoading ? 'Sending...' : 'Send OTP'}
@@ -109,7 +107,7 @@ const Login = () => {
               <span className="text-primary-800 font-extrabold tracking-widest">1 2 3 4</span>
             </div>
             <p className="text-sm text-gray-500 mb-6 text-center">
-              We've sent a 4-digit code to +91 {phoneNumber}. 
+              We've sent a 4-digit code to {email}. 
               <button type="button" onClick={() => setStep(1)} className="text-primary-600 ml-1 font-medium">Edit</button>
             </p>
             <div className="mb-6">
