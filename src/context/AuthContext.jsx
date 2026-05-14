@@ -1,39 +1,46 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useContext, useEffect } from 'react';
+import api from '../services/api';
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const savedToken = localStorage.getItem('token');
-    const savedUser = localStorage.getItem('user');
-    
-    if (savedToken && savedUser) {
-      setToken(savedToken);
-      setUser(JSON.parse(savedUser));
+    const token = localStorage.getItem('token');
+    if (token) {
+      // Validate token by fetching profile
+      api.get('/users/')
+        .then(res => {
+          if (res.data && res.data.length > 0) {
+            setUser(res.data[0]);
+          } else {
+            localStorage.removeItem('token');
+          }
+        })
+        .catch(() => {
+          localStorage.removeItem('token');
+        })
+        .finally(() => setLoading(false));
+    } else {
+      setLoading(false);
     }
-    setLoading(false);
   }, []);
 
-  const login = (userData, accessToken) => {
+  const login = (userData, token) => {
     setUser(userData);
-    setToken(accessToken);
-    localStorage.setItem('token', accessToken);
-    localStorage.setItem('user', JSON.stringify(userData));
+    localStorage.setItem('token', token);
   };
 
   const logout = () => {
     setUser(null);
-    setToken(null);
     localStorage.removeItem('token');
-    localStorage.removeItem('user');
+    localStorage.removeItem('selectedMosque');
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, login, logout, loading }}>
+    <AuthContext.Provider value={{ user, login, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );

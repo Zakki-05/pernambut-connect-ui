@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { User, MapPin, Settings, LogOut, ChevronRight, Edit3, Heart, Phone, Calendar, Bell, BookOpen, Shield, X, Check } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 import { useMosque } from '../context/MosqueContext';
 import { useTheme } from '../context/ThemeContext';
 import { useNavigate } from 'react-router-dom';
@@ -7,14 +8,19 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 const Profile = () => {
   const { selectedMosque } = useMosque();
+  const { user, logout } = useAuth();
   const { darkMode } = useTheme();
   const navigate = useNavigate();
   const [showEditModal, setShowEditModal] = useState(false);
   
-  // Local state for public profile simulation
-  const [editName, setEditName] = useState('Guest User');
-  const [editArea, setEditArea] = useState('Pernambut, TN');
-  const [userPhone, setUserPhone] = useState('+91 XXXXXXXXXX');
+  const [editName, setEditName] = useState(user?.name || 'User');
+  const [editArea, setEditArea] = useState(user?.area || 'Pernambut, TN');
+  const [userPhone, setUserPhone] = useState(user?.email || 'No Email');
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
 
   const handleSaveProfile = () => {
     setShowEditModal(false);
@@ -28,6 +34,7 @@ const Profile = () => {
     { id: 'wafat', icon: BookOpen, label: 'Wafat / Death News', desc: 'Community announcements', color: 'bg-gray-100 text-gray-600', action: () => navigate('/death-news') },
     { id: 'announcements', icon: Bell, label: 'All Announcements', desc: 'Alerts & updates', color: 'bg-yellow-50 text-yellow-600', action: () => navigate('/announcements') },
     { id: 'settings', icon: Settings, label: 'Settings', desc: 'Theme, notifications, language', color: 'bg-purple-50 text-purple-500', action: () => navigate('/settings') },
+    { id: 'logout', icon: LogOut, label: 'Log Out', desc: 'Sign out of your account', color: 'bg-gray-100 text-gray-500', action: handleLogout },
   ];
 
   const stats = [
