@@ -12,7 +12,10 @@ import {
   CheckCircle,
   ArrowRight,
   Menu,
-  X
+  X,
+  Twitter,
+  Facebook,
+  Instagram
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import ourStoryImg from '../our-story.png';
@@ -114,6 +117,7 @@ const LandingPage = () => {
               <button 
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
                 className="p-2 text-gray-600"
+                aria-label="Toggle menu"
               >
                 {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
               </button>
@@ -202,7 +206,7 @@ const LandingPage = () => {
                   <div className="flex -space-x-3">
                     {[1,2,3,4].map(i => (
                       <div key={i} className="w-10 h-10 rounded-full border-2 border-white bg-gray-100 overflow-hidden">
-                        <img src={`https://i.pravatar.cc/150?u=${i+10}`} alt="user" className="w-full h-full object-cover" />
+                        <img src={`https://i.pravatar.cc/150?u=${i+10}`} alt="Community member" loading="lazy" className="w-full h-full object-cover" />
                       </div>
                     ))}
                     <div className="w-10 h-10 rounded-full border-2 border-white bg-primary-600 flex items-center justify-center text-[10px] font-bold text-white">
@@ -335,7 +339,8 @@ const LandingPage = () => {
               <div className="bg-gray-100 rounded-[48px] overflow-hidden aspect-square">
                 <img 
                   src={ourStoryImg} 
-                  alt="Our Story" 
+                  alt="Pernambut Community Gathering" 
+                  loading="lazy"
                   className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
                 />
               </div>
@@ -437,10 +442,10 @@ const LandingPage = () => {
             <div>
               <h4 className="font-bold text-gray-900 mb-6">Platform</h4>
               <ul className="space-y-4 text-gray-500 font-medium">
-                <li><a href="#" className="hover:text-primary-600 transition-colors">How it works</a></li>
+                <li><a href="#how-it-works" className="hover:text-primary-600 transition-colors">How it works</a></li>
                 <li><a href="#features" className="hover:text-primary-600 transition-colors">Features</a></li>
-                <li><a href="/login" className="hover:text-primary-600 transition-colors">Join Community</a></li>
-                <li><a href="#" className="hover:text-primary-600 transition-colors">Admin Portal</a></li>
+                <li><Link to="/login" className="hover:text-primary-600 transition-colors">Join Community</Link></li>
+                <li><Link to="/admin-portal" className="hover:text-primary-600 transition-colors">Admin Portal</Link></li>
               </ul>
             </div>
 
@@ -448,9 +453,9 @@ const LandingPage = () => {
               <h4 className="font-bold text-gray-900 mb-6">Company</h4>
               <ul className="space-y-4 text-gray-500 font-medium">
                 <li><a href="#about" className="hover:text-primary-600 transition-colors">About Us</a></li>
-                <li><a href="#" className="hover:text-primary-600 transition-colors">Privacy Policy</a></li>
-                <li><a href="#" className="hover:text-primary-600 transition-colors">Terms of Service</a></li>
-                <li><a href="#" className="hover:text-primary-600 transition-colors">Contact</a></li>
+                <li><Link to="/privacy" className="hover:text-primary-600 transition-colors">Privacy Policy</Link></li>
+                <li><Link to="/terms" className="hover:text-primary-600 transition-colors">Terms of Service</Link></li>
+                <li><a href="#contact" className="hover:text-primary-600 transition-colors">Contact</a></li>
               </ul>
             </div>
           </div>
@@ -460,9 +465,15 @@ const LandingPage = () => {
               © 2026 Pernambut Connects. All rights reserved.
             </p>
             <div className="flex items-center space-x-6 text-gray-400">
-              <a href="#" className="hover:text-primary-600 transition-colors font-bold">Twitter</a>
-              <a href="#" className="hover:text-primary-600 transition-colors font-bold">Facebook</a>
-              <a href="#" className="hover:text-primary-600 transition-colors font-bold">Instagram</a>
+              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="hover:text-primary-600 transition-colors" aria-label="Twitter">
+                <Twitter size={20} />
+              </a>
+              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="hover:text-primary-600 transition-colors" aria-label="Facebook">
+                <Facebook size={20} />
+              </a>
+              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="hover:text-primary-600 transition-colors" aria-label="Instagram">
+                <Instagram size={20} />
+              </a>
             </div>
           </div>
         </div>

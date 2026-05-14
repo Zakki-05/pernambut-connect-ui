@@ -155,10 +155,6 @@ const Login = () => {
           </>
         ) : (
           <form onSubmit={handleVerifyOtp}>
-            <div className="bg-primary-50 border border-primary-100 rounded-xl p-3 mb-6 flex items-center justify-center space-x-2">
-              <span className="text-primary-600 text-xs font-bold uppercase tracking-wider">Demo OTP:</span>
-              <span className="text-primary-800 font-extrabold tracking-widest">1 2 3 4</span>
-            </div>
             <p className="text-sm text-gray-500 mb-6 text-center">
               We've sent a 4-digit code to {email}. 
               <button type="button" onClick={() => setStep(1)} className="text-primary-600 ml-1 font-medium">Edit</button>
