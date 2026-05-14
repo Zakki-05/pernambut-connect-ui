@@ -1,16 +1,18 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 
-// Replace with your Firebase project configuration
+// Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_AUTH_DOMAIN",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_STORAGE_BUCKET",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyDE-ilhPZMwGSQKrRLUJ0NPhr4d2vgjVvA",
+  authDomain: "pernambut-connection.firebaseapp.com",
+  projectId: "pernambut-connection",
+  storageBucket: "pernambut-connection.firebasestorage.app",
+  messagingSenderId: "234362565213",
+  appId: "1:234362565213:web:fb045d2b5cde0b0fcb93b4",
+  measurementId: "G-BG81E9S0Y0"
 };
 
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const googleProvider = new GoogleAuthProvider();
