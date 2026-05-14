@@ -17,12 +17,10 @@ import {
   Facebook,
   Instagram
 } from 'lucide-react';
-import { useAuth } from '../context/AuthContext';
 import ourStoryImg from '../our-story.png';
 
 const LandingPage = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
   // If user is already logged in, they might want to go straight to dashboard
@@ -92,24 +90,12 @@ const LandingPage = () => {
             <div className="hidden md:flex items-center space-x-8">
               <a href="#features" className="text-sm font-semibold text-gray-600 hover:text-primary-600 transition-colors">Features</a>
               <a href="#about" className="text-sm font-semibold text-gray-600 hover:text-primary-600 transition-colors">About</a>
-              {user ? (
-                <button 
-                  onClick={() => navigate('/')}
-                  className="bg-primary-600 text-white px-6 py-2.5 rounded-full font-bold text-sm shadow-lg shadow-primary-200 hover:bg-primary-700 transition-all transform hover:-translate-y-0.5 active:scale-95"
-                >
-                  Enter App
-                </button>
-              ) : (
-                <div className="flex items-center space-x-4">
-                  <Link to="/login" className="text-sm font-bold text-gray-900 hover:text-primary-600">Login</Link>
-                  <Link 
-                    to="/login" 
-                    className="bg-primary-600 text-white px-6 py-2.5 rounded-full font-bold text-sm shadow-lg shadow-primary-200 hover:bg-primary-700 transition-all transform hover:-translate-y-0.5 active:scale-95"
-                  >
-                    Join Now
-                  </Link>
-                </div>
-              )}
+              <button 
+                onClick={() => navigate('/select-mosque')}
+                className="bg-primary-600 text-white px-6 py-2.5 rounded-full font-bold text-sm shadow-lg shadow-primary-200 hover:bg-primary-700 transition-all transform hover:-translate-y-0.5 active:scale-95"
+              >
+                Enter App
+              </button>
             </div>
 
             {/* Mobile Menu Button */}
@@ -130,25 +116,12 @@ const LandingPage = () => {
           <div className="md:hidden bg-white border-b border-gray-100 p-4 space-y-4 animate-in slide-in-from-top duration-300">
             <a href="#features" className="block text-base font-semibold text-gray-600" onClick={() => setIsMenuOpen(false)}>Features</a>
             <a href="#about" className="block text-base font-semibold text-gray-600" onClick={() => setIsMenuOpen(false)}>About</a>
-            {user ? (
               <button 
-                onClick={() => { navigate('/'); setIsMenuOpen(false); }}
+                onClick={() => { navigate('/select-mosque'); setIsMenuOpen(false); }}
                 className="w-full bg-primary-600 text-white px-6 py-3 rounded-xl font-bold text-center"
               >
                 Enter App
               </button>
-            ) : (
-              <div className="space-y-3 pt-2">
-                <Link to="/login" className="block text-center font-bold text-gray-900" onClick={() => setIsMenuOpen(false)}>Login</Link>
-                <Link 
-                  to="/login" 
-                  className="block w-full bg-primary-600 text-white px-6 py-3 rounded-xl font-bold text-center"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  Get Started
-                </Link>
-              </div>
-            )}
           </div>
         )}
       </nav>
@@ -188,7 +161,7 @@ const LandingPage = () => {
                 </p>
                 <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start space-y-4 sm:space-y-0 sm:space-x-4">
                   <button 
-                    onClick={() => navigate('/login')}
+                    onClick={() => navigate('/select-mosque')}
                     className="w-full sm:w-auto bg-gray-900 text-white px-8 py-4 rounded-2xl font-bold text-lg shadow-xl hover:bg-gray-800 transition-all transform hover:-translate-y-1 flex items-center justify-center"
                   >
                     Get Started Now
@@ -383,7 +356,7 @@ const LandingPage = () => {
                 ))}
               </ul>
               <button 
-                onClick={() => navigate('/login')}
+                onClick={() => navigate('/select-mosque')}
                 className="bg-gray-900 text-white px-10 py-4 rounded-2xl font-bold text-lg shadow-xl hover:bg-gray-800 transition-all"
               >
                 Learn More
@@ -406,7 +379,7 @@ const LandingPage = () => {
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6">
               <button 
-                onClick={() => navigate('/login')}
+                onClick={() => navigate('/select-mosque')}
                 className="w-full sm:w-auto bg-white text-gray-900 px-10 py-5 rounded-2xl font-black text-xl shadow-xl hover:scale-105 transition-all active:scale-95"
               >
                 Get Started for Free
@@ -444,7 +417,7 @@ const LandingPage = () => {
               <ul className="space-y-4 text-gray-500 font-medium">
                 <li><a href="#how-it-works" className="hover:text-primary-600 transition-colors">How it works</a></li>
                 <li><a href="#features" className="hover:text-primary-600 transition-colors">Features</a></li>
-                <li><Link to="/login" className="hover:text-primary-600 transition-colors">Join Community</Link></li>
+                <li><Link to="/select-mosque" className="hover:text-primary-600 transition-colors">Join Community</Link></li>
                 <li><Link to="/admin-portal" className="hover:text-primary-600 transition-colors">Admin Portal</Link></li>
               </ul>
             </div>
