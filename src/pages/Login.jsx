@@ -66,7 +66,8 @@ const Login = () => {
       await loginWithEmail(email);
       setStep(2);
     } catch (err) {
-      setError('Failed to send OTP. Is your backend running?');
+      const msg = err.response?.data?.error || err.message || 'Failed to send OTP. Is your backend running?';
+      setError(msg);
     } finally {
       setIsLoading(false);
     }
