@@ -223,8 +223,8 @@ const LandingPage = () => {
               >
                 <div className="bg-white p-4 rounded-[40px] shadow-2xl border border-gray-100 transform rotate-3 hover:rotate-0 transition-transform duration-500">
                    <img 
-                    src="/pernambut_connects_hero_1778673840946.png" 
-                    alt="Pernambut Connects App" 
+                    src="https://images.unsplash.com/photo-1542831371-29b0f74f9713?q=80&w=2070&auto=format&fit=crop" 
+                    alt="Pernambut Connects Community" 
                     className="rounded-[32px] w-full shadow-inner"
                   />
                 </div>
