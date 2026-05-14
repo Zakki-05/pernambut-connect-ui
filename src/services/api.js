@@ -18,6 +18,8 @@ api.interceptors.request.use((config) => {
 // ===== AUTH =====
 export const loginWithEmail = (email, otp = null) =>
   api.post('/auth/login/', { email, otp });
+export const loginWithGoogleApi = (token) =>
+  api.post('/auth/google_login/', { token });
 
 // ===== USER =====
 export const getProfile = () => api.get('/users/');

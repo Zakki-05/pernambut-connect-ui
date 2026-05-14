@@ -15,6 +15,7 @@ import {
   X
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import ourStoryImg from '../our-story.png';
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -333,8 +334,8 @@ const LandingPage = () => {
             <div className="mb-16 lg:mb-0 relative">
               <div className="bg-gray-100 rounded-[48px] overflow-hidden aspect-square">
                 <img 
-                  src="https://images.unsplash.com/photo-1590076215667-875d45469502?q=80&w=2070&auto=format&fit=crop" 
-                  alt="Community" 
+                  src={ourStoryImg} 
+                  alt="Our Story" 
                   className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
                 />
               </div>
