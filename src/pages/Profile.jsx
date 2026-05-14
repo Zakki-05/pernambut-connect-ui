@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { User, MapPin, Settings, LogOut, ChevronRight, Edit3, Heart, Phone, Calendar, Bell, BookOpen, Shield, X, Check } from 'lucide-react';
+import { useMosque } from '../context/MosqueContext';
 import { useTheme } from '../context/ThemeContext';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
