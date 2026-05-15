@@ -38,7 +38,7 @@ const Donate = () => {
       {/* Centered Top Navbar */}
       <TopNav title={step === 1 ? 'Make a Donation' : step === 2 ? 'Secure Payment' : 'Success'} showBack={true} />
 
-      <main className="w-full px-6 py-24 max-w-4xl mx-auto">
+      <main className="w-full px-6 py-24 max-w-7xl mx-auto">
         <AnimatePresence mode="wait">
           {step === 1 ? (
             <motion.div key="form" initial={{ opacity:0, y:20 }} animate={{ opacity:1, y:0 }} exit={{ opacity:0, y:-20 }} className="space-y-10">

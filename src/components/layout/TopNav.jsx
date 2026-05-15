@@ -8,7 +8,7 @@ const TopNav = ({ title, showBack = false }) => {
   const { t } = useTranslation();
 
   return (
-    <header className="fixed top-4 left-1/2 -translate-x-1/2 w-[92%] max-w-5xl z-[100] bg-white/80 dark:bg-[#020617]/80 backdrop-blur-xl border border-slate-200/50 dark:border-slate-800/50 rounded-[24px] shadow-2xl shadow-slate-900/5 transition-all duration-300">
+    <header className="fixed top-4 left-1/2 -translate-x-1/2 w-[92%] max-w-7xl z-[100] bg-white/80 dark:bg-[#020617]/80 backdrop-blur-xl border border-slate-200/50 dark:border-slate-800/50 rounded-[24px] shadow-2xl shadow-slate-900/5 transition-all duration-300">
       <div className="px-5 py-3.5 flex items-center justify-between">
         <div className="flex items-center gap-3">
           {showBack ? (

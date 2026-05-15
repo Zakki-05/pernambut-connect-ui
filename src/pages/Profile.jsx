@@ -51,7 +51,7 @@ const Profile = () => {
       <TopNav title={title} showBack={true} />
       {/* ── Profile Header ── */}
       <header className="bg-white dark:bg-[#020617] pt-32 pb-16 px-6 border-b border-slate-100 dark:border-slate-800">
-        <div className="max-w-4xl mx-auto flex flex-col md:flex-row items-center gap-10">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-10">
           <div className="relative group">
             <div className="w-32 h-32 rounded-[48px] bg-emerald-500 text-white flex items-center justify-center text-5xl font-black shadow-2xl shadow-emerald-500/30 transform group-hover:rotate-6 transition-transform duration-500">
               {initial}
@@ -69,10 +69,13 @@ const Profile = () => {
                 </div>
                 <div className="flex flex-wrap items-center justify-center md:justify-start gap-4">
                   <p className="text-slate-500 dark:text-slate-400 font-bold text-sm flex items-center gap-2">
-                    <Mail size={14} className="text-emerald-500" /> {user?.email}
+                    <Mail size={14} className="text-emerald-500" /> {user?.email || 'zakkiadnan05@gmail.com'}
                   </p>
                   <span className="w-1 h-1 rounded-full bg-slate-200 dark:bg-slate-800 hidden sm:block" />
-                  <p className="text-emerald-500 font-black text-[10px] uppercase tracking-widest bg-emerald-500/10 px-2 py-0.5 rounded-md">Verified Resident</p>
+                  <div className="flex items-center gap-2">
+                    <span className="px-2 py-0.5 rounded-md bg-amber-400 text-[9px] font-black text-amber-950 uppercase tracking-widest shadow-sm">Gold Contributor</span>
+                    <p className="text-emerald-500 font-black text-[9px] uppercase tracking-widest bg-emerald-500/10 px-2 py-0.5 rounded-md">Verified Resident</p>
+                  </div>
                 </div>
              </div>
              
@@ -91,7 +94,7 @@ const Profile = () => {
         </div>
       </header>
 
-      <main className="max-w-4xl mx-auto px-6 mt-12 space-y-12">
+      <main className="max-w-7xl mx-auto px-6 mt-12 space-y-12">
         
         {/* Upgrade Banner */}
         <div className="bg-emerald-600 rounded-[40px] p-8 text-white flex flex-col md:flex-row items-center justify-between gap-6 relative overflow-hidden shadow-xl shadow-emerald-600/20">

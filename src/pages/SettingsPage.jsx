@@ -213,7 +213,7 @@ const SettingsPage = () => {
       {/* Centered Top Navbar */}
       <TopNav title={t('settings')} showBack={true} />
 
-      <main className="w-full px-6 py-24 space-y-8 max-w-2xl mx-auto">
+      <main className="w-full px-6 py-24 space-y-8 max-w-7xl mx-auto">
         
         {!searchQuery && (
           <div className="relative group max-w-2xl mx-auto mb-10">
@@ -239,13 +239,15 @@ const SettingsPage = () => {
                 {user?.profile_image ? <img src={user.profile_image} className="w-full h-full object-cover" /> : <User size={32} />}
               </div>
               <div className="flex-1">
-                <h3 className="text-xl font-black text-white">{user?.name || 'Community Member'}</h3>
-                <p className="text-white/60 text-xs font-bold uppercase tracking-widest mt-1">{user?.email || 'member@pernambut.com'}</p>
-                <div className="flex items-center gap-2 mt-3">
-                  <span className="px-2 py-0.5 rounded-md bg-white/20 text-[10px] font-black text-white uppercase tracking-tighter">Gold Contributor</span>
+                <h3 className="text-xl font-black text-white drop-shadow-sm">{user?.name || 'Community Member'}</h3>
+                <p className="text-emerald-50/70 text-[10px] font-black uppercase tracking-[0.2em] mt-1.5">{user?.email || 'zakkiadnan05@gmail.com'}</p>
+                <div className="flex items-center gap-2 mt-4">
+                  <span className="px-3 py-1 rounded-full bg-amber-400 text-[9px] font-black text-amber-950 uppercase tracking-widest shadow-lg shadow-amber-400/20 border border-amber-300">
+                    <Star size={10} className="inline-block mr-1 fill-current" /> Gold Contributor
+                  </span>
                   {user?.is_staff && (
-                    <span className="px-2 py-0.5 rounded-md bg-amber-400 text-[10px] font-black text-slate-900 uppercase tracking-tighter flex items-center gap-1">
-                      <Heart size={8} fill="currentColor" /> Pro User
+                    <span className="px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-[9px] font-black text-white uppercase tracking-widest border border-white/20">
+                      <Shield size={10} className="inline-block mr-1" /> Pro User
                     </span>
                   )}
                 </div>
