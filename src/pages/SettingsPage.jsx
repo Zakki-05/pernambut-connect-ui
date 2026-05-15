@@ -208,10 +208,10 @@ const SettingsPage = () => {
   }, [searchQuery, sections]);
 
   return (
-    <div className="pb-32 min-h-screen bg-[#fcfcfd] dark:bg-[#020617] transition-all duration-300" style={{ fontSize: `${fontSize}px` }}>
+    <div className="pb-32 min-h-screen w-full bg-[#fcfcfd] dark:bg-[#020617] transition-all duration-300 overflow-x-hidden" style={{ fontSize: `${fontSize}px` }}>
       {/* Header */}
       <header className="sticky top-0 z-50 bg-white/80 dark:bg-[#020617]/80 backdrop-blur-xl border-b border-slate-100 dark:border-slate-800 px-6 py-6">
-        <div className="max-w-2xl mx-auto space-y-6">
+        <div className="max-w-screen-xl mx-auto space-y-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <button onClick={() => navigate(-1)} className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400 hover:text-emerald-500 transition-colors">
@@ -224,7 +224,7 @@ const SettingsPage = () => {
             </div>
           </div>
 
-          <div className="relative group">
+          <div className="relative group max-w-2xl mx-auto">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-emerald-500 transition-colors" size={18} />
             <input 
               type="text" 
@@ -246,17 +246,19 @@ const SettingsPage = () => {
           >
             <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16 blur-2xl" />
             <div className="relative z-10 flex items-center gap-6">
-              <div className="w-20 h-20 rounded-3xl bg-white/20 backdrop-blur-md flex items-center justify-center text-white border border-white/20 shadow-xl">
-                <User size={32} />
+              <div className="w-20 h-20 rounded-3xl bg-white/20 backdrop-blur-md flex items-center justify-center text-white border border-white/20 shadow-xl overflow-hidden">
+                {user?.profile_image ? <img src={user.profile_image} className="w-full h-full object-cover" /> : <User size={32} />}
               </div>
               <div className="flex-1">
-                <h3 className="text-xl font-black text-white">{user?.full_name || 'Community Member'}</h3>
+                <h3 className="text-xl font-black text-white">{user?.name || 'Community Member'}</h3>
                 <p className="text-white/60 text-xs font-bold uppercase tracking-widest mt-1">{user?.email || 'member@pernambut.com'}</p>
                 <div className="flex items-center gap-2 mt-3">
                   <span className="px-2 py-0.5 rounded-md bg-white/20 text-[10px] font-black text-white uppercase tracking-tighter">Gold Contributor</span>
-                  <span className="px-2 py-0.5 rounded-md bg-amber-400 text-[10px] font-black text-slate-900 uppercase tracking-tighter flex items-center gap-1">
-                    <Heart size={8} fill="currentColor" /> Pro User
-                  </span>
+                  {user?.is_staff && (
+                    <span className="px-2 py-0.5 rounded-md bg-amber-400 text-[10px] font-black text-slate-900 uppercase tracking-tighter flex items-center gap-1">
+                      <Heart size={8} fill="currentColor" /> Pro User
+                    </span>
+                  )}
                 </div>
               </div>
               <button onClick={() => navigate('/profile')} className="w-10 h-10 rounded-xl bg-white text-slate-900 flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
