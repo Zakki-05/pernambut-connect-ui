@@ -1,308 +1,142 @@
-import React, { useState, useEffect } from 'react';
-import { Heart, QrCode, CheckCircle, Shield, ArrowLeft, Copy, ExternalLink } from 'lucide-react';
+import React, { useState } from 'react';
+import { Heart, QrCode, CheckCircle, Shield, ArrowLeft, Copy, MapPin, IndianRupee } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useMosque } from '../context/MosqueContext';
+import { useNavigate } from 'react-router-dom';
+import { getHijriDate } from '../utils/dateUtils';
 
-// ========== CONFIGURATION ==========
-// ⚠️ REPLACE THIS with your real UPI ID before going live
 const UPI_ID = 'pernambut.connect@okaxis';
-// ====================================
 
 const Donate = () => {
   const { selectedMosque } = useMosque();
+  const navigate = useNavigate();
+  const hijri = getHijriDate();
+  
   const [selectedCategory, setSelectedCategory] = useState('MAINTENANCE');
   const [amount, setAmount] = useState('');
-  const [step, setStep] = useState(1); // 1 = form, 2 = payment, 3 = success
+  const [step, setStep] = useState(1);
   const [copied, setCopied] = useState(false);
 
   const categories = [
-    { id: 'MAINTENANCE', label: 'Mosque Maintenance', icon: '🕌' },
-    { id: 'CHARITY', label: 'Zakat / Charity', icon: '🤲' },
-    { id: 'CONSTRUCTION', label: 'Construction Fund', icon: '🧱' },
+    { id: 'MAINTENANCE', label: 'Maintenance', icon: '🕌' },
+    { id: 'CHARITY', label: 'Zakat', icon: '🤲' },
+    { id: 'CONSTRUCTION', label: 'Construction', icon: '🧱' },
   ];
 
-  const suggestedAmounts = [100, 250, 500, 1000, 2500, 5000];
+  const suggestedAmounts = [100, 500, 1000, 2000, 5000];
 
-  const getUpiUrl = () => {
+  const handlePayWithApp = () => {
+    const currentCat = categories.find(c => c.id === selectedCategory);
+    const label = currentCat ? currentCat.label : 'Donation';
     const payeeName = encodeURIComponent(selectedMosque?.name || 'Pernambut Mosque');
-    const note = encodeURIComponent(`Donation - ${categories.find(c => c.id === selectedCategory)?.label}`);
-    return `upi://pay?pa=${UPI_ID}&pn=${payeeName}&am=${amount}&cu=INR&tn=${note}`;
+    const note = encodeURIComponent(`Donation - ${label}`);
+    const upiUrl = `upi://pay?pa=${UPI_ID}&pn=${payeeName}&am=${amount}&cu=INR&tn=${note}`;
+    window.location.href = upiUrl;
   };
 
-  const getQrImageUrl = () => {
-    // Uses Google Charts API to generate a QR code image from the UPI URL
-    const data = encodeURIComponent(getUpiUrl());
-    return `https://chart.googleapis.com/chart?chs=280x280&cht=qr&chl=${data}&choe=UTF-8`;
-  };
-
-  const handleProceed = () => {
-    if (!amount || Number(amount) <= 0) return;
-    setStep(2);
-  };
-
-  const handlePayWithApp = (app) => {
-    const upiUrl = getUpiUrl();
-    // Intent URLs for specific apps on mobile
-    const intents = {
-      gpay: `gpay://upi/${upiUrl.replace('upi://', '')}`,
-      phonepe: `phonepe://pay?${upiUrl.split('?')[1]}`,
-      paytm: `paytmmp://pay?${upiUrl.split('?')[1]}`,
-      generic: upiUrl,
-    };
-    window.location.href = intents[app] || upiUrl;
-  };
-
-  const handleCopyUpiId = () => {
+  const handleCopy = () => {
     navigator.clipboard.writeText(UPI_ID);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const handleDone = () => {
-    setStep(3);
-    setTimeout(() => {
-      setStep(1);
-      setAmount('');
-    }, 4000);
-  };
-
   return (
-    <div className="pb-24 min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-gradient-to-br from-primary-700 via-primary-600 to-emerald-500 px-6 pt-12 pb-10 rounded-b-[36px] text-white shadow-lg relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-40 h-40 bg-white/5 rounded-full -mr-10 -mt-10"></div>
-        <div className="absolute bottom-0 left-0 w-24 h-24 bg-white/5 rounded-full -ml-6 -mb-6"></div>
-        
-        {step === 2 && (
-          <button onClick={() => setStep(1)} className="flex items-center text-white/80 text-sm mb-3 hover:text-white">
-            <ArrowLeft size={16} className="mr-1" /> Back
-          </button>
-        )}
-        <h1 className="text-2xl font-bold mb-1">
-          {step === 1 ? 'Support Your Mosque' : step === 2 ? 'Complete Payment' : 'Thank You! 🤲'}
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 pb-32">
+      <header className="bg-white dark:bg-slate-900 pt-16 pb-12 px-6 border-b border-slate-100 dark:border-slate-800">
+        <button onClick={() => step === 1 ? navigate(-1) : setStep(1)} className="flex items-center gap-2 text-slate-400 font-black text-[10px] uppercase tracking-widest mb-4 hover:text-brand-600 transition-colors">
+          <ArrowLeft size={16} /> {step === 1 ? 'Back' : 'Change Amount'}
+        </button>
+        <h1 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">
+          {step === 3 ? 'Thank You!' : 'Support Mosque'}
         </h1>
-        <p className="text-white/70 text-sm">
-          {step === 1 ? 'Every contribution makes a difference' : step === 2 ? `Paying ₹${amount} via UPI` : 'May Allah reward you abundantly'}
-        </p>
-      </div>
+        <p className="text-slate-400 font-medium text-sm mt-1">{hijri.full}</p>
+      </header>
 
-      <AnimatePresence mode="wait">
-        {/* ========== STEP 1: SELECT CATEGORY & AMOUNT ========== */}
-        {step === 1 && (
-          <motion.div
-            key="step1"
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
-            className="px-6 -mt-6"
-          >
-            <div className="bg-white rounded-2xl shadow-lg p-5 border border-gray-100">
-              {/* Mosque Name */}
-              <div className="flex items-center text-gray-800 font-semibold mb-5 border-b border-gray-100 pb-3">
-                <Heart size={18} className="text-primary-500 mr-2" />
-                {selectedMosque?.name || 'Selected Mosque'}
-              </div>
+      <div className="px-6 -mt-6 relative z-10 max-w-lg mx-auto">
+        <AnimatePresence mode="wait">
+          {step === 1 ? (
+            <motion.div key="form" initial={{ opacity:0, y:10 }} animate={{ opacity:1, y:0 }} exit={{ opacity:0, y:-10 }} className="space-y-6">
+              <div className="bg-white dark:bg-slate-900 rounded-[32px] p-8 border border-slate-100 dark:border-slate-800 shadow-soft">
+                <div className="flex items-center gap-3 mb-8">
+                  <div className="w-12 h-12 rounded-2xl bg-brand-50 text-brand-600 flex items-center justify-center shadow-sm">
+                    <Heart size={24} className="fill-brand-600/10" />
+                  </div>
+                  <div className="text-left">
+                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-0.5">Contributing to</p>
+                    <p className="text-base font-black text-slate-900 dark:text-white leading-tight">{selectedMosque?.name || 'Selected Mosque'}</p>
+                  </div>
+                </div>
 
-              {/* Category Selection */}
-              <div className="mb-6">
-                <label className="block text-sm font-semibold text-gray-700 mb-3">What would you like to support?</label>
-                <div className="flex flex-col space-y-2">
-                  {categories.map((cat) => (
-                    <div 
-                      key={cat.id}
-                      onClick={() => setSelectedCategory(cat.id)}
-                      className={`flex items-center justify-between p-3.5 rounded-xl border-2 cursor-pointer transition-all ${
-                        selectedCategory === cat.id 
-                        ? 'border-primary-500 bg-primary-50 shadow-sm' 
-                        : 'border-gray-100 hover:border-gray-200'
-                      }`}
-                    >
-                      <div className="flex items-center">
-                        <span className="text-xl mr-3">{cat.icon}</span>
-                        <span className={`text-sm font-medium ${selectedCategory === cat.id ? 'text-primary-700' : 'text-gray-600'}`}>
-                          {cat.label}
-                        </span>
-                      </div>
-                      {selectedCategory === cat.id && <CheckCircle size={20} className="text-primary-600" />}
+                <div className="space-y-6">
+                  <div>
+                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 block">Category</label>
+                    <div className="grid grid-cols-3 gap-2">
+                      {categories.map(c => (
+                        <button key={c.id} onClick={() => setSelectedCategory(c.id)} className={`flex flex-col items-center gap-2 p-4 rounded-2xl border transition-all ${selectedCategory === c.id ? 'border-brand-600 bg-brand-50/50' : 'border-slate-50 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30'}`}>
+                          <span className="text-xl">{c.icon}</span>
+                          <span className={`text-[10px] font-black uppercase ${selectedCategory === c.id ? 'text-brand-600' : 'text-slate-400'}`}>{c.label}</span>
+                        </button>
+                      ))}
                     </div>
-                  ))}
+                  </div>
+
+                  <div>
+                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 block">Amount (₹)</label>
+                    <div className="relative">
+                      <IndianRupee size={24} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-300" />
+                      <input type="number" placeholder="0" value={amount} onChange={e => setAmount(e.target.value)} className="w-full pl-12 pr-6 py-5 bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700 rounded-2xl text-4xl font-black outline-none focus:ring-4 focus:ring-brand-600/10 focus:border-brand-600 transition-all text-slate-900 dark:text-white" />
+                    </div>
+                    <div className="flex flex-wrap gap-2 mt-4">
+                      {suggestedAmounts.map(amt => (
+                        <button key={amt} onClick={() => setAmount(amt.toString())} className={`px-4 py-2 rounded-xl text-xs font-black transition-all ${amount === amt.toString() ? 'bg-brand-600 text-white shadow-vivid' : 'bg-slate-50 dark:bg-slate-800 text-slate-400 border border-slate-100 dark:border-slate-700'}`}>₹{amt}</button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <button onClick={() => amount > 0 && setStep(2)} disabled={!amount} className="w-full bg-brand-600 text-white font-black py-5 rounded-2xl shadow-vivid hover:-translate-y-1 transition-all disabled:opacity-50 text-base mt-4">Continue to Payment</button>
                 </div>
               </div>
-
-              {/* Amount Input */}
-              <div className="mb-6">
-                <label className="block text-sm font-semibold text-gray-700 mb-3">Enter Amount</label>
-                <div className="relative">
-                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-2xl font-bold text-gray-400">₹</span>
-                  <input 
-                    type="number" 
-                    placeholder="0"
-                    value={amount}
-                    onChange={(e) => setAmount(e.target.value)}
-                    className="w-full text-3xl font-bold border-2 border-gray-200 rounded-xl p-4 pl-12 outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all text-gray-800"
-                  />
+            </motion.div>
+          ) : step === 2 ? (
+            <motion.div key="pay" initial={{ opacity:0, y:10 }} animate={{ opacity:1, y:0 }} exit={{ opacity:0, y:-10 }} className="space-y-6">
+              <div className="bg-white dark:bg-slate-900 rounded-[32px] p-8 border border-slate-100 dark:border-slate-800 shadow-soft text-center">
+                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-6">Scan QR with UPI App</p>
+                <div className="bg-white p-4 rounded-3xl border border-slate-100 inline-block mb-6 shadow-inner">
+                  <img src={`https://chart.googleapis.com/chart?chs=280x280&cht=qr&chl=${encodeURIComponent(`upi://pay?pa=${UPI_ID}&pn=${selectedMosque?.name || 'Pernambut Mosque'}&am=${amount}&cu=INR`)}&choe=UTF-8`} alt="QR" className="w-48 h-48 mx-auto" />
                 </div>
+                <h2 className="text-4xl font-black text-slate-900 dark:text-white mb-2 tracking-tight">₹{Number(amount).toLocaleString('en-IN')}</h2>
+                <p className="text-[10px] font-black text-brand-600 uppercase tracking-[0.2em]">{categories.find(c => c.id === selectedCategory)?.label}</p>
                 
-                <div className="grid grid-cols-3 gap-2 mt-4">
-                  {suggestedAmounts.map((amt) => (
-                    <button
-                      key={amt}
-                      onClick={() => setAmount(amt.toString())}
-                      className={`py-2.5 rounded-xl text-sm font-semibold transition-all ${
-                        amount === amt.toString()
-                        ? 'bg-primary-600 text-white shadow-md'
-                        : 'border-2 border-gray-100 text-gray-600 hover:border-primary-200 hover:bg-primary-50'
-                      }`}
-                    >
-                      ₹{amt.toLocaleString('en-IN')}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Proceed Button */}
-              <button 
-                onClick={handleProceed}
-                disabled={!amount || Number(amount) <= 0}
-                className="w-full bg-primary-600 text-white font-bold py-4 rounded-xl shadow-lg hover:bg-primary-700 transition-all flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed text-lg"
-              >
-                Proceed to Pay ₹{amount || '0'}
-              </button>
-
-              <div className="flex items-center justify-center mt-4 text-gray-400 text-xs">
-                <Shield size={12} className="mr-1" /> 100% Secure &middot; UPI Powered
-              </div>
-            </div>
-          </motion.div>
-        )}
-
-        {/* ========== STEP 2: QR CODE + PAY BUTTONS ========== */}
-        {step === 2 && (
-          <motion.div
-            key="step2"
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: 20 }}
-            className="px-6 -mt-6"
-          >
-            {/* QR Code Card */}
-            <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100 text-center mb-4">
-              <p className="text-sm font-medium text-gray-500 mb-4">Scan this QR code with any UPI app</p>
-              <div className="bg-gray-50 rounded-2xl p-4 inline-block border-2 border-dashed border-gray-200 mb-4">
-                <img 
-                  src={getQrImageUrl()} 
-                  alt="UPI QR Code" 
-                  className="w-56 h-56 mx-auto"
-                />
-              </div>
-              <div className="text-3xl font-bold text-gray-900 mb-1">₹{Number(amount).toLocaleString('en-IN')}</div>
-              <p className="text-sm text-gray-500 mb-4">{categories.find(c => c.id === selectedCategory)?.label}</p>
-              
-              {/* Copy UPI ID */}
-              <div className="bg-gray-50 rounded-xl p-3 flex items-center justify-between">
-                <div className="text-left">
-                  <p className="text-[10px] text-gray-400 uppercase font-bold tracking-wider">UPI ID</p>
-                  <p className="text-sm font-semibold text-gray-800">{UPI_ID}</p>
-                </div>
-                <button 
-                  onClick={handleCopyUpiId}
-                  className="bg-white px-3 py-1.5 rounded-lg border border-gray-200 text-xs font-semibold text-gray-600 flex items-center hover:bg-gray-50 transition-colors"
-                >
-                  {copied ? <><CheckCircle size={14} className="mr-1 text-green-500"/> Copied!</> : <><Copy size={14} className="mr-1"/> Copy</>}
-                </button>
-              </div>
-            </div>
-
-            {/* Pay with App Buttons */}
-            <div className="bg-white rounded-2xl shadow-lg p-5 border border-gray-100 mb-4">
-              <p className="text-sm font-semibold text-gray-700 mb-4 text-center">Or pay directly with your app</p>
-              <div className="grid grid-cols-1 gap-3">
-                <button 
-                  onClick={() => handlePayWithApp('generic')}
-                  className="flex items-center justify-center w-full py-3.5 bg-primary-600 text-white rounded-xl font-bold text-base hover:bg-primary-700 transition-all shadow-md"
-                >
-                  <QrCode size={20} className="mr-2" /> Open UPI App
-                </button>
-
-                <div className="grid grid-cols-3 gap-3">
-                  <button 
-                    onClick={() => handlePayWithApp('gpay')}
-                    className="flex flex-col items-center p-3 rounded-xl border-2 border-gray-100 hover:border-blue-300 hover:bg-blue-50 transition-all"
-                  >
-                    <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mb-1.5">
-                      <span className="text-lg font-black text-blue-600">G</span>
-                    </div>
-                    <span className="text-xs font-semibold text-gray-700">GPay</span>
-                  </button>
-                  <button 
-                    onClick={() => handlePayWithApp('phonepe')}
-                    className="flex flex-col items-center p-3 rounded-xl border-2 border-gray-100 hover:border-purple-300 hover:bg-purple-50 transition-all"
-                  >
-                    <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center mb-1.5">
-                      <span className="text-lg font-black text-purple-600">P</span>
-                    </div>
-                    <span className="text-xs font-semibold text-gray-700">PhonePe</span>
-                  </button>
-                  <button 
-                    onClick={() => handlePayWithApp('paytm')}
-                    className="flex flex-col items-center p-3 rounded-xl border-2 border-gray-100 hover:border-sky-300 hover:bg-sky-50 transition-all"
-                  >
-                    <div className="w-10 h-10 bg-sky-100 rounded-full flex items-center justify-center mb-1.5">
-                      <span className="text-lg font-black text-sky-600">₹</span>
-                    </div>
-                    <span className="text-xs font-semibold text-gray-700">Paytm</span>
+                <div className="mt-8 flex items-center justify-between bg-slate-50 dark:bg-slate-800/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-700">
+                  <div className="text-left">
+                    <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">UPI ID</p>
+                    <p className="text-xs font-black text-slate-700 dark:text-slate-300">{UPI_ID}</p>
+                  </div>
+                  <button onClick={handleCopy} className="px-4 py-2 bg-white dark:bg-slate-700 rounded-xl border border-slate-100 dark:border-slate-600 text-[10px] font-black text-slate-500 uppercase tracking-widest">
+                    {copied ? 'Copied' : 'Copy'}
                   </button>
                 </div>
               </div>
-            </div>
 
-            {/* Done Button */}
-            <div className="bg-white rounded-2xl shadow-lg p-5 border border-gray-100">
-              <button 
-                onClick={handleDone}
-                className="w-full py-3.5 bg-green-600 text-white rounded-xl font-bold hover:bg-green-700 transition-all flex items-center justify-center"
-              >
-                <CheckCircle size={18} className="mr-2" /> I've Completed the Payment
-              </button>
-            </div>
-          </motion.div>
-        )}
+              <div className="grid grid-cols-2 gap-4">
+                <button onClick={handlePayWithApp} className="bg-slate-900 dark:bg-slate-800 text-white font-black py-4 rounded-2xl flex items-center justify-center gap-3 shadow-lg"><QrCode size={20} /> Open UPI App</button>
+                <button onClick={() => setStep(3)} className="bg-green-600 text-white font-black py-4 rounded-2xl flex items-center justify-center gap-3 shadow-lg shadow-green-600/20"><CheckCircle size={20} /> I've Paid</button>
+              </div>
+            </motion.div>
+          ) : (
+             <motion.div key="success" initial={{ opacity:0, scale:0.95 }} animate={{ opacity:1, scale:1 }} className="bg-white dark:bg-slate-900 rounded-[32px] p-12 text-center shadow-soft border border-slate-100 dark:border-slate-800">
+                <div className="w-24 h-24 bg-green-50 text-green-500 rounded-full flex items-center justify-center mx-auto mb-8 shadow-inner"><CheckCircle size={48} /></div>
+                <h2 className="text-3xl font-black text-slate-900 dark:text-white mb-3">Accepted! 🤲</h2>
+                <p className="text-slate-500 dark:text-slate-400 text-sm font-medium leading-relaxed mb-8">May Allah accept your donation of <span className="font-black text-slate-900 dark:text-white">₹{amount}</span> and reward you manifold in this life and the hereafter.</p>
+                <button onClick={() => navigate('/home')} className="w-full bg-brand-600 text-white font-black py-5 rounded-2xl shadow-vivid">Back to Community</button>
+             </motion.div>
+          )}
+        </AnimatePresence>
 
-        {/* ========== STEP 3: SUCCESS ========== */}
-        {step === 3 && (
-          <motion.div
-            key="step3"
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0 }}
-            className="px-6 -mt-6"
-          >
-            <div className="bg-white rounded-2xl shadow-lg p-8 border border-gray-100 text-center">
-              <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <CheckCircle size={40} className="text-green-600" />
-              </div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">JazakAllahu Khairan!</h2>
-              <p className="text-gray-500 mb-2">Your donation of <span className="font-bold text-gray-800">₹{Number(amount).toLocaleString('en-IN')}</span> has been noted.</p>
-              <p className="text-sm text-gray-400">May Allah accept your contribution</p>
-              
-              <div className="mt-6 bg-gray-50 rounded-xl p-4 text-left">
-                <div className="flex justify-between text-sm mb-2">
-                  <span className="text-gray-500">Mosque</span>
-                  <span className="font-medium text-gray-800">{selectedMosque?.name}</span>
-                </div>
-                <div className="flex justify-between text-sm mb-2">
-                  <span className="text-gray-500">Category</span>
-                  <span className="font-medium text-gray-800">{categories.find(c => c.id === selectedCategory)?.label}</span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span className="text-gray-500">Amount</span>
-                  <span className="font-bold text-green-600">₹{Number(amount).toLocaleString('en-IN')}</span>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+        <div className="mt-12 flex items-center justify-center gap-2 text-slate-300 text-[9px] font-black uppercase tracking-[0.3em]">
+          <Shield size={12} /> SECURE CRYPTOGRAPHIC PAYMENT
+        </div>
+      </div>
     </div>
   );
 };

@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowLeft, Clock, AlertCircle, BookOpen, Share2, X, Maximize2 } from 'lucide-react';
+import { ArrowLeft, Clock, AlertCircle, BookOpen, X, Maximize2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useMosque } from '../context/MosqueContext';
 import { getCommunityUpdates } from '../services/api';
+import { getHijriDate } from '../utils/dateUtils';
 
 const DeathNews = () => {
   const navigate = useNavigate();
   const { selectedMosque } = useMosque();
+  const hijri = getHijriDate();
+  
   const [newsList, setNewsList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState(null);
@@ -27,192 +30,82 @@ const DeathNews = () => {
     }
   }, [selectedMosque]);
 
-  const isToday = (dateStr) => {
-    const today = new Date().toISOString().split('T')[0];
-    const itemDate = new Date(dateStr).toISOString().split('T')[0];
-    return itemDate === today;
-  };
-
   return (
-    <div className="pb-24 min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-gradient-to-br from-primary-700 via-primary-600 to-emerald-500 px-6 pt-12 pb-12 rounded-b-[40px] text-white shadow-lg relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-48 h-48 bg-white/5 rounded-full -mr-16 -mt-16"></div>
-        <div className="absolute bottom-0 left-0 w-32 h-32 bg-white/5 rounded-full -ml-10 -mb-10"></div>
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 pb-32">
+      <header className="bg-white dark:bg-slate-900 pt-16 pb-12 px-6 border-b border-slate-100 dark:border-slate-800">
+        <button onClick={() => navigate('/home')} className="flex items-center gap-2 text-slate-400 font-black text-[10px] uppercase tracking-widest mb-4">
+          <ArrowLeft size={16} /> Back
+        </button>
+        <h1 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">Wafat News</h1>
+        <p className="text-slate-400 font-medium text-sm mt-1">{hijri.full}</p>
         
-        <div className="flex items-center mb-3">
-          <button onClick={() => navigate('/')} className="p-2 -ml-2 mr-2 rounded-full hover:bg-white/10 transition-colors">
-            <ArrowLeft size={22} className="text-white" />
-          </button>
-          <h1 className="text-2xl font-bold">Wafat News</h1>
+        <div className="mt-8 bg-slate-900 dark:bg-brand-600 rounded-3xl p-6 shadow-vivid relative overflow-hidden">
+           <p className="text-white font-black text-2xl text-center mb-1 tracking-widest" dir="rtl">إِنَّا لِلَّٰهِ وَإِنَّا إِلَيْهِ رَاجِعُونَ</p>
+           <p className="text-white/40 text-[9px] text-center font-black uppercase tracking-[0.3em]">Official Community Alerts</p>
+           <div className="absolute top-0 right-0 w-24 h-24 bg-white/5 rounded-full blur-2xl" />
         </div>
-        <div className="text-center py-2">
-          <p className="text-white font-bold text-lg mb-1" dir="rtl">إِنَّا لِلَّٰهِ وَإِنَّا إِلَيْهِ رَاجِعُونَ</p>
-          <p className="text-white/70 text-xs italic tracking-widest uppercase">Inna lillahi wa inna ilayhi rajioon</p>
-        </div>
-      </div>
+      </header>
 
-      {/* Urgent Banner if any today */}
-      {newsList.some(d => isToday(d.created_at)) ? (
-        <div className="px-6 -mt-6 relative z-10">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="bg-white border border-red-100 rounded-2xl p-4 flex items-center shadow-lg"
-          >
-            <div className="w-10 h-10 bg-red-50 rounded-full flex items-center justify-center mr-3 flex-shrink-0">
-              <AlertCircle size={20} className="text-red-500" />
-            </div>
-            <div>
-              <p className="text-sm text-gray-900 font-bold">New Janaza Today</p>
-              <p className="text-xs text-gray-500">Please check details below for timings</p>
-            </div>
-          </motion.div>
-        </div>
-      ) : (
-        <div className="px-6 -mt-6 relative z-10">
-          <div className="bg-white rounded-2xl shadow-lg p-4 flex items-center justify-between border border-gray-100">
-             <div className="flex items-center">
-                <div className="w-10 h-10 bg-primary-50 rounded-full flex items-center justify-center mr-3">
-                  <BookOpen size={20} className="text-primary-600" />
-                </div>
-                <div>
-                  <p className="text-sm font-bold text-gray-800">Community News</p>
-                  <p className="text-[11px] text-gray-400">Updates on local transitions</p>
-                </div>
-             </div>
+      <main className="px-6 -mt-6 relative z-10 space-y-6 max-w-lg mx-auto">
+        {isLoading ? (
+          <div className="space-y-4">
+            {[1, 2].map(n => <div key={n} className="skeleton h-48 w-full rounded-[32px]" />)}
           </div>
-        </div>
-      )}
-
-      {/* Death News Cards */}
-      <div className="px-6 mt-6 space-y-4">
-        {newsList.map((news, idx) => (
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: idx * 0.1 }}
-            key={news.id}
-            className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden"
-          >
-            {/* Top colored bar */}
-            <div className={`h-1.5 ${isToday(news.created_at) ? 'bg-red-500' : 'bg-gray-300'}`}></div>
-
-            <div className="p-5 pb-0">
-              {/* Name & Badge */}
-              <div className="flex justify-between items-start mb-3">
-                <div>
-                  <h3 className="font-bold text-lg text-gray-900">{news.title}</h3>
-                  <div className="flex items-center text-xs text-gray-400 mt-1">
-                    <Clock size={12} className="mr-1" />
-                    {new Date(news.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}
+        ) : newsList.length === 0 ? (
+          <div className="bg-white dark:bg-slate-900 py-20 rounded-[32px] border border-slate-100 dark:border-slate-800 text-center">
+            <BookOpen size={32} className="text-slate-200 mx-auto mb-4" />
+            <p className="text-slate-500 font-bold">No recent alerts</p>
+          </div>
+        ) : (
+          newsList.map((news, idx) => (
+            <div key={news.id} className="bg-white dark:bg-slate-900 rounded-[32px] border border-slate-100 dark:border-slate-800 shadow-sm overflow-hidden group hover:border-brand-300 transition-all">
+              <div className="p-8">
+                <div className="flex justify-between items-start mb-6">
+                  <div>
+                    <h3 className="text-xl font-black text-slate-900 dark:text-white leading-tight">{news.title}</h3>
+                    <div className="flex items-center gap-1.5 text-[10px] font-black text-slate-400 uppercase tracking-widest mt-2">
+                      <Clock size={12} className="text-brand-500" /> {new Date(news.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}
+                    </div>
                   </div>
+                  <AlertCircle size={20} className="text-red-500" />
                 </div>
-                {isToday(news.created_at) && (
-                  <span className="text-xs font-bold text-red-600 bg-red-50 px-2.5 py-1 rounded-full border border-red-200 uppercase">New</span>
+
+                <div className="bg-slate-50 dark:bg-slate-800/50 rounded-2xl p-5 border border-slate-50 dark:border-slate-800">
+                  <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed font-bold whitespace-pre-wrap">{news.content}</p>
+                </div>
+
+                {news.image && (
+                  <div className="mt-6 relative rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-800 cursor-zoom-in group"
+                    onClick={() => setSelectedImage(news.image.startsWith('http') ? news.image : `${import.meta.env.VITE_API_URL?.replace('/api', '') || 'https://pernambut-connect-backend.onrender.com'}${news.image}`)}>
+                    <img src={news.image.startsWith('http') ? news.image : `${import.meta.env.VITE_API_URL?.replace('/api', '') || 'https://pernambut-connect-backend.onrender.com'}${news.image}`} 
+                      className="w-full max-h-64 object-cover group-hover:scale-105 transition-transform duration-500" alt="Update" />
+                    <div className="absolute inset-0 bg-black/10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all">
+                      <Maximize2 size={32} className="text-white drop-shadow-xl" />
+                    </div>
+                  </div>
                 )}
               </div>
-
-              {/* Message Content */}
-              <div className="bg-gray-50 rounded-xl p-4">
-                <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-wrap font-medium">
-                  {news.content}
-                </p>
-              </div>
             </div>
-
-            {news.image && (
-              <div className="px-5 pt-4">
-                <div 
-                  className="relative w-full bg-gray-100 overflow-hidden group cursor-zoom-in rounded-xl border border-gray-100"
-                  onClick={() => setSelectedImage(news.image.startsWith('http') ? news.image : `${import.meta.env.VITE_API_URL?.replace('/api', '') || 'https://pernambut-connect-backend.onrender.com'}${news.image}`)}
-                >
-                  <img 
-                    src={news.image.startsWith('http') ? news.image : `${import.meta.env.VITE_API_URL?.replace('/api', '') || 'https://pernambut-connect-backend.onrender.com'}${news.image}`} 
-                    alt={news.title}
-                    className="w-full max-h-[400px] object-contain mx-auto transition-transform duration-500 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none"></div>
-                  <div className="absolute bottom-3 right-3 bg-black/40 backdrop-blur-md p-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity">
-                    <Share2 size={16} className="text-white" />
-                  </div>
-                </div>
-              </div>
-            )}
-
-            <div className="px-5 pb-5 pt-3">
-              <div className="flex items-center text-[10px] text-gray-400 uppercase tracking-widest font-bold">
-                <AlertCircle size={10} className="mr-1" /> Verified Official News
-              </div>
-            </div>
-          </motion.div>
-        ))}
-
-        {newsList.length === 0 && !isLoading && (
-          <div className="text-center py-12">
-            <BookOpen size={48} className="mx-auto text-gray-200 mb-4" />
-            <p className="text-gray-400">No death news posted yet.</p>
-          </div>
+          ))
         )}
-        
-        {isLoading && (
-          <div className="flex justify-center py-12">
-            <div className="w-8 h-8 border-4 border-primary-500 border-t-transparent rounded-full animate-spin"></div>
-          </div>
-        )}
-      </div>
 
-      {/* Dua Section */}
-      <div className="px-6 mt-8 mb-6">
-        <div className="bg-gray-900 rounded-2xl p-5 text-center shadow-xl">
-          <p className="text-white/60 text-[10px] uppercase tracking-widest mb-3">Masnoon Dua for the Deceased</p>
-          <div className="space-y-4">
-            <div>
-              <p className="text-white font-semibold text-base leading-relaxed" dir="rtl">
-                اللهُـمِّ اغْفِـرْ لِحَيِّـنا وَمَيِّتِـنا وَشـاهِدِنا ، وَغائِبِـنا ، وَصَغيـرِنا وَكَبيـرِنا ، وَذَكَـرِنا وَأُنْثـانا
-              </p>
-            </div>
-            <div className="h-[1px] bg-white/10 w-1/2 mx-auto"></div>
-            <div>
-              <p className="text-white font-semibold text-base leading-relaxed" dir="rtl">
-                اَللّهُمَّ اغْفِرْ لَهُ وَارْحَمْهُ وَعَافِهِ وَاعْفُ عَنْهُ
-              </p>
-            </div>
+        <div className="bg-white dark:bg-slate-900 rounded-[32px] p-8 border border-slate-100 dark:border-slate-800 text-center shadow-soft">
+          <p className="text-brand-600 text-[10px] font-black uppercase tracking-[0.2em] mb-6">Masnoon Dua</p>
+          <div className="space-y-6">
+            <p className="text-slate-900 dark:text-white font-black text-2xl leading-relaxed tracking-wider" dir="rtl">اللّهُـمِّ اغْفِـرْ لِحَيِّـنا وَمَيِّتِـنا وَشـاهِدِنا ، وَغائِبِـنا</p>
+            <div className="h-px bg-slate-100 dark:bg-slate-800 w-1/4 mx-auto" />
+            <p className="text-slate-900 dark:text-white font-black text-2xl leading-relaxed tracking-wider" dir="rtl">اَللّهُمَّ اغْفِرْ لَهُ وَارْحَمْهُ وَعَافِهِ وَاعْفُ عَنْهُ</p>
           </div>
-          <p className="mt-4 text-primary-400 text-[11px] italic italic">"O Allah, forgive our living and our dead..."</p>
+          <p className="mt-8 text-slate-400 text-xs font-bold italic">"O Allah, forgive our living and our dead..."</p>
         </div>
-      </div>
-      
-      {/* Photo Lightbox */}
+      </main>
+
       <AnimatePresence>
         {selectedImage && (
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-xl flex items-center justify-center p-4"
-            onClick={() => setSelectedImage(null)}
-          >
-            <motion.button 
-              initial={{ scale: 0.5, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              className="absolute top-10 right-6 p-3 bg-white/10 rounded-full text-white hover:bg-white/20 transition-colors"
-            >
-              <X size={24} />
-            </motion.button>
-            
-            <motion.img 
-              initial={{ scale: 0.9, y: 20 }}
-              animate={{ scale: 1, y: 0 }}
-              src={selectedImage}
-              alt="Wafat News Full Size"
-              className="max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl"
-              onClick={(e) => e.stopPropagation()}
-            />
-            
-            <div className="absolute bottom-10 left-0 right-0 text-center">
-               <p className="text-white/50 text-xs">Pernambut Connect Official News</p>
-            </div>
+          <motion.div initial={{ opacity:0 }} animate={{ opacity:1 }} exit={{ opacity:0 }} onClick={() => setSelectedImage(null)}
+            className="fixed inset-0 z-[100] bg-slate-900/95 backdrop-blur-xl flex items-center justify-center p-4">
+            <button className="absolute top-10 right-10 p-4 bg-white/10 rounded-full text-white"><X size={28} /></button>
+            <motion.img initial={{ scale:0.9 }} animate={{ scale:1 }} src={selectedImage} className="max-w-full max-h-[85vh] object-contain rounded-3xl shadow-2xl border border-white/10" />
           </motion.div>
         )}
       </AnimatePresence>

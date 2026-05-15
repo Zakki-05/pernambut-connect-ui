@@ -106,23 +106,31 @@ const AdminHub = () => {
   };
 
   return (
-    <div className="pb-24 min-h-screen bg-gray-50">
+    <div className="pb-24 min-h-screen bg-gray-50 dark:bg-[#0c1410]">
       {/* Header */}
-      <div className="bg-red-600 px-6 pt-12 pb-8 rounded-b-3xl text-white shadow-lg">
-        <div className="flex items-center mb-4">
-          <button onClick={() => navigate('/profile')} className="p-2 -ml-2 mr-2 rounded-full hover:bg-white/10 transition-colors">
-            <ArrowLeft size={22} />
+      <div className="page-header">
+        <div className="page-header-orb-1" /><div className="page-header-orb-2" />
+        <div className="relative z-10">
+          <button onClick={() => navigate('/profile')} className="flex items-center gap-2 text-white/70 hover:text-white text-sm font-semibold mb-4 transition-colors">
+            <ArrowLeft size={16} /> Back
           </button>
-          <h1 className="text-2xl font-bold">Admin Hub</h1>
-        </div>
-        <div className="flex items-center justify-between">
-          <p className="text-red-100 text-sm">Send official announcements to the community</p>
-          <button 
-            onClick={() => navigate('/admin/users')}
-            className="bg-white/20 hover:bg-white/30 text-white px-3 py-1.5 rounded-xl text-xs font-bold flex items-center transition-all backdrop-blur-md"
-          >
-            <Users size={14} className="mr-1.5" /> Manage Members
-          </button>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-2xl bg-white/15 flex items-center justify-center backdrop-blur-sm">
+                <ShieldAlert size={20} />
+              </div>
+              <div>
+                <h1 className="text-white text-2xl font-black">Admin Hub</h1>
+                <p className="text-white/60 text-xs mt-0.5">Post to the community</p>
+              </div>
+            </div>
+            <button 
+              onClick={() => navigate('/admin/users')}
+              className="bg-white/15 hover:bg-white/25 text-white px-3 py-1.5 rounded-xl text-xs font-bold flex items-center transition-all backdrop-blur-md"
+            >
+              <Users size={14} className="mr-1.5" /> Members
+            </button>
+          </div>
         </div>
       </div>
 

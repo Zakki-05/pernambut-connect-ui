@@ -16,12 +16,12 @@ const BottomNav = () => (
       <NavLink
         key={name}
         to={path}
-        className={({ isActive }) => `bottom-nav-item${isActive ? ' active' : ''}`}
+        className={({ isActive }) => `nav-item${isActive ? ' active' : ''}`}
       >
         {({ isActive }) => (
           <>
             <span className="nav-pill">
-              <Icon size={20} strokeWidth={isActive ? 2.5 : 1.75} />
+              <Icon size={19} strokeWidth={isActive ? 2.5 : 1.75} />
             </span>
             <span className="nav-label">{name}</span>
           </>
