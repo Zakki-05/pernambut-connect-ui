@@ -23,18 +23,18 @@ const Profile = () => {
 
   const menuGroups = [
     {
-      label: 'Admin',
+      label: 'Administrative Hub',
       items: [
-        { id: 'admin',   icon: Shield, label: 'Post Update',    desc: 'Mosque announcements', action: () => navigate('/admin-portal'), show: isAdmin },
-        { id: 'members', icon: Users,  label: 'Members List',   desc: 'Community directory', action: () => navigate('/admin/users'), show: isAdmin },
+        { id: 'admin',   icon: Shield, label: 'Post Update',    desc: 'Official alerts', action: () => navigate('/admin-portal'), show: isAdmin },
+        { id: 'members', icon: Users,  label: 'Member Registry', desc: 'Directory management', action: () => navigate('/admin/users'), show: isAdmin },
       ].filter(i => i.show),
     },
     {
-      label: 'Personal',
+      label: 'Account & Community',
       items: [
-        { id: 'mosque',  icon: MapPin,   label: 'My Mosque',    desc: selectedMosque?.name || 'Select yours', action: () => navigate('/select-mosque') },
-        { id: 'history', icon: Heart,    label: 'Donations',    desc: 'Your contributions', action: () => navigate('/donate-history') },
-        { id: 'settings',icon: Settings, label: 'Settings',     desc: 'App preferences', action: () => navigate('/settings') },
+        { id: 'mosque',  icon: MapPin,   label: 'My Mosque',    desc: selectedMosque?.name || 'Set preference', action: () => navigate('/select-mosque') },
+        { id: 'history', icon: Heart,    label: 'Donation Hub', desc: 'Contribution history', action: () => navigate('/donate-history') },
+        { id: 'settings',icon: Settings, label: 'Preferences',  desc: 'App configurations', action: () => navigate('/settings') },
       ],
     },
   ].filter(g => g.items.length > 0);
@@ -42,59 +42,62 @@ const Profile = () => {
   const initial = (editName?.[0] || 'U').toUpperCase();
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 pb-32">
-      {/* ── Clear Header ── */}
-      <header className="bg-white dark:bg-slate-900 pt-16 pb-12 px-6 border-b border-slate-100 dark:border-slate-800 relative overflow-hidden">
+    <div className="min-h-screen bg-white dark:bg-slate-950 pb-32">
+      {/* ── Prime Header ── */}
+      <header className="pt-16 pb-12 px-6 border-b border-slate-100 dark:border-slate-900 relative">
         <div className="relative z-10">
-          <p className="text-[10px] font-black text-brand-600 uppercase tracking-[0.2em] mb-4">{hijri.full}</p>
-          <div className="flex items-center gap-6">
-            <div className="w-20 h-20 rounded-[32px] bg-slate-900 dark:bg-brand-600 flex items-center justify-center text-white text-3xl font-black shadow-vivid">
+          <p className="text-[10px] font-black text-blue-600 uppercase tracking-[0.3em] mb-6">{hijri.full}</p>
+          <div className="flex items-center gap-8">
+            <div className="w-24 h-24 rounded-[40px] bg-slate-950 dark:bg-blue-600 flex items-center justify-center text-white text-4xl font-black shadow-2xl shadow-slate-950/20">
               {initial}
             </div>
             <div className="flex-1">
-              <h1 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">{editName}</h1>
-              <p className="text-slate-400 font-medium text-sm flex items-center gap-1.5 mt-1"><Mail size={14} /> {user?.email}</p>
+              <div className="flex items-center gap-2 mb-1">
+                <h1 className="text-3xl font-black text-slate-950 dark:text-white tracking-tight leading-none">{editName}</h1>
+                <button onClick={() => setShowEdit(true)} className="p-2 text-slate-300 hover:text-blue-600 transition-colors"><Edit3 size={18} /></button>
+              </div>
+              <p className="text-slate-500 font-bold text-sm flex items-center gap-2"><Mail size={14} className="text-blue-500" /> {user?.email}</p>
             </div>
           </div>
         </div>
       </header>
 
-      <main className="px-6 -mt-6 relative z-10 max-w-lg mx-auto">
-        {/* ── Profile Stats Card ── */}
-        <div className="bg-white dark:bg-slate-900 rounded-[32px] p-6 border border-slate-100 dark:border-slate-800 shadow-soft grid grid-cols-3 gap-4 mb-8">
-          {[{ v: '12', l: 'Days' }, { v: '₹4k', l: 'Given' }, { v: 'Verified', l: 'Status' }].map(s => (
+      <main className="px-6 -mt-8 relative z-10 max-w-lg mx-auto">
+        {/* ── Prime Analytics ── */}
+        <div className="bg-white dark:bg-slate-900 rounded-[40px] p-8 border border-slate-100 dark:border-slate-800 shadow-xl shadow-slate-950/5 grid grid-cols-3 gap-6 mb-12">
+          {[{ v: '12d', l: 'Loyalty' }, { v: '₹4.5k', l: 'Total' }, { v: 'Pro', l: 'Status' }].map(s => (
             <div key={s.l} className="text-center">
-              <p className="text-lg font-black text-slate-900 dark:text-white leading-none">{s.v}</p>
-              <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mt-1.5">{s.l}</p>
+              <p className="text-xl font-black text-slate-950 dark:text-white leading-none">{s.v}</p>
+              <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-2">{s.l}</p>
             </div>
           ))}
         </div>
 
-        {/* ── Menu Groups ── */}
-        <div className="space-y-8">
+        {/* ── Menu Grid ── */}
+        <div className="space-y-12">
           {menuGroups.map(group => (
             <div key={group.label}>
-              <h2 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4 px-2">{group.label}</h2>
-              <div className="bg-white dark:bg-slate-900 rounded-[32px] border border-slate-100 dark:border-slate-800 overflow-hidden shadow-sm">
+              <h2 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] mb-6 px-4">{group.label}</h2>
+              <div className="bg-white dark:bg-slate-900 rounded-[40px] border border-slate-100 dark:border-slate-800 overflow-hidden shadow-sm">
                 {group.items.map((item, idx) => (
-                  <button key={item.id} onClick={item.action} className={`w-full flex items-center justify-between p-5 text-left hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors ${idx !== group.items.length - 1 ? 'border-b border-slate-50 dark:border-slate-800' : ''}`}>
-                    <div className="flex items-center gap-4">
-                      <div className="w-10 h-10 rounded-xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-500 dark:text-slate-400"><item.icon size={20} /></div>
+                  <button key={item.id} onClick={item.action} className={`w-full flex items-center justify-between p-6 text-left hover:bg-slate-50 dark:hover:bg-slate-800 transition-all group ${idx !== group.items.length - 1 ? 'border-b border-slate-50 dark:border-slate-800' : ''}`}>
+                    <div className="flex items-center gap-5">
+                      <div className="w-12 h-12 rounded-2xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-500 group-hover:text-blue-600 group-hover:bg-blue-50 transition-all"><item.icon size={22} strokeWidth={2.5} /></div>
                       <div>
-                        <p className="text-sm font-black text-slate-900 dark:text-white leading-none">{item.label}</p>
-                        <p className="text-[10px] font-bold text-slate-400 mt-1.5 uppercase tracking-wide">{item.desc}</p>
+                        <p className="text-sm font-black text-slate-950 dark:text-white leading-none">{item.label}</p>
+                        <p className="text-[10px] font-black text-slate-400 mt-2 uppercase tracking-widest">{item.desc}</p>
                       </div>
                     </div>
-                    <ChevronRight size={18} className="text-slate-200 dark:text-slate-700" />
+                    <ChevronRight size={20} className="text-slate-200 group-hover:text-blue-600 transition-colors" />
                   </button>
                 ))}
               </div>
             </div>
           ))}
 
-          {/* ── Sign Out ── */}
-          <button onClick={handleLogout} className="w-full flex items-center justify-center gap-3 p-5 bg-red-50 dark:bg-red-900/10 text-red-600 dark:text-red-400 rounded-3xl font-black text-sm border border-red-100 dark:border-red-900/20 hover:bg-red-100 transition-all">
-            <LogOut size={20} /> Sign Out from Account
+          {/* ── Danger Zone ── */}
+          <button onClick={handleLogout} className="w-full flex items-center justify-center gap-4 p-6 bg-slate-950 text-white rounded-[32px] font-black text-sm shadow-xl shadow-slate-900/40 hover:bg-red-600 transition-all group">
+            <LogOut size={20} className="group-hover:translate-x-1 transition-transform" /> Sign Out from Platform
           </button>
         </div>
       </main>
@@ -102,19 +105,21 @@ const Profile = () => {
       {/* ── Edit Modal ── */}
       <AnimatePresence>
         {showEdit && (
-          <motion.div initial={{ opacity:0 }} animate={{ opacity:1 }} exit={{ opacity:0 }} className="fixed inset-0 bg-slate-900/40 backdrop-blur-md z-50 flex items-end sm:items-center justify-center p-4" onClick={() => setShowEdit(false)}>
-            <motion.div initial={{ y:100 }} animate={{ y:0 }} exit={{ y:100 }} onClick={e => e.stopPropagation()} className="w-full max-w-md bg-white dark:bg-slate-900 rounded-t-[40px] sm:rounded-[40px] p-8 shadow-2xl">
-              <div className="flex justify-between items-center mb-8">
-                <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">Edit Profile</h2>
-                <button onClick={() => setShowEdit(false)} className="p-3 bg-slate-50 dark:bg-slate-800 rounded-2xl text-slate-400"><X size={20} /></button>
+          <motion.div initial={{ opacity:0 }} animate={{ opacity:1 }} exit={{ opacity:0 }} className="fixed inset-0 bg-slate-950/60 backdrop-blur-xl z-50 flex items-end sm:items-center justify-center p-6" onClick={() => setShowEdit(false)}>
+            <motion.div initial={{ y:100 }} animate={{ y:0 }} exit={{ y:100 }} onClick={e => e.stopPropagation()} className="w-full max-w-md bg-white dark:bg-slate-900 rounded-t-[48px] sm:rounded-[48px] p-10 shadow-2xl">
+              <div className="flex justify-between items-center mb-10">
+                <h2 className="text-3xl font-black text-slate-950 dark:text-white tracking-tight">Identity</h2>
+                <button onClick={() => setShowEdit(false)} className="p-4 bg-slate-50 dark:bg-slate-800 rounded-3xl text-slate-400 hover:text-red-500 transition-colors"><X size={24} /></button>
               </div>
-              <div className="space-y-6">
+              <div className="space-y-8">
                 <div>
-                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block">Display Name</label>
-                  <input type="text" value={editName} onChange={e => setEditName(e.target.value)} className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl p-4 text-sm font-bold outline-none focus:ring-4 focus:ring-brand-600/10 focus:border-brand-600 transition-all text-slate-900 dark:text-white" />
+                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 block">Full Legal Name</label>
+                  <input type="text" value={editName} onChange={e => setEditName(e.target.value)} className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-3xl p-5 text-base font-black outline-none focus:ring-8 focus:ring-blue-600/5 focus:border-blue-600 transition-all text-slate-950 dark:text-white shadow-inner" />
                 </div>
               </div>
-              <button onClick={() => setShowEdit(false)} className="w-full bg-brand-600 text-white font-black py-5 rounded-2xl mt-8 shadow-vivid flex items-center justify-center gap-2"><Check size={20} /> Save Changes</button>
+              <button onClick={() => setShowEdit(false)} className="w-full bg-blue-600 text-white font-black py-6 rounded-3xl mt-10 shadow-xl shadow-blue-600/30 flex items-center justify-center gap-3">
+                <Check size={24} strokeWidth={3} /> Save Identity
+              </button>
             </motion.div>
           </motion.div>
         )}

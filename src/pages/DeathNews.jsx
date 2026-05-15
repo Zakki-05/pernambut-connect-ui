@@ -31,56 +31,56 @@ const DeathNews = () => {
   }, [selectedMosque]);
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 pb-32">
-      <header className="bg-white dark:bg-slate-900 pt-16 pb-12 px-6 border-b border-slate-100 dark:border-slate-800">
-        <button onClick={() => navigate('/home')} className="flex items-center gap-2 text-slate-400 font-black text-[10px] uppercase tracking-widest mb-4">
+    <div className="min-h-screen bg-white dark:bg-slate-950 pb-32">
+      <header className="pt-16 pb-12 px-6 border-b border-slate-100 dark:border-slate-900">
+        <button onClick={() => navigate('/home')} className="flex items-center gap-2 text-slate-400 font-black text-[10px] uppercase tracking-[0.2em] mb-6">
           <ArrowLeft size={16} /> Back
         </button>
-        <h1 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">Wafat News</h1>
-        <p className="text-slate-400 font-medium text-sm mt-1">{hijri.full}</p>
+        <h1 className="text-4xl font-black text-slate-950 dark:text-white tracking-tight leading-none">Wafat Alerts</h1>
+        <p className="text-slate-500 font-bold text-sm mt-3 uppercase tracking-wider">{hijri.full}</p>
         
-        <div className="mt-8 bg-slate-900 dark:bg-brand-600 rounded-3xl p-6 shadow-vivid relative overflow-hidden">
-           <p className="text-white font-black text-2xl text-center mb-1 tracking-widest" dir="rtl">إِنَّا لِلَّٰهِ وَإِنَّا إِلَيْهِ رَاجِعُونَ</p>
-           <p className="text-white/40 text-[9px] text-center font-black uppercase tracking-[0.3em]">Official Community Alerts</p>
-           <div className="absolute top-0 right-0 w-24 h-24 bg-white/5 rounded-full blur-2xl" />
+        <div className="mt-10 bg-slate-950 rounded-[40px] p-10 shadow-2xl shadow-slate-950/20 relative overflow-hidden">
+           <p className="text-white font-black text-3xl text-center mb-4 tracking-widest leading-loose" dir="rtl">إِنَّا لِلَّٰهِ وَإِنَّا إِلَيْهِ رَاجِعُونَ</p>
+           <p className="text-blue-500 text-[10px] text-center font-black uppercase tracking-[0.4em]">Official Janaza Registry</p>
+           <div className="absolute top-0 right-0 w-32 h-32 bg-blue-600/10 rounded-full blur-3xl -mr-10 -mt-10" />
         </div>
       </header>
 
-      <main className="px-6 -mt-6 relative z-10 space-y-6 max-w-lg mx-auto">
+      <main className="px-6 -mt-10 relative z-10 space-y-8 max-w-lg mx-auto">
         {isLoading ? (
-          <div className="space-y-4">
-            {[1, 2].map(n => <div key={n} className="skeleton h-48 w-full rounded-[32px]" />)}
+          <div className="space-y-6">
+            {[1, 2].map(n => <div key={n} className="skeleton h-56 w-full rounded-[48px]" />)}
           </div>
         ) : newsList.length === 0 ? (
-          <div className="bg-white dark:bg-slate-900 py-20 rounded-[32px] border border-slate-100 dark:border-slate-800 text-center">
-            <BookOpen size={32} className="text-slate-200 mx-auto mb-4" />
-            <p className="text-slate-500 font-bold">No recent alerts</p>
+          <div className="bg-white dark:bg-slate-900 py-24 rounded-[48px] border border-slate-100 dark:border-slate-800 text-center shadow-sm">
+            <BookOpen size={40} className="text-slate-100 mx-auto mb-6" />
+            <p className="text-slate-400 font-black uppercase tracking-widest text-[11px]">No Recent Alerts</p>
           </div>
         ) : (
           newsList.map((news, idx) => (
-            <div key={news.id} className="bg-white dark:bg-slate-900 rounded-[32px] border border-slate-100 dark:border-slate-800 shadow-sm overflow-hidden group hover:border-brand-300 transition-all">
-              <div className="p-8">
-                <div className="flex justify-between items-start mb-6">
+            <div key={news.id} className="bg-white dark:bg-slate-900 rounded-[48px] border border-slate-100 dark:border-slate-800 shadow-sm overflow-hidden group hover:border-blue-400 transition-all">
+              <div className="p-10">
+                <div className="flex justify-between items-start mb-8">
                   <div>
-                    <h3 className="text-xl font-black text-slate-900 dark:text-white leading-tight">{news.title}</h3>
-                    <div className="flex items-center gap-1.5 text-[10px] font-black text-slate-400 uppercase tracking-widest mt-2">
-                      <Clock size={12} className="text-brand-500" /> {new Date(news.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}
+                    <h3 className="text-2xl font-black text-slate-950 dark:text-white leading-tight tracking-tight">{news.title}</h3>
+                    <div className="flex items-center gap-2 text-[11px] font-black text-slate-300 uppercase tracking-widest mt-3">
+                      <Clock size={14} className="text-blue-500" /> {new Date(news.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}
                     </div>
                   </div>
-                  <AlertCircle size={20} className="text-red-500" />
+                  <div className="w-12 h-12 rounded-2xl bg-red-50 flex items-center justify-center text-red-600"><AlertCircle size={24} strokeWidth={2.5} /></div>
                 </div>
 
-                <div className="bg-slate-50 dark:bg-slate-800/50 rounded-2xl p-5 border border-slate-50 dark:border-slate-800">
-                  <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed font-bold whitespace-pre-wrap">{news.content}</p>
+                <div className="bg-slate-50 dark:bg-slate-800/50 rounded-3xl p-6 border border-slate-50 dark:border-slate-800">
+                  <p className="text-base text-slate-950 dark:text-slate-200 leading-relaxed font-bold whitespace-pre-wrap">{news.content}</p>
                 </div>
 
                 {news.image && (
-                  <div className="mt-6 relative rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-800 cursor-zoom-in group"
-                    onClick={() => setSelectedImage(news.image.startsWith('http') ? news.image : `${import.meta.env.VITE_API_URL?.replace('/api', '') || 'https://pernambut-connect-backend.onrender.com'}${news.image}`)}>
+                  <div className="mt-8 relative rounded-[32px] overflow-hidden border border-slate-100 dark:border-slate-800 cursor-zoom-in group"
+                    onClick={() => setSelectedImage(news.image)}>
                     <img src={news.image.startsWith('http') ? news.image : `${import.meta.env.VITE_API_URL?.replace('/api', '') || 'https://pernambut-connect-backend.onrender.com'}${news.image}`} 
-                      className="w-full max-h-64 object-cover group-hover:scale-105 transition-transform duration-500" alt="Update" />
-                    <div className="absolute inset-0 bg-black/10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all">
-                      <Maximize2 size={32} className="text-white drop-shadow-xl" />
+                      className="w-full max-h-72 object-cover group-hover:scale-110 transition-transform duration-700" alt="Update" />
+                    <div className="absolute inset-0 bg-slate-950/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all">
+                      <Maximize2 size={40} className="text-white drop-shadow-2xl" />
                     </div>
                   </div>
                 )}
@@ -89,23 +89,23 @@ const DeathNews = () => {
           ))
         )}
 
-        <div className="bg-white dark:bg-slate-900 rounded-[32px] p-8 border border-slate-100 dark:border-slate-800 text-center shadow-soft">
-          <p className="text-brand-600 text-[10px] font-black uppercase tracking-[0.2em] mb-6">Masnoon Dua</p>
-          <div className="space-y-6">
-            <p className="text-slate-900 dark:text-white font-black text-2xl leading-relaxed tracking-wider" dir="rtl">اللّهُـمِّ اغْفِـرْ لِحَيِّـنا وَمَيِّتِـنا وَشـاهِدِنا ، وَغائِبِـنا</p>
-            <div className="h-px bg-slate-100 dark:bg-slate-800 w-1/4 mx-auto" />
-            <p className="text-slate-900 dark:text-white font-black text-2xl leading-relaxed tracking-wider" dir="rtl">اَللّهُمَّ اغْفِرْ لَهُ وَارْحَمْهُ وَعَافِهِ وَاعْفُ عَنْهُ</p>
+        <div className="bg-white dark:bg-slate-900 rounded-[48px] p-10 border border-slate-100 dark:border-slate-800 text-center shadow-xl shadow-slate-950/5">
+          <p className="text-blue-600 text-[10px] font-black uppercase tracking-[0.4em] mb-8">Masnoon Dua</p>
+          <div className="space-y-8">
+            <p className="text-slate-950 dark:text-white font-black text-3xl leading-loose tracking-widest" dir="rtl">اللّهُـمِّ اغْفِـرْ لِحَيِّـنا وَمَيِّتِـنا وَشـاهِدِنا</p>
+            <div className="h-px bg-slate-100 dark:bg-slate-800 w-1/6 mx-auto" />
+            <p className="text-slate-950 dark:text-white font-black text-3xl leading-loose tracking-widest" dir="rtl">اَللّهُمَّ اغْفِرْ لَهُ وَارْحَمْهُ وَعَافِهِ</p>
           </div>
-          <p className="mt-8 text-slate-400 text-xs font-bold italic">"O Allah, forgive our living and our dead..."</p>
+          <p className="mt-10 text-slate-400 text-xs font-black italic uppercase tracking-widest">"O Allah, forgive our living and our dead..."</p>
         </div>
       </main>
 
       <AnimatePresence>
         {selectedImage && (
           <motion.div initial={{ opacity:0 }} animate={{ opacity:1 }} exit={{ opacity:0 }} onClick={() => setSelectedImage(null)}
-            className="fixed inset-0 z-[100] bg-slate-900/95 backdrop-blur-xl flex items-center justify-center p-4">
-            <button className="absolute top-10 right-10 p-4 bg-white/10 rounded-full text-white"><X size={28} /></button>
-            <motion.img initial={{ scale:0.9 }} animate={{ scale:1 }} src={selectedImage} className="max-w-full max-h-[85vh] object-contain rounded-3xl shadow-2xl border border-white/10" />
+            className="fixed inset-0 z-[100] bg-slate-950/98 backdrop-blur-3xl flex items-center justify-center p-6">
+            <button className="absolute top-10 right-10 p-5 bg-white/10 rounded-full text-white hover:bg-white/20 transition-all"><X size={32} /></button>
+            <motion.img initial={{ scale:0.8, rotate:-2 }} animate={{ scale:1, rotate:0 }} src={selectedImage.startsWith('http') ? selectedImage : `${import.meta.env.VITE_API_URL?.replace('/api', '') || 'https://pernambut-connect-backend.onrender.com'}${selectedImage}`} className="max-w-full max-h-[80vh] object-contain rounded-[48px] shadow-2xl border border-white/5" />
           </motion.div>
         )}
       </AnimatePresence>

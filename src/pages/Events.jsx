@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import { Calendar, MapPin, Clock, ArrowLeft, Heart, Users, Mic2, Coffee } from 'lucide-react';
+import { Calendar, MapPin, Clock, ArrowLeft, Heart, Users, Mic2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { getHijriDate } from '../utils/dateUtils';
 
 const allEvents = [
-  { id: 1, title: 'Nikah of Abdullah & Fatima',      type: 'NIKAH',   date: 'May 25, 2026', time: '10:00 AM',       location: 'Road Masjid Main Hall',    upcoming: true  },
-  { id: 2, title: 'Monthly Community Meeting',       type: 'MEETING', date: 'May 28, 2026', time: '08:30 PM',       location: 'Jamiya Masjid Library',    upcoming: true  },
-  { id: 3, title: 'Special Bayan by Mufti Tariq',   type: 'BAYAN',   date: 'Jun 2, 2026',  time: 'After Maghrib',  location: 'Chowk Masjid Prayer Hall', upcoming: true  },
+  { id: 1, title: 'Nikah: Abdullah & Fatima',        type: 'NIKAH',   date: 'May 25', time: '10:00 AM', location: 'Road Masjid' },
+  { id: 2, title: 'Monthly Registry Meeting',        type: 'MEETING', date: 'May 28', time: '08:30 PM', location: 'Jamiya Masjid' },
+  { id: 3, title: 'Grand Bayan by Mufti Tariq',    type: 'BAYAN',   date: 'Jun 2',  time: 'After Maghrib', location: 'Chowk Masjid' },
 ];
 
 const Events = () => {
@@ -16,42 +16,42 @@ const Events = () => {
   const hijri = getHijriDate();
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 pb-32">
-      <header className="bg-white dark:bg-slate-900 pt-16 pb-12 px-6 border-b border-slate-100 dark:border-slate-800">
-        <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-slate-400 font-black text-[10px] uppercase tracking-widest mb-4">
+    <div className="min-h-screen bg-white dark:bg-slate-950 pb-32">
+      <header className="pt-16 pb-12 px-6 border-b border-slate-100 dark:border-slate-900">
+        <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-slate-400 font-black text-[10px] uppercase tracking-[0.2em] mb-6">
           <ArrowLeft size={16} /> Back
         </button>
-        <h1 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">Events</h1>
-        <p className="text-slate-400 font-medium text-sm mt-1">{hijri.full}</p>
+        <h1 className="text-4xl font-black text-slate-950 dark:text-white tracking-tight leading-none">Programs</h1>
+        <p className="text-slate-500 font-bold text-sm mt-3 uppercase tracking-wider">{hijri.full}</p>
       </header>
 
-      <main className="px-6 -mt-6 relative z-10 space-y-6 max-w-lg mx-auto">
-        <div className="bg-white dark:bg-slate-900 p-1.5 rounded-[24px] border border-slate-100 dark:border-slate-800 shadow-soft flex gap-1">
-          {['upcoming', 'past'].map(f => (
-            <button key={f} onClick={() => setFilter(f)} className={`flex-1 py-3 text-[10px] font-black uppercase tracking-widest rounded-[18px] transition-all ${filter === f ? 'bg-slate-900 dark:bg-brand-600 text-white shadow-vivid' : 'text-slate-400'}`}>{f}</button>
+      <main className="px-6 -mt-8 relative z-10 space-y-8 max-w-lg mx-auto">
+        <div className="bg-white dark:bg-slate-900 p-2 rounded-[32px] border border-slate-100 dark:border-slate-800 shadow-xl shadow-slate-950/5 flex gap-2">
+          {['upcoming', 'completed'].map(f => (
+            <button key={f} onClick={() => setFilter(f)} className={`flex-1 py-4 text-[10px] font-black uppercase tracking-[0.25em] rounded-[24px] transition-all ${filter === f ? 'bg-slate-950 text-white shadow-xl' : 'text-slate-400 hover:text-blue-600'}`}>{f}</button>
           ))}
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-6">
           {allEvents.map(ev => (
-            <div key={ev.id} className="bg-white dark:bg-slate-900 p-6 rounded-[32px] border border-slate-100 dark:border-slate-800 shadow-sm group hover:border-brand-300 transition-all">
-              <div className="flex items-start gap-4">
-                <div className="w-14 h-14 rounded-2xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-brand-600 shadow-inner">
-                  {ev.type === 'NIKAH' ? <Heart size={24} /> : ev.type === 'MEETING' ? <Users size={24} /> : <Mic2 size={24} />}
+            <div key={ev.id} className="bg-white dark:bg-slate-900 p-8 rounded-[40px] border border-slate-100 dark:border-slate-800 shadow-sm group hover:border-blue-400 transition-all">
+              <div className="flex items-start gap-6">
+                <div className="w-16 h-16 rounded-3xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-blue-600 shadow-inner group-hover:scale-105 transition-transform border border-slate-100 dark:border-slate-700">
+                  {ev.type === 'NIKAH' ? <Heart size={28} strokeWidth={2.5} /> : ev.type === 'MEETING' ? <Users size={28} strokeWidth={2.5} /> : <Mic2 size={28} strokeWidth={2.5} />}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-[9px] font-black text-brand-600 uppercase tracking-widest bg-brand-50 px-2 py-0.5 rounded-lg">{ev.type}</span>
-                    <span className="text-[10px] font-bold text-slate-300">{ev.date.split(',')[0]}</span>
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-[10px] font-black text-blue-600 uppercase tracking-[0.3em] bg-blue-50 px-3 py-1 rounded-xl">{ev.type}</span>
+                    <span className="text-[11px] font-black text-slate-300 uppercase tracking-widest">{ev.date}</span>
                   </div>
-                  <h3 className="text-base font-black text-slate-900 dark:text-white leading-tight mb-4 group-hover:text-brand-600 transition-colors">{ev.title}</h3>
+                  <h3 className="text-xl font-black text-slate-950 dark:text-white leading-tight mb-6 group-hover:text-blue-600 transition-colors">{ev.title}</h3>
                   
-                  <div className="grid grid-cols-2 gap-4 pt-4 border-t border-slate-50 dark:border-slate-800">
-                    <div className="flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-widest">
-                      <Clock size={12} className="text-brand-500" /> {ev.time}
+                  <div className="grid grid-cols-2 gap-6 pt-6 border-t border-slate-100 dark:border-slate-800">
+                    <div className="flex items-center gap-2.5 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">
+                      <Clock size={14} className="text-blue-500" /> {ev.time}
                     </div>
-                    <div className="flex items-center gap-2 text-[10px] font-black text-slate-400 uppercase tracking-widest">
-                      <MapPin size={12} className="text-brand-500" /> Pernambut
+                    <div className="flex items-center gap-2.5 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">
+                      <MapPin size={14} className="text-blue-500" /> {ev.location}
                     </div>
                   </div>
                 </div>
