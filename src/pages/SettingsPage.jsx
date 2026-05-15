@@ -13,6 +13,7 @@ import { useTheme } from '../context/ThemeContext';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
+import TopNav from '../components/layout/TopNav';
 
 const SettingToggle = ({ label, description, enabled, onToggle, icon: Icon, color = "emerald" }) => {
   const colors = {
@@ -209,35 +210,23 @@ const SettingsPage = () => {
 
   return (
     <div className="pb-32 min-h-screen w-full bg-[#fcfcfd] dark:bg-[#020617] transition-all duration-300 overflow-x-hidden" style={{ fontSize: `${fontSize}px` }}>
-      {/* Header */}
-      <header className="sticky top-0 z-50 bg-white/80 dark:bg-[#020617]/80 backdrop-blur-xl border-b border-slate-100 dark:border-slate-800 px-6 py-6">
-        <div className="max-w-screen-xl mx-auto space-y-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <button onClick={() => navigate(-1)} className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400 hover:text-emerald-500 transition-colors">
-                <ArrowLeft size={20} />
-              </button>
-              <h1 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">{t('settings')}</h1>
-            </div>
-            <div className="w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center text-white shadow-lg shadow-emerald-500/30">
-              <ShieldCheck size={20} />
-            </div>
-          </div>
+      {/* Centered Top Navbar */}
+      <TopNav title={t('settings')} showBack={true} />
 
-          <div className="relative group max-w-2xl mx-auto">
+      <main className="w-full px-6 py-24 space-y-8 max-w-2xl mx-auto">
+        
+        {!searchQuery && (
+          <div className="relative group max-w-2xl mx-auto mb-10">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-emerald-500 transition-colors" size={18} />
             <input 
               type="text" 
               placeholder={t('search_settings')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-4 py-4 bg-slate-50 dark:bg-slate-900/50 border border-slate-100 dark:border-slate-800 rounded-2xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 outline-none transition-all font-bold text-sm"
+              className="w-full pl-12 pr-4 py-4 bg-slate-50 dark:bg-slate-900/50 border border-slate-100 dark:border-slate-800 rounded-2xl focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 outline-none transition-all font-bold text-sm shadow-sm"
             />
           </div>
-        </div>
-      </header>
-
-      <main className="w-full px-6 py-8 space-y-8 max-w-2xl mx-auto">
+        )}
         
         {!searchQuery && (
           <motion.section 

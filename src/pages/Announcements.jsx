@@ -3,6 +3,7 @@ import { Search, SlidersHorizontal, Megaphone, ArrowLeft, Clock, Share2, AlertCi
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { getHijriDate } from '../utils/dateUtils';
+import TopNav from '../components/layout/TopNav';
 
 const data = [
   { id: 1, title: 'Jummah timing adjusted', content: 'The Jummah bayan will start at 1:15 PM instead of 1:00 PM this week due to extreme heat.', type: 'RELIGIOUS', priority: 'NORMAL', time: '2h ago', author: 'Masjid Committee' },
@@ -25,24 +26,10 @@ const Announcements = () => {
 
   return (
     <div className="min-h-screen bg-[#fcfcfd] dark:bg-[#020617] pb-40">
-      {/* ── Header ── */}
-      <header className="sticky top-0 z-50 bg-white/80 dark:bg-[#020617]/80 backdrop-blur-xl border-b border-slate-100 dark:border-slate-800 px-6 py-6">
-        <div className="w-full flex items-center justify-between">
-          <button onClick={() => navigate(-1)} className="flex items-center gap-3 text-slate-400 hover:text-emerald-500 transition-colors group">
-            <div className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center group-hover:-translate-x-1 transition-transform">
-              <ArrowLeft size={16} />
-            </div>
-            <span className="text-xs font-black uppercase tracking-widest">Back</span>
-          </button>
-          
-          <div className="flex flex-col items-start">
-             <h1 className="text-xl font-black text-slate-900 dark:text-white tracking-tighter">Community Feed</h1>
-             <p className="text-[10px] font-black text-emerald-500 uppercase tracking-widest">{hijri.full}</p>
-          </div>
-        </div>
-      </header>
+      {/* Centered Top Navbar */}
+      <TopNav title="Community Feed" showBack={true} />
 
-      <main className="w-full px-6 py-12 space-y-10">
+      <main className="w-full px-6 py-24 space-y-10 max-w-5xl mx-auto">
         
         {/* Search & Filter */}
         <div className="space-y-6">

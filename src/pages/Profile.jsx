@@ -8,6 +8,7 @@ import { useMosque } from '../context/MosqueContext';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getHijriDate } from '../utils/dateUtils';
+import TopNav from '../components/layout/TopNav';
 
 const Profile = () => {
   const { selectedMosque } = useMosque();
@@ -40,11 +41,14 @@ const Profile = () => {
   ].filter(g => g.items.length > 0);
 
   const initial = (editName?.[0] || 'U').toUpperCase();
+  const title = t('profile') || 'User Profile';
 
   return (
-    <div className="min-h-screen bg-[#fcfcfd] dark:bg-[#020617] pb-40">
+    <div className="min-h-screen bg-[#fcfcfd] dark:bg-[#020617] pb-40 overflow-x-hidden">
+      {/* Centered Top Navbar */}
+      <TopNav title={title} showBack={true} />
       {/* ── Profile Header ── */}
-      <header className="bg-white dark:bg-[#020617] pt-20 pb-16 px-6 border-b border-slate-100 dark:border-slate-800">
+      <header className="bg-white dark:bg-[#020617] pt-32 pb-16 px-6 border-b border-slate-100 dark:border-slate-800">
         <div className="max-w-4xl mx-auto flex flex-col md:flex-row items-center gap-10">
           <div className="relative group">
             <div className="w-32 h-32 rounded-[48px] bg-emerald-500 text-white flex items-center justify-center text-5xl font-black shadow-2xl shadow-emerald-500/30 transform group-hover:rotate-6 transition-transform duration-500">

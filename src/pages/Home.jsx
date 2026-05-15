@@ -9,6 +9,7 @@ import { motion } from 'framer-motion';
 import { getHijriDate } from '../utils/dateUtils';
 import MasjidList from '../components/mosque/MasjidList';
 import BayanSection from '../components/layout/BayanSection';
+import TopNav from '../components/layout/TopNav';
 
 import { useTranslation } from 'react-i18next';
 
@@ -39,28 +40,10 @@ const Home = () => {
 
   return (
     <div className="min-h-screen bg-[#fcfcfd] dark:bg-[#020617] pb-40">
-      {/* ── Modern Navbar / Header ── */}
-      <header className="sticky top-0 z-50 bg-white/80 dark:bg-[#020617]/80 backdrop-blur-xl border-b border-slate-100 dark:border-slate-800 px-6 py-4">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-emerald-500 rounded-lg flex items-center justify-center text-white font-black">ﺑ</div>
-            <h1 className="text-lg font-black tracking-tighter dark:text-white hidden sm:block">Pernambut Connect</h1>
-          </div>
-          
-          <div className="flex items-center gap-4">
-             <button className="p-2 text-slate-400 hover:text-emerald-500 transition-colors"><Search size={20} /></button>
-             <button onClick={() => navigate('/notifications')} className="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 relative">
-               <Bell size={18} />
-               <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-emerald-500 rounded-full border-2 border-white dark:border-slate-800" />
-             </button>
-             <button onClick={() => navigate('/profile')} className="w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center text-white shadow-lg shadow-emerald-500/20">
-                <Users size={18} />
-             </button>
-          </div>
-        </div>
-      </header>
+      {/* ── Centered Top Navbar ── */}
+      <TopNav />
 
-      <main className="max-w-7xl mx-auto px-6 lg:px-10 py-10 grid grid-cols-1 lg:grid-cols-12 gap-10">
+      <main className="max-w-7xl mx-auto px-6 lg:px-10 py-24 grid grid-cols-1 lg:grid-cols-12 gap-10">
         
         {/* ── Left Column: Main Feed ── */}
         <div className="lg:col-span-8 space-y-12">

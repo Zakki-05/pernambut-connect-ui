@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useMosque } from '../context/MosqueContext';
 import { useNavigate } from 'react-router-dom';
 import { getHijriDate } from '../utils/dateUtils';
+import TopNav from '../components/layout/TopNav';
 
 const UPI_ID = 'pernambut.connect@okaxis';
 
@@ -34,25 +35,10 @@ const Donate = () => {
 
   return (
     <div className="min-h-screen bg-[#fcfcfd] dark:bg-[#020617] pb-40">
-      {/* ── Progress Header ── */}
-      <header className="sticky top-0 z-50 bg-white/80 dark:bg-[#020617]/80 backdrop-blur-xl border-b border-slate-100 dark:border-slate-800 px-6 py-6">
-        <div className="w-full flex items-center justify-between">
-          <button onClick={() => step === 1 ? navigate(-1) : setStep(1)} className="flex items-center gap-3 text-slate-400 hover:text-emerald-500 transition-colors group">
-            <div className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center group-hover:-translate-x-1 transition-transform">
-              <ArrowLeft size={16} />
-            </div>
-            <span className="text-xs font-black uppercase tracking-widest">{step === 1 ? 'Go Back' : 'Amount Selection'}</span>
-          </button>
-          
-          <div className="flex items-center gap-1.5">
-            {[1, 2, 3].map(s => (
-              <div key={s} className={`h-1.5 rounded-full transition-all duration-500 ${step >= s ? 'w-8 bg-emerald-500' : 'w-2 bg-slate-200 dark:bg-slate-800'}`} />
-            ))}
-          </div>
-        </div>
-      </header>
+      {/* Centered Top Navbar */}
+      <TopNav title={step === 1 ? 'Make a Donation' : step === 2 ? 'Secure Payment' : 'Success'} showBack={true} />
 
-      <main className="w-full px-6 py-12">
+      <main className="w-full px-6 py-24 max-w-4xl mx-auto">
         <AnimatePresence mode="wait">
           {step === 1 ? (
             <motion.div key="form" initial={{ opacity:0, y:20 }} animate={{ opacity:1, y:0 }} exit={{ opacity:0, y:-20 }} className="space-y-10">

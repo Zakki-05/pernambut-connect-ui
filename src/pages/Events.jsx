@@ -3,6 +3,7 @@ import { Calendar, MapPin, Clock, ArrowLeft, Heart, Users, Mic2, Star, ChevronRi
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { getHijriDate } from '../utils/dateUtils';
+import TopNav from '../components/layout/TopNav';
 
 const allEvents = [
   { id: 1, title: 'Nikah Ceremony: Abdullah & Fatima', type: 'NIKAH',   date: 'May 25, 2026', time: '10:00 AM', location: 'Main Road Masjid', organizer: 'Rahman Family' },
@@ -17,24 +18,10 @@ const Events = () => {
 
   return (
     <div className="min-h-screen bg-[#fcfcfd] dark:bg-[#020617] pb-40">
-      {/* ── Header ── */}
-      <header className="sticky top-0 z-50 bg-white/80 dark:bg-[#020617]/80 backdrop-blur-xl border-b border-slate-100 dark:border-slate-800 px-6 py-6">
-        <div className="w-full flex items-center justify-between">
-          <button onClick={() => navigate(-1)} className="flex items-center gap-3 text-slate-400 hover:text-emerald-500 transition-colors group">
-            <div className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center group-hover:-translate-x-1 transition-transform">
-              <ArrowLeft size={16} />
-            </div>
-            <span className="text-xs font-black uppercase tracking-widest">Back</span>
-          </button>
-          
-          <div className="flex flex-col items-start">
-             <h1 className="text-xl font-black text-slate-900 dark:text-white tracking-tighter">Community Events</h1>
-             <p className="text-[10px] font-black text-emerald-500 uppercase tracking-widest">{hijri.full}</p>
-          </div>
-        </div>
-      </header>
+      {/* Centered Top Navbar */}
+      <TopNav title="Community Events" showBack={true} />
 
-      <main className="w-full px-6 py-12 space-y-10">
+      <main className="w-full px-6 py-24 space-y-10 max-w-5xl mx-auto">
         
         {/* Toggle Filter */}
         <div className="bg-white dark:bg-slate-900 p-2 rounded-[32px] border border-slate-100 dark:border-slate-800 shadow-xl shadow-slate-900/5 flex gap-2">
