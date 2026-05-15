@@ -4,6 +4,7 @@ import { useAuth } from './context/AuthContext';
 import { useMosque } from './context/MosqueContext';
 import BottomNav from './components/layout/BottomNav';
 import Login from './pages/Login';
+import Register from './pages/Register';
 import MosqueSelection from './pages/MosqueSelection';
 import Home from './pages/Home';
 import Announcements from './pages/Announcements';
@@ -59,6 +60,7 @@ function App() {
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
           <Route path="/select-mosque" element={
             <AuthProtectedRoute>
               <MosqueSelection />

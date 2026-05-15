@@ -8,19 +8,25 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('access_token');
+    const storedUser = localStorage.getItem('user');
+    
     if (token) {
+      if (storedUser) {
+        setUser(JSON.parse(storedUser));
+      }
       // Validate token by fetching profile
-      api.get('/users/')
+      api.get('/profile/')
         .then(res => {
-          if (res.data && res.data.length > 0) {
-            setUser(res.data[0]);
-          } else {
-            localStorage.removeItem('token');
-          }
+          setUser(res.data);
+          localStorage.setItem('user', JSON.stringify(res.data));
         })
         .catch(() => {
-          localStorage.removeItem('token');
+          // If profile fetch fails, token is invalid or expired
+          // The interceptor might try to refresh it, but if it fails completely:
+          if (!localStorage.getItem('access_token')) {
+            setUser(null);
+          }
         })
         .finally(() => setLoading(false));
     } else {
@@ -28,15 +34,25 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  const login = (userData, token) => {
+  const login = (userData, accessToken, refreshToken) => {
     setUser(userData);
-    localStorage.setItem('token', token);
+    localStorage.setItem('access_token', accessToken);
+    localStorage.setItem('refresh_token', refreshToken);
+    localStorage.setItem('user', JSON.stringify(userData));
   };
 
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem('token');
-    localStorage.removeItem('selectedMosque');
+  const logout = async () => {
+    try {
+      await api.post('/logout/', { refresh: localStorage.getItem('refresh_token') });
+    } catch (error) {
+      console.error("Logout error", error);
+    } finally {
+      setUser(null);
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('refresh_token');
+      localStorage.removeItem('user');
+      localStorage.removeItem('selectedMosque');
+    }
   };
 
   return (

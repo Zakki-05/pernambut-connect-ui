@@ -1,44 +1,33 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Mail, ShieldCheck, ArrowRight, Loader2 } from 'lucide-react';
+import { useNavigate, Link } from 'react-router-dom';
+import { Mail, ShieldCheck, Lock, Loader2 } from 'lucide-react';
 import { loginWithEmail } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 
 const Login = () => {
   const [email, setEmail] = useState('');
-  const [otp, setOtp] = useState('');
-  const [step, setStep] = useState(1);
+  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
   const { login } = useAuth();
 
-  const handleRequestOtp = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    if (!email) return setError("Email is required");
+    if (!email || !password) return setError("Email and Password are required");
     setLoading(true);
     setError('');
+    
     try {
-      const res = await loginWithEmail(email);
-      setStep(2);
-    } catch (err) {
-      setError(err.response?.data?.error || "Failed to send OTP");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleVerifyOtp = async (e) => {
-    e.preventDefault();
-    if (!otp) return setError("OTP is required");
-    setLoading(true);
-    setError('');
-    try {
-      const res = await loginWithEmail(email, otp);
-      login(res.data.user, res.data.access);
+      const res = await loginWithEmail(email, password);
+      login(res.data.user, res.data.access, res.data.refresh);
       navigate('/select-mosque');
     } catch (err) {
-      setError(err.response?.data?.error || "Invalid OTP");
+      if (err.response?.status === 401) {
+        setError("Invalid email or password");
+      } else {
+        setError(err.response?.data?.error || "Login failed. Please try again.");
+      }
     } finally {
       setLoading(false);
     }
@@ -61,59 +50,51 @@ const Login = () => {
           </div>
         )}
 
-        {step === 1 ? (
-          <form onSubmit={handleRequestOtp} className="space-y-5">
-            <div>
-              <label className="block text-sm font-bold text-gray-700 mb-2">Email Address</label>
-              <div className="relative">
-                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
-                <input 
-                  type="email" 
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-12 pr-4 py-4 bg-gray-50 border-2 border-gray-100 rounded-2xl outline-none focus:border-primary-500 focus:bg-white transition-all text-gray-800"
-                  placeholder="Enter your email"
-                />
-              </div>
-            </div>
-            <button 
-              type="submit" 
-              disabled={loading}
-              className="w-full bg-primary-600 text-white font-bold py-4 rounded-2xl flex items-center justify-center hover:bg-primary-700 transition-all shadow-lg shadow-primary-200 disabled:opacity-70"
-            >
-              {loading ? <Loader2 className="animate-spin" /> : "Request OTP"}
-            </button>
-          </form>
-        ) : (
-          <form onSubmit={handleVerifyOtp} className="space-y-5">
-            <div>
-              <label className="block text-sm font-bold text-gray-700 mb-2">Enter OTP</label>
+        <form onSubmit={handleLogin} className="space-y-5">
+          <div>
+            <label className="block text-sm font-bold text-gray-700 mb-2">Email Address</label>
+            <div className="relative">
+              <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
               <input 
-                type="text" 
+                type="email" 
                 required
-                value={otp}
-                onChange={(e) => setOtp(e.target.value)}
-                className="w-full px-4 py-4 text-center text-2xl tracking-widest bg-gray-50 border-2 border-gray-100 rounded-2xl outline-none focus:border-primary-500 focus:bg-white transition-all text-gray-800"
-                placeholder="1234"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full pl-12 pr-4 py-4 bg-gray-50 border-2 border-gray-100 rounded-2xl outline-none focus:border-primary-500 focus:bg-white transition-all text-gray-800"
+                placeholder="Enter your email"
               />
             </div>
-            <button 
-              type="submit" 
-              disabled={loading}
-              className="w-full bg-primary-600 text-white font-bold py-4 rounded-2xl flex items-center justify-center hover:bg-primary-700 transition-all shadow-lg shadow-primary-200 disabled:opacity-70"
-            >
-              {loading ? <Loader2 className="animate-spin" /> : "Verify & Login"}
-            </button>
-            <button 
-              type="button"
-              onClick={() => setStep(1)}
-              className="w-full text-gray-500 font-semibold text-sm hover:text-gray-900 transition-colors"
-            >
-              Back to Email
-            </button>
-          </form>
-        )}
+          </div>
+          
+          <div>
+            <label className="block text-sm font-bold text-gray-700 mb-2">Password</label>
+            <div className="relative">
+              <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+              <input 
+                type="password" 
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full pl-12 pr-4 py-4 bg-gray-50 border-2 border-gray-100 rounded-2xl outline-none focus:border-primary-500 focus:bg-white transition-all text-gray-800"
+                placeholder="Enter your password"
+              />
+            </div>
+          </div>
+
+          <button 
+            type="submit" 
+            disabled={loading}
+            className="w-full bg-primary-600 text-white font-bold py-4 rounded-2xl flex items-center justify-center hover:bg-primary-700 transition-all shadow-lg shadow-primary-200 disabled:opacity-70"
+          >
+            {loading ? <Loader2 className="animate-spin" /> : "Sign In"}
+          </button>
+        </form>
+        
+        <div className="mt-6 text-center">
+          <p className="text-gray-500 text-sm">
+            Don't have an account? <Link to="/register" className="text-primary-600 font-bold hover:underline">Register here</Link>
+          </p>
+        </div>
       </div>
     </div>
   );
