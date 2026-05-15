@@ -23,13 +23,35 @@ const Home = () => {
   const dayName = today.toLocaleDateString('en-IN', { weekday: 'long' });
   const fullDate = today.toLocaleDateString('en-IN', { day: 'numeric', month: 'long' });
 
-  const prayerTimes = [
-    { name: 'Fajr', time: selectedMosque?.fajr || '04:52', active: false },
-    { name: 'Dhuhr', time: selectedMosque?.dhuhr || '12:22', active: false },
-    { name: 'Asr', time: selectedMosque?.asr || '03:48', active: true },
-    { name: 'Maghrib', time: selectedMosque?.maghrib || '06:38', active: false },
-    { name: 'Isha', time: selectedMosque?.isha || '07:52', active: false },
+  const prayerTimesData = [
+    { name: 'Fajr', time: selectedMosque?.fajr || '04:52' },
+    { name: 'Dhuhr', time: selectedMosque?.dhuhr || '12:22' },
+    { name: 'Asr', time: selectedMosque?.asr || '15:48' },
+    { name: 'Maghrib', time: selectedMosque?.maghrib || '18:38' },
+    { name: 'Isha', time: selectedMosque?.isha || '19:52' },
   ];
+
+  const getActivePrayerIndex = () => {
+    const now = new Date();
+    const currentMinutes = now.getHours() * 60 + now.getMinutes();
+    
+    const minutesList = prayerTimesData.map(p => {
+      const [h, m] = p.time.split(':').map(Number);
+      return h * 60 + m;
+    });
+
+    // Find the latest prayer that has already started
+    for (let i = minutesList.length - 1; i >= 0; i--) {
+      if (currentMinutes >= minutesList[i]) return i;
+    }
+    return 4; // If before Fajr, return Isha (last prayer of previous day)
+  };
+
+  const activeIndex = getActivePrayerIndex();
+  const prayerTimes = prayerTimesData.map((p, i) => ({
+    ...p,
+    active: i === activeIndex
+  }));
 
   const quickActions = [
     { label: t('donate'),     sub: t('sadaqah_zakat'), icon: Heart,    color: 'bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400', path: '/donate' },
