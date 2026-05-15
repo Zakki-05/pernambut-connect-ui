@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowLeft, Bell, Moon, Sun, Globe, Shield, Info, ChevronRight, ToggleLeft, ToggleRight, Calendar, UserCheck } from 'lucide-react';
+import { ArrowLeft, Bell, Moon, Sun, Globe, Shield, Info, ChevronRight, Calendar, UserCheck } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '../context/ThemeContext';
 
 const SettingToggle = ({ label, description, enabled, onToggle }) => (
-  <div className="flex items-center justify-between py-4">
+  <div className="flex items-center justify-between py-3.5">
     <div className="flex-1 mr-4">
-      <p className="font-medium text-gray-800">{label}</p>
-      {description && <p className="text-xs text-gray-500 mt-0.5">{description}</p>}
+      <p className="font-semibold text-sm text-gray-900 dark:text-gray-100">{label}</p>
+      {description && <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">{description}</p>}
     </div>
-    <button onClick={onToggle} className="text-primary-600">
-      {enabled ? <ToggleRight size={32} /> : <ToggleLeft size={32} className="text-gray-300" />}
+    <button
+      onClick={onToggle}
+      className={`relative w-11 h-6 rounded-full transition-all duration-300 focus:outline-none ${enabled ? 'bg-primary-500' : 'bg-gray-200 dark:bg-gray-700'}`}
+    >
+      <span className={`absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform duration-300 ${enabled ? 'translate-x-5' : 'translate-x-0'}`} />
     </button>
   </div>
 );
@@ -77,10 +80,10 @@ const SettingsPage = () => {
   };
 
   return (
-    <div className="pb-24 min-h-screen bg-gray-50">
+    <div className="pb-24 min-h-screen bg-gray-50 dark:bg-[#080c14]">
       {/* Header */}
-      <div className="bg-gradient-to-br from-primary-700 via-primary-600 to-emerald-500 px-6 pt-12 pb-10 rounded-b-[40px] text-white shadow-lg relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-40 h-40 bg-white/5 rounded-full -mr-10 -mt-10"></div>
+      <div className="bg-gradient-to-br from-primary-700 via-primary-600 to-sky-400 px-6 pt-12 pb-10 rounded-b-[40px] text-white shadow-lg relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-40 h-40 bg-white/5 rounded-full -mr-10 -mt-10" />
         <div className="flex items-center">
           <button onClick={() => navigate('/profile')} className="p-2 -ml-2 mr-2 rounded-full hover:bg-white/10 transition-colors">
             <ArrowLeft size={22} className="text-white" />
@@ -91,10 +94,10 @@ const SettingsPage = () => {
 
       <div className="px-6 mt-6">
         {/* Notifications Section */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 mb-5">
+        <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-5 mb-5">
           <div className="flex items-center mb-2">
             <Bell size={18} className="text-primary-600 mr-2" />
-            <h2 className="font-bold text-gray-800">Notifications</h2>
+            <h2 className="font-bold text-gray-800 dark:text-gray-100">Notifications</h2>
           </div>
           <div className="divide-y divide-gray-50">
             <SettingToggle 
@@ -119,10 +122,10 @@ const SettingsPage = () => {
         </div>
 
         {/* Prayer Time Adjustments */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 mb-5">
+        <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-5 mb-5">
           <div className="flex items-center mb-4">
             <Calendar size={18} className="text-primary-600 mr-2" />
-            <h2 className="font-bold text-gray-800">Prayer Adjustments</h2>
+            <h2 className="font-bold text-gray-800 dark:text-gray-100">Prayer Adjustments</h2>
           </div>
           <p className="text-[10px] text-gray-500 mb-4 italic">Adjust timing offsets if your local mosque varies from standard calculation.</p>
           <div className="space-y-3">
@@ -150,10 +153,10 @@ const SettingsPage = () => {
         </div>
 
         {/* Appearance Section */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 mb-5">
+        <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-5 mb-5">
           <div className="flex items-center mb-4">
             <Moon size={18} className="text-primary-600 mr-2" />
-            <h2 className="font-bold text-gray-800">Theme Mode</h2>
+            <h2 className="font-bold text-gray-800 dark:text-gray-100">Theme Mode</h2>
           </div>
           <div className="grid grid-cols-2 gap-4">
             {/* Light Mode Card */}
@@ -203,10 +206,10 @@ const SettingsPage = () => {
         </div>
 
         {/* Privacy & Visibility Section */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 mb-5">
+        <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-5 mb-5">
           <div className="flex items-center mb-2">
             <UserCheck size={18} className="text-primary-600 mr-2" />
-            <h2 className="font-bold text-gray-800">Privacy & Visibility</h2>
+            <h2 className="font-bold text-gray-800 dark:text-gray-100">Privacy & Visibility</h2>
           </div>
           <div className="divide-y divide-gray-50">
             <SettingToggle 
@@ -225,10 +228,10 @@ const SettingsPage = () => {
         </div>
 
         {/* Language Section */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 mb-5">
+        <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-5 mb-5">
           <div className="flex items-center mb-4">
             <Globe size={18} className="text-primary-600 mr-2" />
-            <h2 className="font-bold text-gray-800">Language</h2>
+            <h2 className="font-bold text-gray-800 dark:text-gray-100">Language</h2>
           </div>
           <div className="space-y-2">
             {['English', 'Tamil', 'Urdu'].map((lang) => (
@@ -249,10 +252,10 @@ const SettingsPage = () => {
         </div>
 
         {/* Account & Security Section */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 mb-5">
+        <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-5 mb-5">
           <div className="flex items-center mb-4">
             <Shield size={18} className="text-primary-600 mr-2" />
-            <h2 className="font-bold text-gray-800">Account & Security</h2>
+            <h2 className="font-bold text-gray-800 dark:text-gray-100">Account & Security</h2>
           </div>
           <div className="divide-y divide-gray-50">
             <div className="flex items-center justify-between py-3.5 cursor-pointer hover:bg-gray-50">
@@ -273,10 +276,10 @@ const SettingsPage = () => {
         </div>
 
         {/* Accessibility Section */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 mb-5">
+        <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-5 mb-5">
           <div className="flex items-center mb-2">
             <Globe size={18} className="text-primary-600 mr-2" />
-            <h2 className="font-bold text-gray-800">Accessibility</h2>
+            <h2 className="font-bold text-gray-800 dark:text-gray-100">Accessibility</h2>
           </div>
           <div className="divide-y divide-gray-50">
             <SettingToggle 
@@ -298,7 +301,7 @@ const SettingsPage = () => {
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-5">
           <div className="flex items-center p-5 pb-3">
             <Info size={18} className="text-primary-600 mr-2" />
-            <h2 className="font-bold text-gray-800">Support & Help</h2>
+            <h2 className="font-bold text-gray-800 dark:text-gray-100">Support & Help</h2>
           </div>
           <div className="divide-y divide-gray-50">
             <div className="flex items-center justify-between px-5 py-3.5 cursor-pointer hover:bg-gray-50">
@@ -321,10 +324,10 @@ const SettingsPage = () => {
         </div>
 
         {/* Data & Storage Section */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 mb-5">
+        <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-5 mb-5">
           <div className="flex items-center mb-4">
             <Info size={18} className="text-primary-600 mr-2" />
-            <h2 className="font-bold text-gray-800">Data & Storage</h2>
+            <h2 className="font-bold text-gray-800 dark:text-gray-100">Data & Storage</h2>
           </div>
           <div className="divide-y divide-gray-50">
             <div className="flex items-center justify-between py-3.5">

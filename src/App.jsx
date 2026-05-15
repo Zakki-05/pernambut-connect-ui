@@ -11,6 +11,7 @@ import Announcements from './pages/Announcements';
 import Events from './pages/Events';
 import Donate from './pages/Donate';
 import Profile from './pages/Profile';
+import AdminUserManagement from './pages/AdminUserManagement';
 import DonationHistory from './pages/DonationHistory';
 import SettingsPage from './pages/SettingsPage';
 import DeathNews from './pages/DeathNews';
@@ -64,6 +65,16 @@ function App() {
           <Route path="/select-mosque" element={
             <AuthProtectedRoute>
               <MosqueSelection />
+            </AuthProtectedRoute>
+          } />
+          
+          <Route path="/admin/users" element={
+            <AuthProtectedRoute>
+              <MosqueProtectedRoute>
+                <AdminProtectedRoute>
+                  <AdminUserManagement />
+                </AdminProtectedRoute>
+              </MosqueProtectedRoute>
             </AuthProtectedRoute>
           } />
           

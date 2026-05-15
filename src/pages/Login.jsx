@@ -1,100 +1,109 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { Mail, ShieldCheck, Lock, Loader2 } from 'lucide-react';
-import { loginWithEmail } from '../services/api';
+import { Link, useNavigate } from 'react-router-dom';
+import { Mail, Lock, Eye, EyeOff, ArrowRight, Loader2, Sparkles } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { loginWithEmail } from '../services/api';
 
 const Login = () => {
-  const [email, setEmail] = useState('');
+  const [email, setEmail]       = useState('');
   const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
-  const navigate = useNavigate();
-  const { login } = useAuth();
+  const [showPass, setShowPass] = useState(false);
+  const [loading, setLoading]   = useState(false);
+  const [error, setError]       = useState('');
+  const { login }               = useAuth();
+  const navigate                = useNavigate();
 
-  const handleLogin = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!email || !password) return setError("Email and Password are required");
+    if (!email || !password) return setError('Please fill in all fields.');
     setLoading(true);
     setError('');
-    
     try {
       const res = await loginWithEmail(email, password);
       login(res.data.user, res.data.access, res.data.refresh);
       navigate('/select-mosque');
     } catch (err) {
-      if (err.response?.status === 401) {
-        setError("Invalid email or password");
-      } else {
-        setError(err.response?.data?.error || "Login failed. Please try again.");
-      }
+      setError(err.response?.data?.error || 'Invalid email or password.');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-      <div className="max-w-md w-full bg-white p-8 rounded-[32px] shadow-2xl border border-gray-100">
+    <div className="min-h-screen bg-gray-50 dark:bg-[#0a0f0a] flex flex-col overflow-hidden">
+
+      {/* Background decorations */}
+      <div className="absolute top-0 left-0 w-full h-72 bg-gradient-to-br from-primary-800 via-primary-700 to-teal-600 rounded-b-[60px]" />
+      <div className="absolute top-20 right-6 w-32 h-32 bg-white/5 rounded-full blur-2xl" />
+      <div className="absolute top-10 left-10 w-24 h-24 bg-primary-400/20 rounded-full blur-xl" />
+      <div className="absolute inset-0 opacity-[0.03]"
+        style={{ backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)', backgroundSize: '18px 18px' }}
+      />
+
+      <div className="relative z-10 flex-1 flex flex-col items-center justify-center px-5 py-12">
+
+        {/* Brand */}
         <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-primary-600 rounded-2xl mx-auto flex items-center justify-center shadow-lg shadow-primary-200 mb-4">
-            <ShieldCheck className="text-white" size={32} />
+          <div className="w-20 h-20 mx-auto mb-4 bg-white rounded-3xl flex items-center justify-center shadow-xl shadow-primary-900/30">
+            <span className="text-primary-700 text-3xl font-black">ﺑ</span>
           </div>
-          <h2 className="text-3xl font-black text-gray-900 mb-2">Welcome Back</h2>
-          <p className="text-gray-500">Sign in to Pernambut Connect</p>
+          <h1 className="text-white text-3xl font-black tracking-tight drop-shadow-lg">Pernambut Connect</h1>
+          <p className="text-primary-200 text-sm mt-1.5 font-medium">Your Muslim community hub</p>
         </div>
 
-        {error && (
-          <div className="bg-red-50 text-red-600 p-4 rounded-xl text-sm font-medium mb-6 text-center">
-            {error}
-          </div>
-        )}
+        {/* Card */}
+        <div className="w-full max-w-sm bg-white dark:bg-gray-900 rounded-4xl shadow-2xl border border-gray-100 dark:border-gray-800 p-7">
+          <h2 className="text-gray-900 dark:text-gray-100 text-xl font-black mb-1">Welcome back</h2>
+          <p className="text-gray-400 dark:text-gray-500 text-sm mb-6">Sign in to your account</p>
 
-        <form onSubmit={handleLogin} className="space-y-5">
-          <div>
-            <label className="block text-sm font-bold text-gray-700 mb-2">Email Address</label>
-            <div className="relative">
-              <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
-              <input 
-                type="email" 
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full pl-12 pr-4 py-4 bg-gray-50 border-2 border-gray-100 rounded-2xl outline-none focus:border-primary-500 focus:bg-white transition-all text-gray-800"
-                placeholder="Enter your email"
-              />
+          {error && (
+            <div className="mb-5 px-4 py-3 rounded-2xl bg-red-50 dark:bg-red-900/20 border border-red-100 dark:border-red-800/40 text-red-600 dark:text-red-400 text-sm font-semibold">
+              {error}
             </div>
-          </div>
-          
-          <div>
-            <label className="block text-sm font-bold text-gray-700 mb-2">Password</label>
-            <div className="relative">
-              <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
-              <input 
-                type="password" 
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full pl-12 pr-4 py-4 bg-gray-50 border-2 border-gray-100 rounded-2xl outline-none focus:border-primary-500 focus:bg-white transition-all text-gray-800"
-                placeholder="Enter your password"
-              />
-            </div>
-          </div>
+          )}
 
-          <button 
-            type="submit" 
-            disabled={loading}
-            className="w-full bg-primary-600 text-white font-bold py-4 rounded-2xl flex items-center justify-center hover:bg-primary-700 transition-all shadow-lg shadow-primary-200 disabled:opacity-70"
-          >
-            {loading ? <Loader2 className="animate-spin" /> : "Sign In"}
-          </button>
-        </form>
-        
-        <div className="mt-6 text-center">
-          <p className="text-gray-500 text-sm">
-            Don't have an account? <Link to="/register" className="text-primary-600 font-bold hover:underline">Register here</Link>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label className="block text-[11px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-2">Email</label>
+              <div className="relative">
+                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300 dark:text-gray-600" size={17} />
+                <input
+                  type="email" value={email} onChange={e => setEmail(e.target.value)} required
+                  placeholder="your@email.com"
+                  className="w-full pl-11 pr-4 py-3.5 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl text-sm text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 dark:focus:border-primary-400 transition-all"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-[11px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-2">Password</label>
+              <div className="relative">
+                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-300 dark:text-gray-600" size={17} />
+                <input
+                  type={showPass ? 'text' : 'password'} value={password} onChange={e => setPassword(e.target.value)} required
+                  placeholder="••••••••"
+                  className="w-full pl-11 pr-12 py-3.5 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl text-sm text-gray-900 dark:text-white outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 dark:focus:border-primary-400 transition-all"
+                />
+                <button type="button" onClick={() => setShowPass(!showPass)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors">
+                  {showPass ? <EyeOff size={16} /> : <Eye size={16} />}
+                </button>
+              </div>
+            </div>
+
+            <button type="submit" disabled={loading}
+              className="w-full bg-gradient-to-r from-primary-600 to-teal-500 text-white font-black py-4 rounded-2xl flex items-center justify-center gap-2 shadow-brand hover:shadow-brand-sm hover:-translate-y-0.5 transition-all disabled:opacity-60 disabled:translate-y-0 mt-2">
+              {loading ? <Loader2 className="animate-spin" size={18} /> : <>Sign In <ArrowRight size={16} /></>}
+            </button>
+          </form>
+
+          <p className="text-center text-sm text-gray-400 dark:text-gray-500 mt-6">
+            No account?{' '}
+            <Link to="/register" className="text-primary-600 dark:text-primary-400 font-bold hover:underline">Create one</Link>
           </p>
         </div>
+
+        <p className="mt-6 text-primary-300/60 text-xs font-medium">Community Platform • Pernambut, TN</p>
       </div>
     </div>
   );

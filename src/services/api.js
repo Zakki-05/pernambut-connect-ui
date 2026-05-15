@@ -59,14 +59,27 @@ api.interceptors.response.use(
 // ===== AUTH =====
 export const loginWithEmail = (email, password) =>
   api.post('/login/', { email, password });
+
 export const registerUser = (userData) =>
   api.post('/register/', userData);
+
+export const verifyOtp = (email, otp) =>
+  api.post('/verify-otp/', { email, otp });
+
+export const resendOtp = (email) =>
+  api.post('/resend-otp/', { email });
+
 export const logoutUser = () => {
   const refresh = localStorage.getItem('refresh_token');
   return api.post('/logout/', { refresh });
 };
 
-// ===== USER =====
+// ===== USER MANAGEMENT (ADMIN) =====
+export const getAllUsers = () => api.get('/users/');
+export const deleteUser = (id) => api.delete(`/users/${id}/`);
+export const toggleAdminStatus = (id) => api.post(`/users/${id}/toggle_admin/`);
+
+// ===== USER PROFILE =====
 export const getProfile = () => api.get('/profile/');
 
 // ===== MOSQUES =====

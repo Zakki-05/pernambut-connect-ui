@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { createAnnouncement, createEvent, createCommunityUpdate, getSocialLinks, updateSocialLink, createSocialLink, createBayan } from '../services/api';
 import { useMosque } from '../context/MosqueContext';
-import { Instagram, Facebook, Youtube, Share2, Globe, Mic2, UserCircle, Image, Upload } from 'lucide-react';
+import { Instagram, Facebook, Youtube, Share2, Globe, Mic2, UserCircle, Image, Upload, Users } from 'lucide-react';
 
 const AdminHub = () => {
   const navigate = useNavigate();
@@ -115,7 +115,15 @@ const AdminHub = () => {
           </button>
           <h1 className="text-2xl font-bold">Admin Hub</h1>
         </div>
-        <p className="text-red-100 text-sm">Send official announcements to the community</p>
+        <div className="flex items-center justify-between">
+          <p className="text-red-100 text-sm">Send official announcements to the community</p>
+          <button 
+            onClick={() => navigate('/admin/users')}
+            className="bg-white/20 hover:bg-white/30 text-white px-3 py-1.5 rounded-xl text-xs font-bold flex items-center transition-all backdrop-blur-md"
+          >
+            <Users size={14} className="mr-1.5" /> Manage Members
+          </button>
+        </div>
       </div>
 
       <div className="px-6 mt-6">
@@ -403,7 +411,7 @@ const AdminHub = () => {
             ) : (
               <Send size={18} className="mr-2" />
             )}
-            Post to {selectedMosque?.name || 'Community'}
+            Post
           </button>
         </form>
 

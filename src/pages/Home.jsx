@@ -1,334 +1,287 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useMosque } from '../context/MosqueContext';
-import { MapPin, Bell, Clock, ChevronRight, AlertCircle, Calendar, Heart, Users, BookOpen, Star, Megaphone, X, CheckCheck, ArrowLeft } from 'lucide-react';
+import {
+  MapPin, Bell, Clock, ChevronRight, AlertCircle,
+  Calendar, Heart, Users, BookOpen, Star, Megaphone,
+  X, ArrowRight, Sunrise, Moon, TrendingUp
+} from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import MasjidList from '../components/mosque/MasjidList';
 import BayanSection from '../components/layout/BayanSection';
 
+/* ── Helpers ─────────────────────────────────────────────── */
+const prayerTimes = [
+  { name: 'Fajr',    time: '05:10', period: 'AM', current: false },
+  { name: 'Dhuhr',   time: '01:30', period: 'PM', current: false },
+  { name: 'Asr',     time: '04:45', period: 'PM', current: true  },
+  { name: 'Maghrib', time: '06:15', period: 'PM', current: false },
+  { name: 'Isha',    time: '08:00', period: 'PM', current: false },
+];
+
+const announcements = [
+  { id: 1, title: 'Jummah bayan timing changed to 1:15 PM',            priority: 'URGENT', time: '2h ago' },
+  { id: 2, title: 'Urgent: Water supply maintenance in Wudu area',     priority: 'URGENT', time: '5h ago' },
+  { id: 3, title: 'Quran class registration open for children',        priority: 'NORMAL', time: '1d ago' },
+];
+
+const events = [
+  { id: 1, title: 'Nikah — Abdullah & Fatima',      date: 'May 10', type: 'NIKAH',   accent: 'from-pink-500 to-rose-500'   },
+  { id: 2, title: 'Special Bayan by Mufti Tariq',  date: 'May 12', type: 'BAYAN',   accent: 'from-violet-500 to-purple-500' },
+  { id: 3, title: 'Monthly Community Meeting',      date: 'May 15', type: 'MEETING', accent: 'from-blue-500 to-indigo-500'  },
+];
+
+const stats = [
+  { label: 'Members',  value: '1,240+', icon: Users,     accent: 'text-emerald-600 bg-emerald-50 dark:bg-emerald-900/20' },
+  { label: 'Mosques',  value: '4',      icon: Star,      accent: 'text-amber-600   bg-amber-50   dark:bg-amber-900/20'   },
+  { label: 'Posts',    value: '56',     icon: Megaphone, accent: 'text-blue-600    bg-blue-50    dark:bg-blue-900/20'    },
+];
+
+/* ── Component ───────────────────────────────────────────── */
 const Home = () => {
   const { selectedMosque } = useMosque();
   const navigate = useNavigate();
-  const [showNotifications, setShowNotifications] = useState(false);
+  const [notifOpen, setNotifOpen] = useState(false);
 
-  const today = new Date();
-  const dateStr = today.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+  const today  = new Date();
+  const dayStr = today.toLocaleDateString('en-IN', { weekday: 'long' });
+  const dtStr  = today.toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' });
 
-  const notifications = [
-    { id: 1, title: 'Janaza Alert', message: 'Janab Abdul Kareem Sahab has passed away. Janaza at Road Masjid at 2:30 PM today.', time: '10 min ago', type: 'URGENT', read: false },
-    { id: 2, title: 'Water Supply Update', message: 'Wudu area water supply restored. Thank you for your patience.', time: '1h ago', type: 'ALERT', read: false },
-    { id: 3, title: 'Jummah Reminder', message: 'Tomorrow is Jummah. Khutbah at Road Masjid starts at 12:50 PM.', time: '3h ago', type: 'REMINDER', read: false },
-    { id: 4, title: 'Event: Nikah Ceremony', message: 'Nikah of Abdullah & Fatima on May 10 at 10:00 AM. All are invited.', time: '5h ago', type: 'EVENT', read: true },
-    { id: 5, title: 'New Announcement', message: 'Quran class registration is now open for children aged 5-12.', time: '1d ago', type: 'INFO', read: true },
-  ];
-
-  const getNotifColor = (type) => {
-    switch(type) {
-      case 'URGENT': return 'bg-red-500';
-      case 'ALERT': return 'bg-yellow-500';
-      case 'REMINDER': return 'bg-blue-500';
-      case 'EVENT': return 'bg-pink-500';
-      default: return 'bg-primary-500';
-    }
-  };
-
-  const unreadCount = notifications.filter(n => !n.read).length;
-
-  const prayerTimes = [
-    { name: 'Fajr', time: '05:10 AM', current: false },
-    { name: 'Dhuhr', time: '01:30 PM', current: true },
-    { name: 'Asr', time: '04:45 PM', current: false },
-    { name: 'Maghrib', time: '06:15 PM', current: false },
-    { name: 'Isha', time: '08:00 PM', current: false },
-  ];
-
-  const recentAnnouncements = [
-    { id: 1, title: 'Jummah bayan timing changed to 1:15 PM', priority: 'NORMAL', time: '2h ago' },
-    { id: 2, title: 'Urgent: Water supply maintenance in Wudu area', priority: 'URGENT', time: '5h ago' },
-    { id: 3, title: 'Quran class registration open for children', priority: 'NORMAL', time: '1d ago' },
-  ];
-
-  const upcomingEvents = [
-    { id: 1, title: 'Nikah — Abdullah & Fatima', date: 'May 10', type: 'NIKAH', color: 'bg-pink-50 text-pink-700 border-pink-200' },
-    { id: 2, title: 'Special Bayan by Mufti Tariq', date: 'May 12', type: 'BAYAN', color: 'bg-purple-50 text-purple-700 border-purple-200' },
-    { id: 3, title: 'Monthly Community Meeting', date: 'May 15', type: 'MEETING', color: 'bg-blue-50 text-blue-700 border-blue-200' },
-  ];
-
-  const communityStats = [
-    { label: 'Members', value: '1,240+', icon: Users },
-    { label: 'Mosques', value: '4', icon: Star },
-    { label: 'Announcements', value: '56', icon: Megaphone },
-  ];
+  const activePrayer = prayerTimes.find(p => p.current);
 
   return (
-    <div className="pb-20">
-      {/* Header */}
-      <div className="bg-gradient-to-br from-primary-700 via-primary-600 to-emerald-500 pt-12 pb-28 px-6 rounded-b-[40px] text-white relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-48 h-48 bg-white/5 rounded-full -mr-16 -mt-16"></div>
-        <div className="absolute bottom-10 left-0 w-28 h-28 bg-white/5 rounded-full -ml-10"></div>
-        
-        <div className="flex justify-between items-start relative z-10">
+    <div className="min-h-screen bg-gray-50 dark:bg-[#0a0f0a] pb-24">
+
+      {/* ╔══════════════════════════════════════════════════╗
+          ║  HERO HEADER                                     ║
+          ╚══════════════════════════════════════════════════╝ */}
+      <div className="relative overflow-hidden bg-gradient-to-br from-primary-800 via-primary-700 to-teal-600 pt-12 pb-32 px-5">
+        {/* Background orbs */}
+        <div className="absolute -top-20 -right-20 w-72 h-72 bg-white/5 rounded-full blur-3xl" />
+        <div className="absolute top-10 -left-16 w-48 h-48 bg-primary-400/20 rounded-full blur-2xl" />
+        <div className="absolute bottom-0 right-0 w-40 h-40 bg-teal-400/10 rounded-full blur-2xl" />
+
+        {/* Dot pattern */}
+        <div className="absolute inset-0 opacity-[0.04]"
+          style={{ backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)', backgroundSize: '20px 20px' }}
+        />
+
+        <div className="relative z-10 flex items-start justify-between">
           <div>
-            <p className="text-white/60 text-xs font-medium uppercase tracking-wider mb-1">Assalamu Alaikum</p>
-            <p className="text-primary-100 text-sm mb-2">{dateStr}</p>
-            <div className="flex items-center">
-              <MapPin size={16} className="mr-1.5" />
-              <h1 className="text-lg font-bold">{selectedMosque?.name}</h1>
-            </div>
+            <p className="text-primary-200 text-xs font-bold uppercase tracking-widest mb-1">Assalamu Alaikum</p>
+            <h1 className="text-white text-2xl font-black leading-tight">{dayStr}</h1>
+            <p className="text-primary-200 text-sm mt-0.5">{dtStr}</p>
+            {selectedMosque && (
+              <button
+                onClick={() => navigate('/select-mosque')}
+                className="flex items-center gap-1.5 mt-3 bg-white/15 hover:bg-white/25 backdrop-blur-sm text-white text-xs font-semibold px-3 py-1.5 rounded-full transition-all"
+              >
+                <MapPin size={12} /> {selectedMosque.name}
+              </button>
+            )}
           </div>
-          <button 
-            onClick={() => navigate('/notifications')} 
-            className="bg-white/20 p-2.5 rounded-full cursor-pointer backdrop-blur-md relative hover:bg-white/30 transition-all active:scale-95"
+
+          <button
+            onClick={() => navigate('/notifications')}
+            className="relative w-11 h-11 rounded-2xl bg-white/15 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/25 transition-all mt-1"
           >
             <Bell size={20} />
-            {unreadCount > 0 && (
-              <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full border-2 border-primary-600 flex items-center justify-center">
-                <span className="text-[9px] font-bold text-white">{unreadCount}</span>
-              </span>
-            )}
+            <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full border-2 border-primary-700 flex items-center justify-center">
+              <span className="text-[9px] font-black text-white">3</span>
+            </span>
           </button>
         </div>
+
+        {/* Next prayer pill */}
+        {activePrayer && (
+          <div className="relative z-10 mt-5 inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 text-white text-xs font-semibold px-3 py-1.5 rounded-full">
+            <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
+            Next: {activePrayer.name} at {activePrayer.time} {activePrayer.period}
+          </div>
+        )}
       </div>
 
-      {/* Notification Panel */}
-      <AnimatePresence>
-        {showNotifications && (
-          <>
-            {/* Backdrop */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setShowNotifications(false)}
-              className="fixed inset-0 bg-black/30 z-40"
-            />
-            {/* Panel */}
-            <motion.div
-              initial={{ opacity: 0, y: -20, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -20, scale: 0.95 }}
-              transition={{ type: 'spring', damping: 25, stiffness: 350 }}
-              className="fixed top-0 left-0 right-0 z-50 mx-3 mt-3"
-            >
-              <div className="bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 max-h-[85vh] overflow-hidden">
-                {/* Panel Header */}
-                <div className="flex justify-between items-center px-6 pt-6 pb-4 border-b border-gray-100">
-                  <div>
-                    <h2 className="text-xl font-extrabold text-gray-900 tracking-tight">Notifications</h2>
-                    <div className="flex items-center mt-0.5">
-                      <span className="w-2 h-2 bg-red-500 rounded-full mr-2"></span>
-                      <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider">{unreadCount} New alerts</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <button onClick={() => setShowNotifications(false)} className="p-2 rounded-full bg-gray-100 text-gray-500 hover:bg-gray-200 transition-all">
-                      <X size={20} />
-                    </button>
-                  </div>
-                </div>
-
-                {/* Notification List */}
-                <div className="overflow-y-auto max-h-[55vh] p-2 space-y-1">
-                  {notifications.map((notif) => (
-                    <div 
-                      key={notif.id}
-                      onClick={() => { setShowNotifications(false); navigate('/notifications'); }}
-                      className={`px-4 py-4 flex items-start rounded-2xl cursor-pointer transition-all ${!notif.read ? 'bg-primary-50/50 hover:bg-primary-100/50' : 'hover:bg-gray-50'}`}
-                    >
-                      <div className={`p-2 rounded-xl mr-4 flex-shrink-0 shadow-sm ${getNotifColor(notif.type).replace('bg-', 'text-').replace('-500', '-600')} ${getNotifColor(notif.type).replace('-500', '-50')}`}>
-                        <Bell size={18} />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex justify-between items-baseline mb-0.5">
-                          <h3 className={`text-sm font-bold truncate ${!notif.read ? 'text-gray-900' : 'text-gray-600'}`}>{notif.title}</h3>
-                          <span className="text-[10px] text-gray-400 ml-2 font-medium">{notif.time}</span>
-                        </div>
-                        <p className="text-[12px] text-gray-500 line-clamp-2 leading-snug">{notif.message}</p>
-                      </div>
-                      {!notif.read && (
-                        <div className="ml-2 w-2 h-2 bg-primary-600 rounded-full mt-2"></div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-
-                {/* Panel Footer */}
-                <div className="p-4 bg-gray-50/50 border-t border-gray-100">
-                  <button 
-                    onClick={() => { setShowNotifications(false); navigate('/notifications'); }}
-                    className="w-full bg-gray-900 text-white font-bold py-3.5 rounded-2xl shadow-lg hover:bg-gray-800 transition-all flex items-center justify-center"
-                  >
-                    Open Notification Center
-                    <ArrowLeft size={16} className="ml-2 rotate-180" />
-                  </button>
-                </div>
+      {/* ╔══════════════════════════════════════════════════╗
+          ║  PRAYER TIMES CARD (overlapping hero)           ║
+          ╚══════════════════════════════════════════════════╝ */}
+      <div className="px-4 -mt-20 relative z-10">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-white dark:bg-gray-900 rounded-3xl shadow-xl border border-gray-100 dark:border-gray-800 p-5"
+        >
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-xl bg-primary-50 dark:bg-primary-900/30 flex items-center justify-center">
+                <Clock size={16} className="text-primary-600 dark:text-primary-400" />
               </div>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
-
-      {/* Prayer Times Card */}
-      <motion.div 
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="px-6 -mt-20"
-      >
-        <div className="bg-white rounded-2xl shadow-lg p-5 border border-gray-100">
-          <div className="flex justify-between items-center mb-1">
-            <h2 className="font-bold text-gray-800 flex items-center text-base">
-              <Clock size={18} className="mr-2 text-primary-500" />
-              Prayer Timings
-            </h2>
-            <span className="text-[10px] text-primary-600 font-bold bg-primary-50 px-2 py-0.5 rounded-md uppercase">Today</span>
+              <span className="font-bold text-gray-900 dark:text-gray-100 text-sm">Prayer Timings</span>
+            </div>
+            <span className="text-[10px] font-black text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/30 px-2.5 py-1 rounded-full uppercase tracking-wide">Today</span>
           </div>
-          <p className="text-xs text-gray-400 mb-4">Next: Asr at 04:45 PM</p>
-          
-          <div className="flex justify-between items-center">
-            {prayerTimes.map((prayer) => (
-              <div key={prayer.name} className={`flex flex-col items-center py-2 px-2 rounded-xl transition-all ${prayer.current ? 'bg-primary-50 shadow-sm' : ''}`}>
-                <span className={`text-[10px] mb-1.5 font-semibold uppercase tracking-wider ${prayer.current ? 'text-primary-700' : 'text-gray-400'}`}>
-                  {prayer.name}
+
+          <div className="flex justify-between">
+            {prayerTimes.map(p => (
+              <div key={p.name} className={`flex flex-col items-center px-1.5 py-2 rounded-2xl transition-all ${p.current ? 'prayer-active' : ''}`}>
+                <span className={`text-[9px] font-bold uppercase tracking-wider mb-1 ${p.current ? 'text-primary-700 dark:text-primary-300' : 'text-gray-400 dark:text-gray-600'}`}>
+                  {p.name}
                 </span>
-                <span className={`text-sm font-bold ${prayer.current ? 'text-primary-800' : 'text-gray-800'}`}>
-                  {prayer.time.split(' ')[0]}
+                <span className={`text-sm font-black ${p.current ? 'text-primary-800 dark:text-primary-200' : 'text-gray-700 dark:text-gray-300'}`}>
+                  {p.time}
                 </span>
-                <span className={`text-[9px] ${prayer.current ? 'text-primary-500' : 'text-gray-400'}`}>
-                  {prayer.time.split(' ')[1]}
+                <span className={`text-[9px] font-semibold ${p.current ? 'text-primary-500 dark:text-primary-400' : 'text-gray-400'}`}>
+                  {p.period}
                 </span>
+                {p.current && <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-primary-500 dark:bg-primary-400" />}
               </div>
             ))}
           </div>
 
-          <div className="mt-4 pt-3 border-t border-gray-50 flex justify-between items-center">
-            <div className="text-xs text-gray-500">
-              <span className="font-semibold text-gray-700">Jummah:</span> 01:00 PM
-            </div>
-            <div className="text-xs text-gray-500">
-              <span className="font-semibold text-gray-700">Sunrise:</span> 06:05 AM
-            </div>
+          <div className="mt-4 pt-3 border-t border-gray-50 dark:border-gray-800 flex items-center justify-between">
+            <span className="text-xs text-gray-500 dark:text-gray-500"><span className="font-semibold text-gray-700 dark:text-gray-300">Jummah:</span> 01:00 PM</span>
+            <span className="text-xs text-gray-500 dark:text-gray-500"><span className="font-semibold text-gray-700 dark:text-gray-300">Sunrise:</span> 06:05 AM</span>
           </div>
-        </div>
-      </motion.div>
+        </motion.div>
+      </div>
 
-      {/* Janaza / Death News Quick Access */}
-      <div className="px-6 mt-5">
-        <div 
+      {/* ╔══════════════════════════════════════════════════╗
+          ║  DEATH NEWS ALERT BANNER                        ║
+          ╚══════════════════════════════════════════════════╝ */}
+      <div className="px-4 mt-4">
+        <button
           onClick={() => navigate('/death-news')}
-          className="bg-gray-900 rounded-2xl p-4 flex items-center justify-between cursor-pointer hover:bg-gray-800 transition-colors shadow-md"
+          className="w-full flex items-center justify-between bg-gray-900 dark:bg-gray-950 border border-gray-800 rounded-2xl p-4 hover:bg-gray-800 dark:hover:bg-gray-900 transition-all group"
         >
-          <div className="flex items-center">
-            <div className="bg-red-500/20 p-2.5 rounded-xl mr-3">
-              <AlertCircle size={22} className="text-red-400" />
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-red-500/15 flex items-center justify-center">
+              <AlertCircle size={20} className="text-red-400" />
             </div>
-            <div>
-              <h3 className="font-bold text-white text-sm">Wafat / Death News</h3>
-              <p className="text-gray-400 text-xs mt-0.5">1 new Janaza alert today</p>
+            <div className="text-left">
+              <p className="text-white font-bold text-sm">Wafat / Death News</p>
+              <p className="text-gray-500 text-xs mt-0.5">1 new Janaza alert today</p>
             </div>
           </div>
-          <div className="flex items-center">
-            <span className="bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full mr-2">NEW</span>
-            <ChevronRight size={18} className="text-gray-500" />
+          <div className="flex items-center gap-2">
+            <span className="bg-red-500 text-white text-[9px] font-black px-2 py-0.5 rounded-full">NEW</span>
+            <ChevronRight size={16} className="text-gray-600 group-hover:text-gray-400 transition-colors" />
           </div>
-        </div>
+        </button>
       </div>
 
-      {/* Community Stats */}
-      <div className="px-6 mt-5">
-        <div className="grid grid-cols-3 gap-3">
-          {communityStats.map((stat) => (
-            <div key={stat.label} className="bg-white rounded-xl p-3 border border-gray-100 shadow-sm text-center">
-              <stat.icon size={18} className="text-primary-500 mx-auto mb-1.5" />
-              <p className="text-lg font-bold text-gray-800">{stat.value}</p>
-              <p className="text-[10px] text-gray-500 font-medium uppercase tracking-wider">{stat.label}</p>
+      {/* ╔══════════════════════════════════════════════════╗
+          ║  QUICK STATS                                    ║
+          ╚══════════════════════════════════════════════════╝ */}
+      <div className="px-4 mt-4 grid grid-cols-3 gap-3">
+        {stats.map(s => (
+          <div key={s.label} className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-100 dark:border-gray-800 p-3 flex flex-col items-center text-center">
+            <div className={`w-9 h-9 rounded-xl ${s.accent} flex items-center justify-center mb-2`}>
+              <s.icon size={17} />
             </div>
-          ))}
-        </div>
+            <p className="text-gray-900 dark:text-gray-100 font-black text-base leading-none">{s.value}</p>
+            <p className="text-gray-400 dark:text-gray-600 text-[10px] font-semibold uppercase tracking-wide mt-0.5">{s.label}</p>
+          </div>
+        ))}
       </div>
 
-      {/* Latest Announcements */}
-      <div className="px-6 mt-6">
-        <div className="flex justify-between items-center mb-3">
-          <h2 className="text-base font-bold text-gray-800">Latest Announcements</h2>
-          <span onClick={() => navigate('/announcements')} className="text-primary-600 text-xs font-semibold flex items-center cursor-pointer">
-            View All <ChevronRight size={14} className="ml-0.5" />
-          </span>
+      {/* ╔══════════════════════════════════════════════════╗
+          ║  ANNOUNCEMENTS                                  ║
+          ╚══════════════════════════════════════════════════╝ */}
+      <div className="px-4 mt-6">
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="text-gray-900 dark:text-gray-100 font-black text-base">Announcements</h2>
+          <button onClick={() => navigate('/announcements')} className="flex items-center gap-0.5 text-primary-600 dark:text-primary-400 text-xs font-bold hover:underline">
+            View All <ChevronRight size={13} />
+          </button>
         </div>
-
         <div className="space-y-2.5">
-          {recentAnnouncements.map((ann) => (
-            <div key={ann.id} onClick={() => navigate('/announcements')} className="bg-white p-3.5 rounded-xl shadow-sm border border-gray-100 flex items-start cursor-pointer hover:shadow-md transition-all">
-              <div className={`w-2 h-2 rounded-full mt-1.5 mr-3 flex-shrink-0 ${ann.priority === 'URGENT' ? 'bg-red-500 animate-pulse' : 'bg-blue-500'}`}></div>
-              <div className="flex-1">
-                <h3 className="font-medium text-gray-800 text-sm">{ann.title}</h3>
-                <p className="text-[10px] text-gray-400 mt-1">{ann.time}</p>
+          {announcements.map((a, i) => (
+            <motion.div
+              key={a.id}
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: i * 0.07 }}
+              onClick={() => navigate('/announcements')}
+              className="bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl p-4 flex items-start gap-3 cursor-pointer hover:border-primary-200 dark:hover:border-primary-800 hover:shadow-sm transition-all group"
+            >
+              <div className={`w-2 h-2 rounded-full mt-2 flex-shrink-0 ${a.priority === 'URGENT' ? 'bg-red-500 animate-pulse' : 'bg-primary-400'}`} />
+              <div className="flex-1 min-w-0">
+                <p className="text-gray-800 dark:text-gray-200 font-semibold text-sm leading-snug">{a.title}</p>
+                <p className="text-gray-400 dark:text-gray-600 text-[11px] mt-1 font-medium">{a.time}</p>
               </div>
-              {ann.priority === 'URGENT' && (
-                <span className="text-[9px] font-bold text-red-600 bg-red-50 px-1.5 py-0.5 rounded-md ml-2">URGENT</span>
+              {a.priority === 'URGENT' && (
+                <span className="flex-shrink-0 text-[9px] font-black text-red-600 bg-red-50 dark:bg-red-900/20 dark:text-red-400 px-1.5 py-0.5 rounded-md border border-red-100 dark:border-red-800/40">
+                  URGENT
+                </span>
               )}
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
 
-      {/* Upcoming Events */}
-      <div className="px-6 mt-6">
-        <div className="flex justify-between items-center mb-3">
-          <h2 className="text-base font-bold text-gray-800">Upcoming Events</h2>
-          <span onClick={() => navigate('/events')} className="text-primary-600 text-xs font-semibold flex items-center cursor-pointer">
-            View All <ChevronRight size={14} className="ml-0.5" />
-          </span>
+      {/* ╔══════════════════════════════════════════════════╗
+          ║  UPCOMING EVENTS                                ║
+          ╚══════════════════════════════════════════════════╝ */}
+      <div className="px-4 mt-6">
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="text-gray-900 dark:text-gray-100 font-black text-base">Upcoming Events</h2>
+          <button onClick={() => navigate('/events')} className="flex items-center gap-0.5 text-primary-600 dark:text-primary-400 text-xs font-bold hover:underline">
+            View All <ChevronRight size={13} />
+          </button>
         </div>
-
         <div className="space-y-2.5">
-          {upcomingEvents.map((event) => (
-            <div key={event.id} onClick={() => navigate('/events')} className={`p-3.5 rounded-xl border shadow-sm flex items-center justify-between cursor-pointer hover:shadow-md transition-all ${event.color}`}>
-              <div className="flex items-center">
-                <Calendar size={16} className="mr-3 opacity-70" />
-                <div>
-                  <h3 className="font-semibold text-sm">{event.title}</h3>
-                  <p className="text-[10px] opacity-70 mt-0.5">{event.date}, 2026</p>
-                </div>
+          {events.map((ev, i) => (
+            <motion.div
+              key={ev.id}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.08 }}
+              onClick={() => navigate('/events')}
+              className="flex items-center gap-4 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl p-4 cursor-pointer hover:shadow-sm transition-all"
+            >
+              <div className={`w-10 h-10 rounded-2xl bg-gradient-to-br ${ev.accent} flex-shrink-0 flex items-center justify-center shadow-md`}>
+                <Calendar size={18} className="text-white" />
               </div>
-              <span className="text-[9px] font-bold opacity-60 bg-white/50 px-1.5 py-0.5 rounded-md">{event.type}</span>
-            </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-gray-800 dark:text-gray-200 font-bold text-sm truncate">{ev.title}</p>
+                <p className="text-gray-400 dark:text-gray-600 text-[11px] mt-0.5 font-medium">{ev.date}, 2026</p>
+              </div>
+              <span className="text-[9px] font-black text-gray-400 dark:text-gray-600 bg-gray-50 dark:bg-gray-800 px-2 py-1 rounded-lg uppercase">
+                {ev.type}
+              </span>
+            </motion.div>
           ))}
         </div>
       </div>
 
-      {/* Quick Actions Grid */}
-      <div className="px-6 mt-6">
-        <h2 className="text-base font-bold text-gray-800 mb-3">Quick Actions</h2>
+      {/* ╔══════════════════════════════════════════════════╗
+          ║  QUICK ACTIONS                                  ║
+          ╚══════════════════════════════════════════════════╝ */}
+      <div className="px-4 mt-6">
+        <h2 className="text-gray-900 dark:text-gray-100 font-black text-base mb-3">Quick Actions</h2>
         <div className="grid grid-cols-2 gap-3">
-          <div onClick={() => navigate('/donate')} className="bg-emerald-50 border border-emerald-100 rounded-xl p-4 cursor-pointer hover:shadow-md transition-all">
-            <Heart size={20} className="text-emerald-600 mb-2" />
-            <h3 className="font-bold text-emerald-800 text-sm">Donate Now</h3>
-            <p className="text-[10px] text-emerald-600 mt-1">Support your mosque via UPI</p>
-          </div>
-          <div onClick={() => navigate('/events')} className="bg-blue-50 border border-blue-100 rounded-xl p-4 cursor-pointer hover:shadow-md transition-all">
-            <Calendar size={20} className="text-blue-600 mb-2" />
-            <h3 className="font-bold text-blue-800 text-sm">Events & Bayans</h3>
-            <p className="text-[10px] text-blue-600 mt-1">3 upcoming this week</p>
-          </div>
-          <div onClick={() => navigate('/death-news')} className="bg-gray-100 border border-gray-200 rounded-xl p-4 cursor-pointer hover:shadow-md transition-all">
-            <BookOpen size={20} className="text-gray-600 mb-2" />
-            <h3 className="font-bold text-gray-800 text-sm">Wafat Updates</h3>
-            <p className="text-[10px] text-gray-500 mt-1">Janaza alerts & condolences</p>
-          </div>
-          <div onClick={() => navigate('/profile')} className="bg-purple-50 border border-purple-100 rounded-xl p-4 cursor-pointer hover:shadow-md transition-all">
-            <Users size={20} className="text-purple-600 mb-2" />
-            <h3 className="font-bold text-purple-800 text-sm">My Profile</h3>
-            <p className="text-[10px] text-purple-600 mt-1">Settings & preferences</p>
-          </div>
+          {[
+            { label: 'Donate Now',    sub: 'Support via UPI',        icon: Heart,    bg: 'from-emerald-500 to-teal-500',   path: '/donate'      },
+            { label: 'Events',        sub: '3 upcoming this week',   icon: Calendar, bg: 'from-blue-500 to-indigo-500',    path: '/events'      },
+            { label: 'Wafat Updates', sub: 'Janaza alerts',          icon: BookOpen, bg: 'from-gray-700 to-gray-900',      path: '/death-news'  },
+            { label: 'My Profile',    sub: 'Settings & preferences', icon: Users,    bg: 'from-violet-500 to-purple-600',  path: '/profile'     },
+          ].map(a => (
+            <button
+              key={a.label}
+              onClick={() => navigate(a.path)}
+              className={`relative overflow-hidden rounded-2xl p-4 bg-gradient-to-br ${a.bg} text-white text-left shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all`}
+            >
+              <a.icon size={22} className="mb-2.5 opacity-90" />
+              <p className="font-black text-sm">{a.label}</p>
+              <p className="text-white/70 text-[10px] mt-0.5 font-medium">{a.sub}</p>
+              <div className="absolute -bottom-3 -right-3 w-14 h-14 bg-white/10 rounded-full" />
+            </button>
+          ))}
         </div>
       </div>
-      
-      {/* Friday Khutbah List */}
+
+      {/* Masjid List & Bayan */}
       <MasjidList />
-
-      {/* Latest Bayan Section */}
       <BayanSection />
-
     </div>
   );
 };
