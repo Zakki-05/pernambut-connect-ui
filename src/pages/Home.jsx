@@ -60,6 +60,8 @@ const Home = () => {
     { label: t('members'),    sub: t('community_directory'), icon: Users,    color: 'bg-indigo-50 text-indigo-600 dark:bg-indigo-500/10 dark:text-indigo-400', path: '/admin/users' },
   ];
 
+  const [showFasting, setShowFasting] = React.useState(false);
+
   return (
     <div className="min-h-screen bg-[#fcfcfd] dark:bg-[#020617] pb-40">
       {/* ── Centered Top Navbar ── */}
@@ -150,25 +152,45 @@ const Home = () => {
             <div className="relative z-10">
               <div className="flex items-center justify-between mb-8">
                 <div>
-                  <h3 className="text-lg font-black tracking-tight">{t('prayer_timings')}</h3>
+                  <h3 className="text-lg font-black tracking-tight">{showFasting ? 'Fasting Timings' : t('prayer_timings')}</h3>
                   <p className="text-slate-500 text-[10px] font-bold uppercase tracking-widest mt-1">Pernambut, Tamil Nadu</p>
                 </div>
-                <div className="w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center"><Clock size={20} className="text-emerald-400" /></div>
+                <div className="w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center cursor-pointer" onClick={() => setShowFasting(!showFasting)}><Clock size={20} className="text-emerald-400" /></div>
               </div>
               
               <div className="space-y-4">
-                {prayerTimes.map(p => (
-                  <div key={p.name} className={`flex items-center justify-between p-4 rounded-2xl border transition-all ${p.active ? 'bg-emerald-500 border-emerald-400 shadow-xl shadow-emerald-500/20' : 'bg-white/5 border-white/5 hover:bg-white/10'}`}>
-                    <span className={`text-sm font-black uppercase tracking-widest ${p.active ? 'text-white' : 'text-slate-400'}`}>{p.name}</span>
-                    <div className="flex items-center gap-3">
-                      <span className={`text-base font-black ${p.active ? 'text-white' : 'text-white/90'}`}>{p.time}</span>
-                      {p.active && <span className="w-2 h-2 rounded-full bg-white animate-ping" />}
-                    </div>
-                  </div>
-                ))}
+                <AnimatePresence mode="wait">
+                  {showFasting ? (
+                    <motion.div key="fasting" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="space-y-4">
+                      <div className="flex items-center justify-between p-4 rounded-2xl bg-amber-500/10 border border-amber-500/20">
+                        <span className="text-sm font-black uppercase tracking-widest text-amber-500">Imsak (Stop)</span>
+                        <span className="text-base font-black text-white">04:32</span>
+                      </div>
+                      <div className="flex items-center justify-between p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/20">
+                        <span className="text-sm font-black uppercase tracking-widest text-emerald-500">Iftar (Break)</span>
+                        <span className="text-base font-black text-white">18:38</span>
+                      </div>
+                      <p className="text-[10px] font-bold text-slate-500 uppercase text-center mt-6 tracking-[0.2em]">Based on Sunnah calculation</p>
+                    </motion.div>
+                  ) : (
+                    <motion.div key="prayers" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }} className="space-y-4">
+                      {prayerTimes.map(p => (
+                        <div key={p.name} className={`flex items-center justify-between p-4 rounded-2xl border transition-all ${p.active ? 'bg-emerald-500 border-emerald-400 shadow-xl shadow-emerald-500/20' : 'bg-white/5 border-white/5 hover:bg-white/10'}`}>
+                          <span className={`text-sm font-black uppercase tracking-widest ${p.active ? 'text-white' : 'text-slate-400'}`}>{p.name}</span>
+                          <div className="flex items-center gap-3">
+                            <span className={`text-base font-black ${p.active ? 'text-white' : 'text-white/90'}`}>{p.time}</span>
+                            {p.active && <span className="w-2 h-2 rounded-full bg-white animate-ping" />}
+                          </div>
+                        </div>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
               
-              <button className="w-full mt-8 py-4 rounded-2xl bg-white/10 border border-white/5 text-xs font-black uppercase tracking-widest hover:bg-white/20 transition-all text-emerald-400">View Imsak/Iftar Timings</button>
+              <button onClick={() => setShowFasting(!showFasting)} className={`w-full mt-8 py-4 rounded-2xl border text-[10px] font-black uppercase tracking-widest transition-all ${showFasting ? 'bg-emerald-500 border-emerald-400 text-white' : 'bg-white/10 border-white/5 text-emerald-400 hover:bg-white/20'}`}>
+                {showFasting ? 'Back to Prayer Times' : 'View Imsak/Iftar Timings'}
+              </button>
             </div>
             {/* Decorative Orbs */}
             <div className="absolute top-0 right-0 w-40 h-40 bg-emerald-500/10 rounded-full blur-[80px] -mr-20 -mt-20" />
