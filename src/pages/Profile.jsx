@@ -9,12 +9,14 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getHijriDate } from '../utils/dateUtils';
 import TopNav from '../components/layout/TopNav';
+import { useTranslation } from 'react-i18next';
 
 const Profile = () => {
   const { selectedMosque } = useMosque();
   const { user, logout }   = useAuth();
   const navigate           = useNavigate();
   const hijri              = getHijriDate();
+  const { t }              = useTranslation();
   
   const [showEdit, setShowEdit] = useState(false);
   const [editName, setEditName] = useState(user?.name || 'Member');
