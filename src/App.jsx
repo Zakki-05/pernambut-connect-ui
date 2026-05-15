@@ -43,7 +43,7 @@ const AdminProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
   
   if (loading) return null;
-  if (!user || (!user.is_staff && !user.is_superuser)) {
+  if (!user || user.email !== 'zakkiadnan05@gmail.com') {
     return <Navigate to="/home" replace />;
   }
   

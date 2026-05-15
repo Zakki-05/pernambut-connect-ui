@@ -35,7 +35,12 @@ const Profile = () => {
     { id: 'announcements', icon: Bell, label: 'All Announcements', desc: 'Alerts & updates', color: 'bg-yellow-50 text-yellow-600', action: () => navigate('/announcements') },
     { id: 'settings', icon: Settings, label: 'Settings', desc: 'Theme, notifications, language', color: 'bg-purple-50 text-purple-500', action: () => navigate('/settings') },
     { id: 'logout', icon: LogOut, label: 'Log Out', desc: 'Sign out of your account', color: 'bg-gray-100 text-gray-500', action: handleLogout },
-  ];
+  ].filter(item => {
+    if (item.id === 'admin') {
+      return user?.email === 'zakkiadnan05@gmail.com';
+    }
+    return true;
+  });
 
   const stats = [
     { label: 'Donations', value: '4' },

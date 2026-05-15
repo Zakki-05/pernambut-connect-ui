@@ -13,12 +13,12 @@
 }
 
 .dark {
-  --bg-primary: #0f172a;
-  --bg-card: #1e293b;
-  --bg-elevated: #334155;
-  --text-primary: #f1f5f9;
-  --text-secondary: #94a3b8;
-  --border-color: #334155;
+  --bg-primary: #020617;     /* Deep Midnight / Obsidian */
+  --bg-card: #0f172a;        /* Rich Navy Card */
+  --bg-elevated: #1e293b;    /* Lighter Slate for hover/elevation */
+  --text-primary: #f8fafc;   /* Crisp White */
+  --text-secondary: #94a3b8; /* Cool Slate Gray */
+  --border-color: #1e293b;   /* Subtle Border */
 }
 
 body {
@@ -37,9 +37,9 @@ body {
 /* ===== DARK MODE GLOBAL STYLES ===== */
 
 /* Backgrounds */
-.dark .bg-gray-50 { background-color: #0f172a !important; }
-.dark .bg-white { background-color: #1e293b !important; }
-.dark .bg-gray-100 { background-color: #334155 !important; }
+.dark .bg-gray-50 { background-color: #020617 !important; }
+.dark .bg-white { background-color: #0f172a !important; }
+.dark .bg-gray-100 { background-color: #1e293b !important; }
 
 /* Text */
 .dark .text-gray-900 { color: #f1f5f9 !important; }
@@ -50,10 +50,10 @@ body {
 .dark .text-gray-400 { color: #475569 !important; }
 
 /* Borders */
-.dark .border-gray-100 { border-color: #334155 !important; }
-.dark .border-gray-200 { border-color: #475569 !important; }
-.dark .border-gray-300 { border-color: #475569 !important; }
-.dark .border-gray-50 { border-color: #1e293b !important; }
+.dark .border-gray-100 { border-color: #1e293b !important; }
+.dark .border-gray-200 { border-color: #334155 !important; }
+.dark .border-gray-300 { border-color: #334155 !important; }
+.dark .border-gray-50 { border-color: #0f172a !important; }
 
 /* Cards & Surfaces */
 .dark .shadow-sm { box-shadow: 0 1px 3px rgba(0,0,0,0.4) !important; }
@@ -64,9 +64,9 @@ body {
 .dark input,
 .dark textarea,
 .dark select {
-  background-color: #334155 !important;
-  color: #f1f5f9 !important;
-  border-color: #475569 !important;
+  background-color: #1e293b !important;
+  color: #f8fafc !important;
+  border-color: #334155 !important;
 }
 .dark input::placeholder,
 .dark textarea::placeholder {
