@@ -28,8 +28,8 @@ const LandingPage = () => {
     <div className="min-h-screen bg-white dark:bg-[#020617] selection:bg-emerald-500 selection:text-white">
       
       {/* ── Modern Navbar ── */}
-      <nav className="fixed top-0 left-0 right-0 z-[100] bg-white/70 dark:bg-[#020617]/70 backdrop-blur-2xl border-b border-slate-100 dark:border-slate-800/50">
-        <div className="w-full px-6 lg:px-10 flex justify-between items-center h-20">
+      <nav className="fixed top-6 left-1/2 -translate-x-1/2 w-[95%] max-w-7xl z-[100] bg-white/80 dark:bg-[#020617]/80 backdrop-blur-2xl border border-slate-200/50 dark:border-slate-800/50 rounded-[32px] shadow-2xl shadow-slate-900/5">
+        <div className="px-6 lg:px-10 flex justify-between items-center h-20">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-emerald-500 rounded-2xl flex items-center justify-center text-white font-black text-xl shadow-lg shadow-emerald-500/20">ﺑ</div>
             <span className="text-xl font-black tracking-tighter dark:text-white">Pernambut <span className="text-emerald-500">Connect</span></span>

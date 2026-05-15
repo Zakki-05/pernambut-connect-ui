@@ -41,7 +41,7 @@ const Home = () => {
     <div className="min-h-screen bg-[#fcfcfd] dark:bg-[#020617] pb-40">
       {/* ── Modern Navbar / Header ── */}
       <header className="sticky top-0 z-50 bg-white/80 dark:bg-[#020617]/80 backdrop-blur-xl border-b border-slate-100 dark:border-slate-800 px-6 py-4">
-        <div className="w-full flex items-center justify-between">
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 bg-emerald-500 rounded-lg flex items-center justify-center text-white font-black">ﺑ</div>
             <h1 className="text-lg font-black tracking-tighter dark:text-white hidden sm:block">Pernambut Connect</h1>
@@ -60,7 +60,7 @@ const Home = () => {
         </div>
       </header>
 
-      <main className="w-full px-6 lg:px-10 py-10 grid grid-cols-1 lg:grid-cols-12 gap-10">
+      <main className="max-w-7xl mx-auto px-6 lg:px-10 py-10 grid grid-cols-1 lg:grid-cols-12 gap-10">
         
         {/* ── Left Column: Main Feed ── */}
         <div className="lg:col-span-8 space-y-12">
