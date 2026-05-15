@@ -2,549 +2,211 @@ import React from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { 
-  ChevronRight, 
-  Bell, 
-  Heart, 
-  Clock, 
-  Shield, 
-  Users, 
-  Star, 
-  CheckCircle,
-  ArrowRight,
-  Menu,
-  X,
-  Twitter,
-  Facebook,
-  Instagram,
-  MapPin,
-  Map,
-  Info
+  ChevronRight, Bell, Heart, Clock, Shield, Users, Star, 
+  CheckCircle, ArrowRight, Menu, X, Twitter, Facebook, 
+  Instagram, MapPin, Compass, Sparkles, Zap
 } from 'lucide-react';
 
 const masjidsList = [
-  { id: 1, name: "Chowk Masjid", location: "Central Pernambut", description: "One of the oldest and most recognized masjids in Pernambut, serving as a major center for daily prayers and community gatherings.", image: "https://images.unsplash.com/photo-1564683214965-3619addd900d?q=80&w=600&auto=format&fit=crop" },
-  { id: 2, name: "Jamiya Masjid", location: "Pernambut Town Center", description: "A large congregational masjid widely attended for Jummah prayers and important Islamic gatherings.", image: "https://images.unsplash.com/photo-1542831371-29b0f74f9713?q=80&w=600&auto=format&fit=crop" },
-  { id: 3, name: "Mothi Masjid", location: "Tippusa Street, Pernambut", description: "A well-known neighborhood masjid recognized for its peaceful environment and active local participation.", image: "https://images.unsplash.com/photo-1585036156171-384164a8c675?q=80&w=600&auto=format&fit=crop" },
-  { id: 4, name: "Nawab Daryakhan Masjid", location: "Pernambut", description: "A historically significant masjid connected to the heritage and Islamic history of Pernambut.", image: "https://images.unsplash.com/photo-1519817914152-2a24126edda7?q=80&w=600&auto=format&fit=crop" },
-  { id: 5, name: "Masjid-E-Fazal", location: "Pernambut", description: "A frequently visited masjid serving local residents with daily prayers and Islamic activities.", image: "https://images.unsplash.com/photo-1564683214965-3619addd900d?q=80&w=600&auto=format&fit=crop" },
-  { id: 6, name: "Road Masjid-e-Ahle Hadees", location: "High Road, Pernambut", description: "A prominent Ahle Hadees masjid known for Islamic lectures, educational programs, and regional events.", image: "https://images.unsplash.com/photo-1542831371-29b0f74f9713?q=80&w=600&auto=format&fit=crop" },
-  { id: 7, name: "New Masjid-e-Ahle Hadees", location: "Pernambut", description: "An expanded prayer center serving the growing Ahle Hadees community in the area.", image: "https://images.unsplash.com/photo-1585036156171-384164a8c675?q=80&w=600&auto=format&fit=crop" },
-  { id: 8, name: "Small Masjid-e-Ahle Hadees", location: "Pernambut", description: "A smaller neighborhood masjid providing convenient daily prayer access for nearby residents.", image: "https://images.unsplash.com/photo-1519817914152-2a24126edda7?q=80&w=600&auto=format&fit=crop" },
-  { id: 9, name: "Madina Masjid", location: "Adamsa Street, Pernambut", description: "A respected local masjid known for regular congregational prayers and community activities.", image: "https://images.unsplash.com/photo-1564683214965-3619addd900d?q=80&w=600&auto=format&fit=crop" },
-  { id: 10, name: "Park Mosque", location: "Rahamadabad, Pernambut", description: "A community-centered mosque serving worshippers from surrounding residential areas.", image: "https://images.unsplash.com/photo-1542831371-29b0f74f9713?q=80&w=600&auto=format&fit=crop" },
-  { id: 11, name: "Masjid-e-Istiqamath", location: "Pernambut", description: "A dedicated prayer space focused on regular worship, discipline, and community unity.", image: "https://images.unsplash.com/photo-1585036156171-384164a8c675?q=80&w=600&auto=format&fit=crop" },
-  { id: 12, name: "Ahle Hadees Forquan Masjid", location: "Pernambut", description: "A recognized Ahle Hadees masjid involved in Islamic teaching and community engagement.", image: "https://images.unsplash.com/photo-1519817914152-2a24126edda7?q=80&w=600&auto=format&fit=crop" },
-  { id: 13, name: "Masjid-e-Hassaniya Ahle Hadees", location: "Pernambut", description: "A neighborhood prayer masjid supporting local worshippers with daily Islamic activities.", image: "https://images.unsplash.com/photo-1564683214965-3619addd900d?q=80&w=600&auto=format&fit=crop" },
-  { id: 14, name: "Ahle Hadees Jamiya Masjid", location: "Pernambut", description: "A major congregational masjid managed by the Ahle Hadees community for large gatherings and religious programs.", image: "https://images.unsplash.com/photo-1542831371-29b0f74f9713?q=80&w=600&auto=format&fit=crop" },
-  { id: 15, name: "Masjid-e-Shekul Hadees", location: "Pernambut", description: "A masjid associated with Islamic learning, religious studies, and educational activities.", image: "https://images.unsplash.com/photo-1585036156171-384164a8c675?q=80&w=600&auto=format&fit=crop" },
-  { id: 16, name: "Masjid Umar", location: "Residential Area, Pernambut", description: "A popular local masjid serving nearby families and residents with regular prayers.", image: "https://images.unsplash.com/photo-1519817914152-2a24126edda7?q=80&w=600&auto=format&fit=crop" },
-  { id: 17, name: "Masjid-e-Nauman", location: "Pernambut Township", description: "A well-established masjid recognized for its active religious and community presence.", image: "https://images.unsplash.com/photo-1564683214965-3619addd900d?q=80&w=600&auto=format&fit=crop" },
-  { id: 18, name: "Masjid-e-Kashifa", location: "Pernambut", description: "A recently established masjid supporting the growing local Muslim community.", image: "https://images.unsplash.com/photo-1542831371-29b0f74f9713?q=80&w=600&auto=format&fit=crop" },
-  { id: 19, name: "Khateeja Masjid", location: "New Town, Pernambut", description: "A peaceful neighborhood masjid serving residents of the New Town area.", image: "https://images.unsplash.com/photo-1585036156171-384164a8c675?q=80&w=600&auto=format&fit=crop" },
-  { id: 20, name: "Thouheed Masjid (TNTJ Markaz)", location: "High Road, Pernambut", description: "A major center of the Tamil Nadu Thowheed Jamaath conducting Islamic lectures, educational sessions, and public programs.", image: "https://images.unsplash.com/photo-1519817914152-2a24126edda7?q=80&w=600&auto=format&fit=crop" }
+  { id: 1, name: "Chowk Masjid", location: "Central Pernambut", description: "The historic spiritual anchor of Pernambut, facilitating daily prayers and major community gatherings since generations.", image: "https://images.unsplash.com/photo-1564683214965-3619addd900d?q=80&w=800&auto=format&fit=crop" },
+  { id: 2, name: "Jamiya Masjid", location: "Town Center", description: "The primary congregational hub for Friday prayers and central Islamic celebrations in the heart of town.", image: "https://images.unsplash.com/photo-1542831371-29b0f74f9713?q=80&w=800&auto=format&fit=crop" },
+  { id: 3, name: "Road Masjid", location: "Main Highway", description: "A vibrant center for the Ahle Hadees community, known for educational seminars and local outreach.", image: "https://images.unsplash.com/photo-1585036156171-384164a8c675?q=80&w=800&auto=format&fit=crop" },
 ];
-import ourStoryImg from '../our-story.png';
 
 const LandingPage = () => {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
-  // If user is already logged in, they might want to go straight to dashboard
-  // but we'll show the landing page first and give them a button to enter the app.
-
   const features = [
-    {
-      icon: Clock,
-      title: "Real-time Prayer Timings",
-      description: "Get accurate prayer and jama'at timings for all mosques in Pernambut, updated daily.",
-      color: "bg-blue-50 text-blue-600"
-    },
-    {
-      icon: Bell,
-      title: "Instant Announcements",
-      description: "Never miss an important update. Get instant notifications about community events and news.",
-      color: "bg-emerald-50 text-emerald-600"
-    },
-    {
-      icon: Shield,
-      title: "Death (Janaza) Alerts",
-      description: "Stay informed about Janaza prayers and death news in the community to offer your support.",
-      color: "bg-red-50 text-red-600"
-    },
-    {
-      icon: Heart,
-      title: "Seamless Donations",
-      description: "Support your local mosques easily through integrated UPI and digital payment options.",
-      color: "bg-purple-50 text-purple-600"
-    }
+    { icon: Clock, title: "Precision Timings", desc: "Live-updated Jama'at timings for all 23+ local masjids in Pernambut.", color: "bg-emerald-50 text-emerald-600" },
+    { icon: Bell, title: "Janaza Alerts", desc: "Stay informed about community departures and Janaza timings instantly.", color: "bg-amber-50 text-amber-600" },
+    { icon: Shield, title: "Verified Updates", desc: "Official announcements directly from mosque administrations and committees.", color: "bg-blue-50 text-blue-600" },
+    { icon: Heart, title: "Sadaqah Hub", desc: "A transparent, integrated way to support your local masjid's maintenance.", color: "bg-red-50 text-red-600" }
   ];
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1
-      }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1
-    }
-  };
-
   return (
-    <div className="min-h-screen bg-white font-sans text-gray-900 overflow-x-hidden">
-      {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-lg border-b border-gray-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16 sm:h-20">
-            <div className="flex items-center">
-              <div className="w-10 h-10 bg-primary-600 rounded-xl flex items-center justify-center shadow-lg shadow-primary-200">
-                <Star className="text-white fill-white" size={24} />
-              </div>
-              <span className="ml-3 text-xl font-black tracking-tight text-gray-900">
-                Pernambut<span className="text-primary-600">Connects</span>
-              </span>
-            </div>
-            
-            {/* Desktop Nav */}
-            <div className="hidden md:flex items-center space-x-8">
-              <a href="#features" className="text-sm font-semibold text-gray-600 hover:text-primary-600 transition-colors">Features</a>
-              <a href="#about" className="text-sm font-semibold text-gray-600 hover:text-primary-600 transition-colors">About</a>
-              <button 
-                onClick={() => navigate('/select-mosque')}
-                className="bg-primary-600 text-white px-6 py-2.5 rounded-full font-bold text-sm shadow-lg shadow-primary-200 hover:bg-primary-700 transition-all transform hover:-translate-y-0.5 active:scale-95"
-              >
-                Enter App
-              </button>
-            </div>
-
-            {/* Mobile Menu Button */}
-            <div className="md:hidden">
-              <button 
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="p-2 text-gray-600"
-                aria-label="Toggle menu"
-              >
-                {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-              </button>
-            </div>
+    <div className="min-h-screen bg-white dark:bg-[#020617] selection:bg-emerald-500 selection:text-white">
+      
+      {/* ── Modern Navbar ── */}
+      <nav className="fixed top-0 left-0 right-0 z-[100] bg-white/70 dark:bg-[#020617]/70 backdrop-blur-2xl border-b border-slate-100 dark:border-slate-800/50">
+        <div className="w-full px-6 lg:px-10 flex justify-between items-center h-20">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-emerald-500 rounded-2xl flex items-center justify-center text-white font-black text-xl shadow-lg shadow-emerald-500/20">ﺑ</div>
+            <span className="text-xl font-black tracking-tighter dark:text-white">Pernambut <span className="text-emerald-500">Connect</span></span>
           </div>
+          
+          <div className="hidden md:flex items-center gap-10">
+            {['Features', 'Masjids', 'About'].map(link => (
+              <a key={link} href={`#${link.toLowerCase()}`} className="text-sm font-black text-slate-500 hover:text-emerald-500 uppercase tracking-widest transition-colors">{link}</a>
+            ))}
+            <button onClick={() => navigate('/select-mosque')} 
+              className="px-8 py-3.5 bg-slate-950 dark:bg-emerald-500 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-xl shadow-slate-950/10 hover:scale-105 active:scale-95 transition-all">
+              Launch App
+            </button>
+          </div>
+
+          <button className="md:hidden p-3 text-slate-900 dark:text-white" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+            {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
+          </button>
         </div>
-
-        {/* Mobile Menu */}
-        {isMenuOpen && (
-          <div className="md:hidden bg-white border-b border-gray-100 p-4 space-y-4 animate-in slide-in-from-top duration-300">
-            <a href="#features" className="block text-base font-semibold text-gray-600" onClick={() => setIsMenuOpen(false)}>Features</a>
-            <a href="#about" className="block text-base font-semibold text-gray-600" onClick={() => setIsMenuOpen(false)}>About</a>
-              <button 
-                onClick={() => { navigate('/select-mosque'); setIsMenuOpen(false); }}
-                className="w-full bg-primary-600 text-white px-6 py-3 rounded-xl font-bold text-center"
-              >
-                Enter App
-              </button>
-          </div>
-        )}
       </nav>
 
-      {/* Hero Section */}
-      <section className="relative pt-32 pb-20 sm:pt-48 sm:pb-32 lg:pt-56 lg:pb-48 overflow-hidden">
-        {/* Background Gradients */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-10">
-          <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary-100/50 rounded-full blur-[120px]"></div>
-          <div className="absolute bottom-[10%] right-[-10%] w-[40%] h-[40%] bg-emerald-100/50 rounded-full blur-[120px]"></div>
-        </div>
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="lg:grid lg:grid-cols-12 lg:gap-12 items-center">
-            <div className="lg:col-span-7 text-center lg:text-left">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-              >
-                <span className="inline-flex items-center px-4 py-1.5 rounded-full text-sm font-bold bg-primary-50 text-primary-700 mb-6">
-                  <span className="relative flex h-2 w-2 mr-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-primary-500"></span>
-                  </span>
-                  Community-Led Platform
-                </span>
-                <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-gray-900 mb-6 leading-[1.1]">
-                  Stay Connected with <br />
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-emerald-500">
-                    Your Local Mosque
-                  </span>
-                </h1>
-                <p className="text-lg sm:text-xl text-gray-600 mb-10 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
-                  Pernambut Connects is the ultimate digital bridge between you and your community mosques. 
-                  Get real-time updates, prayer timings, and support your local Masjids—all in one place.
-                </p>
-                <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start space-y-4 sm:space-y-0 sm:space-x-4">
-                  <button 
-                    onClick={() => navigate('/select-mosque')}
-                    className="w-full sm:w-auto bg-gray-900 text-white px-8 py-4 rounded-2xl font-bold text-lg shadow-xl hover:bg-gray-800 transition-all transform hover:-translate-y-1 flex items-center justify-center"
-                  >
-                    Get Started Now
-                    <ArrowRight className="ml-2" size={20} />
-                  </button>
-                  <a 
-                    href="#features"
-                    className="w-full sm:w-auto bg-white text-gray-700 border-2 border-gray-100 px-8 py-4 rounded-2xl font-bold text-lg hover:bg-gray-50 transition-all flex items-center justify-center"
-                  >
-                    Explore Features
-                  </a>
-                </div>
-
-                <div className="mt-10 flex items-center justify-center lg:justify-start space-x-6 text-gray-400">
-                  <div className="flex -space-x-3">
-                    {[1,2,3,4].map(i => (
-                      <div key={i} className="w-10 h-10 rounded-full border-2 border-white bg-gray-100 overflow-hidden">
-                        <img src={`https://i.pravatar.cc/150?u=${i+10}`} alt="Community member" loading="lazy" className="w-full h-full object-cover" />
-                      </div>
-                    ))}
-                    <div className="w-10 h-10 rounded-full border-2 border-white bg-primary-600 flex items-center justify-center text-[10px] font-bold text-white">
-                      +1k
-                    </div>
-                  </div>
-                  <p className="text-sm font-medium">Joined by 1,000+ Pernambut residents</p>
-                </div>
-              </motion.div>
+      {/* ── Hero Section ── */}
+      <section className="relative pt-40 pb-24 lg:pt-60 lg:pb-40 overflow-hidden">
+        <div className="w-full px-6 lg:px-10 relative z-10 text-center lg:text-left grid lg:grid-cols-2 gap-20 items-center">
+          <motion.div initial={{ opacity:0, y:30 }} animate={{ opacity:1, y:0 }} transition={{ duration: 0.8 }}>
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[10px] font-black uppercase tracking-[0.3em] mb-10">
+               <Sparkles size={14} /> The Digital Pulse of Pernambut
             </div>
-
-            <div className="lg:col-span-5 mt-16 lg:mt-0 relative">
-              <motion.div
-                initial={{ opacity: 0, scale: 0.8, rotate: 5 }}
-                animate={{ opacity: 1, scale: 1, rotate: 0 }}
-                transition={{ duration: 0.8, delay: 0.2 }}
-                className="relative z-10"
-              >
-                <div className="bg-white p-4 rounded-[40px] shadow-2xl border border-gray-100 transform rotate-3 hover:rotate-0 transition-transform duration-500">
-                   <img 
-                    src="https://images.unsplash.com/photo-1542831371-29b0f74f9713?q=80&w=2070&auto=format&fit=crop" 
-                    alt="Pernambut Connects Community" 
-                    className="rounded-[32px] w-full shadow-inner"
-                  />
-                </div>
-
-                {/* Floating Elements */}
-                <motion.div 
-                  animate={{ y: [0, -15, 0] }}
-                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                  className="absolute -top-6 -right-6 bg-white p-4 rounded-2xl shadow-xl border border-gray-50 flex items-center space-x-3 z-20"
-                >
-                  <div className="bg-emerald-100 p-2 rounded-lg text-emerald-600">
-                    <CheckCircle size={20} />
-                  </div>
-                  <div>
-                    <p className="text-[10px] font-bold text-gray-400 uppercase">Latest Update</p>
-                    <p className="text-xs font-bold text-gray-900">Jummah Bayan at 1:15 PM</p>
-                  </div>
-                </motion.div>
-
-                <motion.div 
-                  animate={{ y: [0, 15, 0] }}
-                  transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                  className="absolute -bottom-10 -left-10 bg-white p-4 rounded-2xl shadow-xl border border-gray-50 flex items-center space-x-3 z-20"
-                >
-                  <div className="bg-primary-100 p-2 rounded-lg text-primary-600">
-                    <Heart size={20} className="fill-current" />
-                  </div>
-                  <div>
-                    <p className="text-[10px] font-bold text-gray-400 uppercase">Donation</p>
-                    <p className="text-xs font-bold text-gray-900">₹5,000 received for Masjid</p>
-                  </div>
-                </motion.div>
-              </motion.div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Features Grid */}
-      <section id="features" className="py-24 bg-gray-50/50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-20">
-            <h2 className="text-primary-600 font-bold tracking-wider uppercase text-sm mb-3">Core Features</h2>
-            <p className="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-4">Everything You Need to Stay Informed</p>
-            <p className="text-gray-600 max-w-2xl mx-auto text-lg">
-              Designed specifically for the Pernambut community, our platform brings modern convenience to your spiritual life.
+            <h1 className="text-6xl lg:text-[90px] font-black tracking-tighter leading-[0.95] mb-10 dark:text-white">
+              Stay <span className="gradient-text">Connected</span> <br/>
+              With Your <br/>
+              <span className="gold-text">Local Masjid.</span>
+            </h1>
+            <p className="text-xl text-slate-500 dark:text-slate-400 font-medium max-w-xl mb-12 leading-relaxed">
+              Pernambut Connects is the unified community platform providing real-time prayer timings, janaza alerts, and seamless mosque support.
             </p>
-          </div>
-
-          <motion.div 
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
-          >
-            {features.map((feature, idx) => (
-              <motion.div 
-                key={idx}
-                variants={itemVariants}
-                className="bg-white p-8 rounded-[32px] border border-gray-100 shadow-sm hover:shadow-xl transition-all group"
-              >
-                <div className={`${feature.color} w-14 h-14 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}>
-                  <feature.icon size={28} />
-                </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-3">{feature.title}</h3>
-                <p className="text-gray-600 leading-relaxed text-sm">
-                  {feature.description}
-                </p>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Stats Section */}
-      <section className="py-20 bg-primary-600 text-white relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-32 -mt-32"></div>
-        <div className="absolute bottom-0 left-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -ml-32 -mb-32"></div>
-        
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            <div>
-              <p className="text-4xl sm:text-5xl font-black mb-2">4+</p>
-              <p className="text-primary-100 text-sm font-bold uppercase tracking-widest">Major Mosques</p>
-            </div>
-            <div>
-              <p className="text-4xl sm:text-5xl font-black mb-2">1k+</p>
-              <p className="text-primary-100 text-sm font-bold uppercase tracking-widest">Active Users</p>
-            </div>
-            <div>
-              <p className="text-4xl sm:text-5xl font-black mb-2">₹1L+</p>
-              <p className="text-primary-100 text-sm font-bold uppercase tracking-widest">Donations Sent</p>
-            </div>
-            <div>
-              <p className="text-4xl sm:text-5xl font-black mb-2">24/7</p>
-              <p className="text-primary-100 text-sm font-bold uppercase tracking-widest">Support</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* About Section */}
-      <section id="about" className="py-24 overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="lg:grid lg:grid-cols-2 lg:gap-24 items-center">
-            <div className="mb-16 lg:mb-0 relative">
-              <div className="bg-gray-100 rounded-[48px] overflow-hidden aspect-square">
-                <img 
-                  src={ourStoryImg} 
-                  alt="Pernambut Community Gathering" 
-                  loading="lazy"
-                  className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
-                />
-              </div>
-              {/* Overlay card */}
-              <div className="absolute -bottom-10 -right-10 bg-white p-8 rounded-3xl shadow-2xl border border-gray-50 max-w-xs hidden sm:block">
-                <div className="flex items-center space-x-2 text-primary-600 mb-3">
-                  <Star size={20} className="fill-current" />
-                  <Star size={20} className="fill-current" />
-                  <Star size={20} className="fill-current" />
-                  <Star size={20} className="fill-current" />
-                  <Star size={20} className="fill-current" />
-                </div>
-                <p className="text-sm italic text-gray-600 mb-4">
-                  "This platform has made it so much easier for us to stay updated with our local mosque's activities. Truly a blessing for our town."
-                </p>
-                <p className="text-sm font-black text-gray-900">— A Local Resident</p>
-              </div>
-            </div>
-
-            <div>
-              <h2 className="text-primary-600 font-bold tracking-wider uppercase text-sm mb-3">Our Mission</h2>
-              <h3 className="text-3xl sm:text-5xl font-extrabold text-gray-900 mb-6 leading-tight">Empowering the <br /> Pernambut Community</h3>
-              <p className="text-gray-600 text-lg mb-8 leading-relaxed">
-                Pernambut Connects was born out of a need for better communication within our community. 
-                We believe that technology should serve to bring people closer to their faith and their neighbors.
-              </p>
-              <ul className="space-y-4 mb-10">
-                {[
-                  "Centralized mosque information for all",
-                  "Transparent donation tracking",
-                  "Fastest Janaza and emergency alerts",
-                  "Unified community calendar"
-                ].map((item, i) => (
-                  <li key={i} className="flex items-center text-gray-700 font-semibold">
-                    <div className="bg-primary-100 text-primary-600 p-1 rounded-full mr-3">
-                      <CheckCircle size={18} />
-                    </div>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              <button 
-                onClick={() => navigate('/select-mosque')}
-                className="bg-gray-900 text-white px-10 py-4 rounded-2xl font-bold text-lg shadow-xl hover:bg-gray-800 transition-all"
-              >
+            <div className="flex flex-col sm:flex-row items-center gap-6">
+              <button onClick={() => navigate('/select-mosque')} className="w-full sm:w-auto h-18 px-12 bg-emerald-500 text-white rounded-[24px] font-black text-lg shadow-2xl shadow-emerald-500/30 hover:scale-105 transition-all flex items-center justify-center gap-3">
+                Get Started <ArrowRight size={20} strokeWidth={3} />
+              </button>
+              <button className="w-full sm:w-auto h-18 px-12 bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 text-slate-900 dark:text-white rounded-[24px] font-black text-lg hover:bg-white transition-all">
                 Learn More
               </button>
             </div>
+            
+            <div className="mt-16 flex items-center justify-center lg:justify-start gap-12">
+               <div className="flex -space-x-3">
+                  {[1,2,3,4].map(i => <div key={i} className="w-12 h-12 rounded-full border-4 border-white dark:border-slate-950 bg-slate-100 overflow-hidden"><img src={`https://i.pravatar.cc/150?u=${i+20}`} alt="user" /></div>)}
+                  <div className="w-12 h-12 rounded-full border-4 border-white dark:border-slate-950 bg-emerald-500 flex items-center justify-center text-[10px] font-black text-white">+5k</div>
+               </div>
+               <p className="text-xs font-black text-slate-400 uppercase tracking-widest">Joined by 5,000+ <br/> local residents</p>
+            </div>
+          </motion.div>
+
+          <div className="relative group">
+             <div className="absolute inset-0 bg-emerald-500/20 rounded-[60px] blur-[100px] group-hover:scale-110 transition-transform duration-700" />
+             <div className="relative premium-card p-4 rounded-[60px] transform rotate-2 hover:rotate-0 transition-all duration-700">
+                <img src="https://images.unsplash.com/photo-1542831371-29b0f74f9713?q=80&w=1200&auto=format&fit=crop" alt="Pernambut" className="rounded-[48px] w-full h-[600px] object-cover" />
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 bg-white/20 backdrop-blur-xl rounded-full flex items-center justify-center text-white border border-white/30 cursor-pointer hover:scale-110 transition-transform">
+                   <Zap size={32} fill="currentColor" />
+                </div>
+             </div>
           </div>
         </div>
       </section>
 
-      {/* Explore Masjids Section */}
-      <section id="masjids" className="py-24 bg-gray-50 relative overflow-hidden">
-        {/* Decorative Background */}
-        <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-emerald-100/40 rounded-bl-[150px] -z-10"></div>
-        <div className="absolute bottom-0 left-0 w-1/3 h-1/3 bg-primary-100/40 rounded-tr-[150px] -z-10"></div>
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="text-center mb-16">
-            <h2 className="text-emerald-600 font-bold tracking-widest uppercase text-sm mb-3">Explore Pernambut Masjids</h2>
-            <p className="text-3xl sm:text-5xl font-black text-gray-900 mb-6 tracking-tight">Discover Our Places of Worship</p>
-            <p className="text-gray-600 max-w-2xl mx-auto text-lg leading-relaxed">
-              Discover prominent masjids across Pernambut — places of worship, learning, unity, and community connection.
-            </p>
+      {/* ── Feature Grid ── */}
+      <section id="features" className="py-32 px-6 lg:px-10 bg-slate-50 dark:bg-[#0f172a]/20">
+        <div className="w-full">
+          <div className="text-center mb-24">
+            <h2 className="text-[10px] font-black text-emerald-500 uppercase tracking-[0.4em] mb-6">Core Capabilities</h2>
+            <h3 className="text-5xl font-black dark:text-white tracking-tighter mb-6">Modernizing Faith Connection</h3>
+            <p className="text-slate-500 font-medium max-w-2xl mx-auto text-lg leading-relaxed">Built with a focus on speed and clarity, Pernambut Connects brings your spiritual routine into the digital age.</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {masjidsList.map((masjid, idx) => (
-              <motion.div 
-                key={masjid.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ delay: (idx % 6) * 0.1, duration: 0.5 }}
-                className="bg-white rounded-[32px] border border-gray-100 shadow-sm hover:shadow-2xl transition-all duration-300 group overflow-hidden flex flex-col h-full relative"
-              >
-                {/* Image Header with Glassmorphism Overlay */}
-                <div className="h-56 relative overflow-hidden bg-gray-200">
-                  <div className="absolute inset-0 bg-gradient-to-t from-gray-900/90 via-gray-900/20 to-transparent z-10"></div>
-                  <img 
-                    src={masjid.image} 
-                    alt={masjid.name} 
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                    loading="lazy"
-                  />
-                  <div className="absolute bottom-5 left-6 right-6 z-20">
-                    <h3 className="text-white text-2xl font-bold mb-2 tracking-tight">{masjid.name}</h3>
-                    <div className="flex items-center text-emerald-300 font-medium text-sm">
-                      <MapPin size={16} className="mr-1.5" />
-                      {masjid.location}
-                    </div>
-                  </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {features.map((f, i) => (
+              <motion.div initial={{ opacity:0, y:20 }} whileInView={{ opacity:1, y:0 }} viewport={{ once:true }} transition={{ delay: i*0.1 }}
+                key={f.title} className="premium-card group">
+                <div className={`w-16 h-16 rounded-[24px] ${f.color} flex items-center justify-center mb-10 group-hover:scale-110 transition-transform`}>
+                  <f.icon size={30} />
                 </div>
-
-                {/* Body Content */}
-                <div className="p-6 flex-grow flex flex-col">
-                  <p className="text-gray-600 text-sm leading-relaxed mb-6 flex-grow font-medium">
-                    {masjid.description}
-                  </p>
-                  
-                  {/* Action Buttons */}
-                  <div className="grid grid-cols-2 gap-3 mt-auto">
-                    <button className="flex items-center justify-center bg-emerald-50 text-emerald-700 px-3 py-3 rounded-xl text-xs font-bold hover:bg-emerald-600 hover:text-white transition-all transform hover:-translate-y-0.5">
-                      <Clock size={16} className="mr-1.5" />
-                      Prayer Timings
-                    </button>
-                    <button className="flex items-center justify-center bg-blue-50 text-blue-700 px-3 py-3 rounded-xl text-xs font-bold hover:bg-blue-600 hover:text-white transition-all transform hover:-translate-y-0.5">
-                      <Map size={16} className="mr-1.5" />
-                      Google Maps
-                    </button>
-                    <button className="col-span-2 flex items-center justify-center bg-gray-900 text-white px-4 py-3.5 rounded-xl text-sm font-bold hover:bg-gray-800 transition-all transform hover:-translate-y-0.5 shadow-md">
-                      <Info size={18} className="mr-2" />
-                      View Details
-                    </button>
-                  </div>
-                </div>
+                <h4 className="text-xl font-black dark:text-white mb-3">{f.title}</h4>
+                <p className="text-slate-500 dark:text-slate-400 font-bold text-sm leading-relaxed">{f.desc}</p>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-24 px-4">
-        <div className="max-w-5xl mx-auto bg-gradient-to-br from-gray-900 to-primary-900 rounded-[48px] p-8 sm:p-16 text-center relative overflow-hidden shadow-2xl">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-primary-500/20 rounded-full blur-3xl -mr-32 -mt-32"></div>
-          <div className="absolute bottom-0 left-0 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl -ml-32 -mb-32"></div>
+      {/* ── Masjid Explorer ── */}
+      <section id="masjids" className="py-40 px-6 lg:px-10">
+        <div className="w-full">
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-10 mb-24">
+             <div>
+                <h2 className="text-[10px] font-black text-amber-500 uppercase tracking-[0.4em] mb-6">Community Map</h2>
+                <h3 className="text-5xl font-black dark:text-white tracking-tighter">Pernambut Registry</h3>
+             </div>
+             <p className="text-slate-500 font-medium max-w-md text-lg">Explore 23+ active masjids integrated into the platform for real-time data sync.</p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+            {masjidsList.map((m, i) => (
+              <div key={m.id} className="premium-card group p-0 overflow-hidden">
+                <div className="h-64 relative overflow-hidden">
+                   <img src={m.image} alt={m.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                   <div className="absolute inset-0 bg-gradient-to-t from-[#020617] via-transparent to-transparent" />
+                   <div className="absolute bottom-6 left-8">
+                      <h4 className="text-2xl font-black text-white tracking-tight">{m.name}</h4>
+                      <div className="flex items-center gap-2 text-emerald-400 text-[10px] font-black uppercase tracking-widest mt-1">
+                         <MapPin size={12} /> {m.location}
+                      </div>
+                   </div>
+                </div>
+                <div className="p-8">
+                   <p className="text-slate-500 dark:text-slate-400 font-bold text-sm leading-relaxed mb-10">{m.description}</p>
+                   <button onClick={() => navigate('/select-mosque')} className="w-full h-14 bg-slate-950 dark:bg-slate-800 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-emerald-500 transition-colors">Select as Primary</button>
+                </div>
+              </div>
+            ))}
+          </div>
           
-          <div className="relative z-10">
-            <h2 className="text-3xl sm:text-5xl font-extrabold text-white mb-6">Ready to Join Your Community?</h2>
-            <p className="text-primary-100 text-lg sm:text-xl mb-12 max-w-2xl mx-auto opacity-80">
-              Create your account today and start receiving updates from your favorite mosques in Pernambut.
-            </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6">
-              <button 
-                onClick={() => navigate('/select-mosque')}
-                className="w-full sm:w-auto bg-white text-gray-900 px-10 py-5 rounded-2xl font-black text-xl shadow-xl hover:scale-105 transition-all active:scale-95"
-              >
-                Get Started for Free
-              </button>
-              <button 
-                className="w-full sm:w-auto bg-white/10 backdrop-blur-md text-white border border-white/20 px-10 py-5 rounded-2xl font-bold text-xl hover:bg-white/20 transition-all"
-              >
-                Contact Support
-              </button>
-            </div>
+          <div className="mt-20 text-center">
+             <button onClick={() => navigate('/select-mosque')} className="px-10 py-5 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-3xl font-black text-sm uppercase tracking-[0.3em] dark:text-white hover:border-emerald-500 transition-all shadow-xl shadow-slate-900/5">Explore Full Registry <ChevronRight className="inline-block ml-3" size={18} /></button>
           </div>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-gray-50 pt-20 pb-10 border-t border-gray-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
-            <div className="col-span-1 md:col-span-2">
-              <div className="flex items-center mb-6">
-                <div className="w-10 h-10 bg-primary-600 rounded-xl flex items-center justify-center shadow-lg shadow-primary-200">
-                  <Star className="text-white fill-white" size={24} />
-                </div>
-                <span className="ml-3 text-xl font-black tracking-tight text-gray-900">
-                  Pernambut<span className="text-primary-600">Connects</span>
-                </span>
-              </div>
-              <p className="text-gray-500 max-w-sm leading-relaxed">
-                The digital heartbeat of Pernambut. Connecting residents with their mosques through technology and community spirit.
-              </p>
+      {/* ── CTA Block ── */}
+      <section className="py-40 px-6">
+         <div className="w-full bg-slate-950 rounded-[80px] p-16 lg:p-32 text-center relative overflow-hidden shadow-2xl">
+            <div className="relative z-10">
+               <h2 className="text-5xl lg:text-7xl font-black text-white tracking-tighter mb-10 leading-[1.1]">Ready to join the <br/> <span className="gradient-text">community?</span></h2>
+               <p className="text-slate-400 text-xl font-medium max-w-xl mx-auto mb-16">Download the hub or launch the web explorer to stay synchronized with Pernambut's Islamic beat.</p>
+               <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
+                  <button onClick={() => navigate('/register')} className="w-full sm:w-auto h-20 px-16 bg-white text-slate-950 rounded-[32px] font-black text-xl shadow-2xl hover:scale-105 active:scale-95 transition-all">Join Registry</button>
+                  <button onClick={() => navigate('/login')} className="w-full sm:w-auto h-20 px-16 bg-emerald-500 text-white rounded-[32px] font-black text-xl shadow-2xl hover:scale-105 active:scale-95 transition-all">Sign In</button>
+               </div>
             </div>
-            
-            <div>
-              <h4 className="font-bold text-gray-900 mb-6">Platform</h4>
-              <ul className="space-y-4 text-gray-500 font-medium">
-                <li><a href="#how-it-works" className="hover:text-primary-600 transition-colors">How it works</a></li>
-                <li><a href="#features" className="hover:text-primary-600 transition-colors">Features</a></li>
-                <li><Link to="/select-mosque" className="hover:text-primary-600 transition-colors">Join Community</Link></li>
-                <li><Link to="/admin-portal" className="hover:text-primary-600 transition-colors">Admin Portal</Link></li>
-              </ul>
-            </div>
+            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-emerald-500/10 rounded-full blur-[120px] -mr-64 -mt-64" />
+            <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-amber-500/5 rounded-full blur-[100px] -ml-48 -mb-48" />
+         </div>
+      </section>
 
-            <div>
-              <h4 className="font-bold text-gray-900 mb-6">Company</h4>
-              <ul className="space-y-4 text-gray-500 font-medium">
-                <li><a href="#about" className="hover:text-primary-600 transition-colors">About Us</a></li>
-                <li><Link to="/privacy" className="hover:text-primary-600 transition-colors">Privacy Policy</Link></li>
-                <li><Link to="/terms" className="hover:text-primary-600 transition-colors">Terms of Service</Link></li>
-                <li><a href="#contact" className="hover:text-primary-600 transition-colors">Contact</a></li>
-              </ul>
-            </div>
+      {/* ── Footer ── */}
+      <footer className="bg-white dark:bg-[#020617] pt-32 pb-20 px-6 lg:px-10 border-t border-slate-100 dark:border-slate-800">
+        <div className="w-full">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-20 mb-32">
+             <div className="col-span-2">
+                <div className="flex items-center gap-3 mb-8">
+                  <div className="w-10 h-10 bg-emerald-500 rounded-2xl flex items-center justify-center text-white font-black text-xl">ﺑ</div>
+                  <span className="text-xl font-black tracking-tighter dark:text-white">Pernambut <span className="text-emerald-500">Connect</span></span>
+                </div>
+                <p className="text-slate-500 font-medium max-w-sm leading-relaxed mb-10">Pernambut's digital bridge. Empowering our community with real-time connectivity and transparent mosque management.</p>
+                <div className="flex items-center gap-6 text-slate-300">
+                  {[Twitter, Facebook, Instagram].map((Icon, i) => <Icon key={i} size={24} className="hover:text-emerald-500 cursor-pointer transition-colors" />)}
+                </div>
+             </div>
+             <div>
+                <h5 className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-[0.4em] mb-10">Navigation</h5>
+                <ul className="space-y-6">
+                   {['Features', 'Masjids', 'Support', 'Contact'].map(l => <li key={l} className="text-sm font-black text-slate-400 hover:text-emerald-500 uppercase tracking-widest cursor-pointer transition-colors">{l}</li>)}
+                </ul>
+             </div>
+             <div>
+                <h5 className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-[0.4em] mb-10">Legal</h5>
+                <ul className="space-y-6">
+                   {['Privacy', 'Terms', 'Credits'].map(l => <li key={l} className="text-sm font-black text-slate-400 hover:text-emerald-500 uppercase tracking-widest cursor-pointer transition-colors">{l}</li>)}
+                </ul>
+             </div>
           </div>
-          
-          <div className="pt-8 border-t border-gray-200 flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
-            <p className="text-gray-400 text-sm font-medium">
-              © 2026 Pernambut Connects. All rights reserved.
-            </p>
-            <div className="flex items-center space-x-6 text-gray-400">
-              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="hover:text-primary-600 transition-colors" aria-label="Twitter">
-                <Twitter size={20} />
-              </a>
-              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="hover:text-primary-600 transition-colors" aria-label="Facebook">
-                <Facebook size={20} />
-              </a>
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="hover:text-primary-600 transition-colors" aria-label="Instagram">
-                <Instagram size={20} />
-              </a>
-            </div>
+          <div className="pt-12 border-t border-slate-100 dark:border-slate-800 flex flex-col md:flex-row justify-between items-center gap-8">
+             <p className="text-slate-400 text-[10px] font-black uppercase tracking-[0.2em]">© 2026 Pernambut Connects • Built for Community</p>
+             <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest">Network Operational</span>
+             </div>
           </div>
         </div>
       </footer>

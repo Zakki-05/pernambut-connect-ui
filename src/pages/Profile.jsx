@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { 
   MapPin, Settings, LogOut, ChevronRight, Edit3, Heart, 
-  Calendar, Bell, BookOpen, Shield, X, Check, Users, Mail 
+  Calendar, Bell, BookOpen, Shield, X, Check, Users, Mail, BadgeCheck, Zap, User
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useMosque } from '../context/MosqueContext';
@@ -23,18 +23,18 @@ const Profile = () => {
 
   const menuGroups = [
     {
-      label: 'Administrative Hub',
+      label: 'Administrative Control',
       items: [
-        { id: 'admin',   icon: Shield, label: 'Post Update',    desc: 'Official alerts', action: () => navigate('/admin-portal'), show: isAdmin },
-        { id: 'members', icon: Users,  label: 'Member Registry', desc: 'Directory management', action: () => navigate('/admin/users'), show: isAdmin },
+        { id: 'admin',   icon: Shield, label: 'Management Portal', desc: 'Administer mosque hub', action: () => navigate('/admin-portal'), show: isAdmin },
+        { id: 'members', icon: Users,  label: 'Community Registry', desc: 'Manage user database', action: () => navigate('/admin/users'), show: isAdmin },
       ].filter(i => i.show),
     },
     {
-      label: 'Account & Community',
+      label: 'Preferences & Hub',
       items: [
-        { id: 'mosque',  icon: MapPin,   label: 'My Mosque',    desc: selectedMosque?.name || 'Set preference', action: () => navigate('/select-mosque') },
-        { id: 'history', icon: Heart,    label: 'Donation Hub', desc: 'Contribution history', action: () => navigate('/donate-history') },
-        { id: 'settings',icon: Settings, label: 'Preferences',  desc: 'App configurations', action: () => navigate('/settings') },
+        { id: 'mosque',  icon: MapPin,   label: 'Assigned Mosque',  desc: selectedMosque?.name || 'Set your location', action: () => navigate('/select-mosque') },
+        { id: 'history', icon: Heart,    label: 'Contribution Log', desc: 'View donation history', action: () => navigate('/donation-history') },
+        { id: 'settings',icon: Settings, label: 'App Configuration', desc: 'Notifications & Theme', action: () => navigate('/settings') },
       ],
     },
   ].filter(g => g.items.length > 0);
@@ -42,84 +42,120 @@ const Profile = () => {
   const initial = (editName?.[0] || 'U').toUpperCase();
 
   return (
-    <div className="min-h-screen bg-white dark:bg-slate-950 pb-32">
-      {/* ── Prime Header ── */}
-      <header className="pt-16 pb-12 px-6 border-b border-slate-100 dark:border-slate-900 relative">
-        <div className="relative z-10">
-          <p className="text-[10px] font-black text-blue-600 uppercase tracking-[0.3em] mb-6">{hijri.full}</p>
-          <div className="flex items-center gap-8">
-            <div className="w-24 h-24 rounded-[40px] bg-slate-950 dark:bg-blue-600 flex items-center justify-center text-white text-4xl font-black shadow-2xl shadow-slate-950/20">
+    <div className="min-h-screen bg-[#fcfcfd] dark:bg-[#020617] pb-40">
+      {/* ── Profile Header ── */}
+      <header className="bg-white dark:bg-[#020617] pt-20 pb-16 px-6 border-b border-slate-100 dark:border-slate-800">
+        <div className="w-full flex flex-col md:flex-row items-center gap-10">
+          <div className="relative group">
+            <div className="w-32 h-32 rounded-[48px] bg-emerald-500 text-white flex items-center justify-center text-5xl font-black shadow-2xl shadow-emerald-500/30 transform group-hover:rotate-6 transition-transform duration-500">
               {initial}
             </div>
-            <div className="flex-1">
-              <div className="flex items-center gap-2 mb-1">
-                <h1 className="text-3xl font-black text-slate-950 dark:text-white tracking-tight leading-none">{editName}</h1>
-                <button onClick={() => setShowEdit(true)} className="p-2 text-slate-300 hover:text-blue-600 transition-colors"><Edit3 size={18} /></button>
-              </div>
-              <p className="text-slate-500 font-bold text-sm flex items-center gap-2"><Mail size={14} className="text-blue-500" /> {user?.email}</p>
-            </div>
+            <button onClick={() => setShowEdit(true)} className="absolute -bottom-2 -right-2 w-10 h-10 bg-white dark:bg-slate-800 rounded-2xl shadow-xl flex items-center justify-center text-slate-900 dark:text-white border border-slate-100 dark:border-slate-700 hover:scale-110 transition-transform">
+              <Edit3 size={18} />
+            </button>
+          </div>
+          
+          <div className="text-center md:text-left space-y-4">
+             <div>
+                <div className="flex items-center justify-center md:justify-start gap-3 mb-2">
+                  <h1 className="text-4xl font-black text-slate-900 dark:text-white tracking-tight leading-none">{editName}</h1>
+                  <BadgeCheck size={24} className="text-emerald-500" />
+                </div>
+                <div className="flex flex-wrap items-center justify-center md:justify-start gap-4">
+                  <p className="text-slate-500 dark:text-slate-400 font-bold text-sm flex items-center gap-2">
+                    <Mail size={14} className="text-emerald-500" /> {user?.email}
+                  </p>
+                  <span className="w-1 h-1 rounded-full bg-slate-200 dark:bg-slate-800 hidden sm:block" />
+                  <p className="text-emerald-500 font-black text-[10px] uppercase tracking-widest bg-emerald-500/10 px-2 py-0.5 rounded-md">Verified Resident</p>
+                </div>
+             </div>
+             
+             <div className="flex items-center justify-center md:justify-start gap-6">
+                <div className="text-center md:text-left">
+                   <p className="text-lg font-black text-slate-900 dark:text-white">₹4,250</p>
+                   <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em]">Donated</p>
+                </div>
+                <div className="w-px h-8 bg-slate-100 dark:bg-slate-800" />
+                <div className="text-center md:text-left">
+                   <p className="text-lg font-black text-slate-900 dark:text-white">12</p>
+                   <p className="text-[9px] font-black text-slate-400 uppercase tracking-[0.2em]">Mosques Followed</p>
+                </div>
+             </div>
           </div>
         </div>
       </header>
 
-      <main className="px-6 -mt-8 relative z-10 max-w-lg mx-auto">
-        {/* ── Prime Analytics ── */}
-        <div className="bg-white dark:bg-slate-900 rounded-[40px] p-8 border border-slate-100 dark:border-slate-800 shadow-xl shadow-slate-950/5 grid grid-cols-3 gap-6 mb-12">
-          {[{ v: '12d', l: 'Loyalty' }, { v: '₹4.5k', l: 'Total' }, { v: 'Pro', l: 'Status' }].map(s => (
-            <div key={s.l} className="text-center">
-              <p className="text-xl font-black text-slate-950 dark:text-white leading-none">{s.v}</p>
-              <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-2">{s.l}</p>
-            </div>
-          ))}
+      <main className="w-full px-6 mt-12 space-y-12">
+        
+        {/* Upgrade Banner */}
+        <div className="bg-emerald-600 rounded-[40px] p-8 text-white flex flex-col md:flex-row items-center justify-between gap-6 relative overflow-hidden shadow-xl shadow-emerald-600/20">
+           <div className="relative z-10 text-center md:text-left">
+              <h3 className="text-xl font-black mb-1">Become a Community Pillar</h3>
+              <p className="text-emerald-100/70 text-sm font-bold">Support local mosque development and maintenance.</p>
+           </div>
+           <button onClick={() => navigate('/donate')} className="relative z-10 px-8 py-4 bg-white text-emerald-600 rounded-2xl font-black text-sm flex items-center gap-2 hover:bg-emerald-50 transition-colors">
+              <Zap size={18} fill="currentColor" /> Donate Now
+           </button>
+           <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -mr-16 -mt-16" />
         </div>
 
-        {/* ── Menu Grid ── */}
-        <div className="space-y-12">
+        {/* Menu Groups */}
+        <div className="space-y-10">
           {menuGroups.map(group => (
-            <div key={group.label}>
-              <h2 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] mb-6 px-4">{group.label}</h2>
+            <div key={group.label} className="reveal">
+              <h2 className="text-[10px] font-black text-slate-400 dark:text-slate-500 uppercase tracking-[0.4em] mb-6 px-4">{group.label}</h2>
               <div className="bg-white dark:bg-slate-900 rounded-[40px] border border-slate-100 dark:border-slate-800 overflow-hidden shadow-sm">
                 {group.items.map((item, idx) => (
-                  <button key={item.id} onClick={item.action} className={`w-full flex items-center justify-between p-6 text-left hover:bg-slate-50 dark:hover:bg-slate-800 transition-all group ${idx !== group.items.length - 1 ? 'border-b border-slate-50 dark:border-slate-800' : ''}`}>
-                    <div className="flex items-center gap-5">
-                      <div className="w-12 h-12 rounded-2xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-500 group-hover:text-blue-600 group-hover:bg-blue-50 transition-all"><item.icon size={22} strokeWidth={2.5} /></div>
+                  <button key={item.id} onClick={item.action} className={`w-full flex items-center justify-between p-7 text-left hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-all group ${idx !== group.items.length - 1 ? 'border-b border-slate-100 dark:border-slate-800/50' : ''}`}>
+                    <div className="flex items-center gap-6">
+                      <div className="w-12 h-12 rounded-2xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-400 group-hover:text-emerald-500 group-hover:bg-emerald-50 dark:group-hover:bg-emerald-500/10 transition-all border border-slate-100 dark:border-slate-800">
+                        <item.icon size={22} />
+                      </div>
                       <div>
-                        <p className="text-sm font-black text-slate-950 dark:text-white leading-none">{item.label}</p>
+                        <p className="text-base font-black text-slate-950 dark:text-white leading-none">{item.label}</p>
                         <p className="text-[10px] font-black text-slate-400 mt-2 uppercase tracking-widest">{item.desc}</p>
                       </div>
                     </div>
-                    <ChevronRight size={20} className="text-slate-200 group-hover:text-blue-600 transition-colors" />
+                    <ChevronRight size={20} className="text-slate-200 dark:text-slate-700 group-hover:text-emerald-500 transition-colors" />
                   </button>
                 ))}
               </div>
             </div>
           ))}
 
-          {/* ── Danger Zone ── */}
-          <button onClick={handleLogout} className="w-full flex items-center justify-center gap-4 p-6 bg-slate-950 text-white rounded-[32px] font-black text-sm shadow-xl shadow-slate-900/40 hover:bg-red-600 transition-all group">
-            <LogOut size={20} className="group-hover:translate-x-1 transition-transform" /> Sign Out from Platform
-          </button>
+          {/* Danger Zone */}
+          <div className="pt-6">
+            <button onClick={handleLogout} className="w-full flex items-center justify-center gap-4 p-7 bg-red-50 dark:bg-red-950/20 text-red-600 dark:text-red-400 rounded-[32px] font-black text-sm border border-red-100 dark:border-red-900/20 hover:bg-red-600 hover:text-white transition-all shadow-sm">
+              <LogOut size={20} /> Securely Sign Out
+            </button>
+          </div>
         </div>
       </main>
 
-      {/* ── Edit Modal ── */}
+      {/* Edit Modal */}
       <AnimatePresence>
         {showEdit && (
-          <motion.div initial={{ opacity:0 }} animate={{ opacity:1 }} exit={{ opacity:0 }} className="fixed inset-0 bg-slate-950/60 backdrop-blur-xl z-50 flex items-end sm:items-center justify-center p-6" onClick={() => setShowEdit(false)}>
-            <motion.div initial={{ y:100 }} animate={{ y:0 }} exit={{ y:100 }} onClick={e => e.stopPropagation()} className="w-full max-w-md bg-white dark:bg-slate-900 rounded-t-[48px] sm:rounded-[48px] p-10 shadow-2xl">
-              <div className="flex justify-between items-center mb-10">
-                <h2 className="text-3xl font-black text-slate-950 dark:text-white tracking-tight">Identity</h2>
-                <button onClick={() => setShowEdit(false)} className="p-4 bg-slate-50 dark:bg-slate-800 rounded-3xl text-slate-400 hover:text-red-500 transition-colors"><X size={24} /></button>
-              </div>
-              <div className="space-y-8">
-                <div>
-                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 block">Full Legal Name</label>
-                  <input type="text" value={editName} onChange={e => setEditName(e.target.value)} className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-3xl p-5 text-base font-black outline-none focus:ring-8 focus:ring-blue-600/5 focus:border-blue-600 transition-all text-slate-950 dark:text-white shadow-inner" />
+          <motion.div initial={{ opacity:0 }} animate={{ opacity:1 }} exit={{ opacity:0 }} className="fixed inset-0 bg-[#020617]/80 backdrop-blur-xl z-[200] flex items-center justify-center p-6" onClick={() => setShowEdit(false)}>
+            <motion.div initial={{ scale:0.9, y: 20 }} animate={{ scale:1, y: 0 }} onClick={e => e.stopPropagation()} className="w-full max-w-md bg-white dark:bg-slate-900 rounded-[48px] p-12 shadow-2xl relative overflow-hidden">
+              <div className="relative z-10">
+                <div className="flex justify-between items-center mb-12">
+                  <h2 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">Personal Identity</h2>
+                  <button onClick={() => setShowEdit(false)} className="p-4 bg-slate-50 dark:bg-slate-800 rounded-3xl text-slate-400 hover:text-red-500 transition-colors"><X size={24} /></button>
                 </div>
+                <div className="space-y-8">
+                  <div>
+                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3 block ml-1">Legal Full Name</label>
+                    <div className="relative">
+                       <User size={18} className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300" />
+                       <input type="text" value={editName} onChange={e => setEditName(e.target.value)} className="form-input h-16 pl-14 text-base font-black text-slate-900 dark:text-white" />
+                    </div>
+                  </div>
+                </div>
+                <button onClick={() => setShowEdit(false)} className="btn-action w-full h-18 text-lg mt-12 shadow-2xl shadow-emerald-500/20">
+                  <Check size={24} strokeWidth={3} /> Commit Changes
+                </button>
               </div>
-              <button onClick={() => setShowEdit(false)} className="w-full bg-blue-600 text-white font-black py-6 rounded-3xl mt-10 shadow-xl shadow-blue-600/30 flex items-center justify-center gap-3">
-                <Check size={24} strokeWidth={3} /> Save Identity
-              </button>
+              <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 rounded-full blur-3xl" />
             </motion.div>
           </motion.div>
         )}

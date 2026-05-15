@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import { Calendar, MapPin, Clock, ArrowLeft, Heart, Users, Mic2 } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { Calendar, MapPin, Clock, ArrowLeft, Heart, Users, Mic2, Star, ChevronRight, Share2 } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { getHijriDate } from '../utils/dateUtils';
 
 const allEvents = [
-  { id: 1, title: 'Nikah: Abdullah & Fatima',        type: 'NIKAH',   date: 'May 25', time: '10:00 AM', location: 'Road Masjid' },
-  { id: 2, title: 'Monthly Registry Meeting',        type: 'MEETING', date: 'May 28', time: '08:30 PM', location: 'Jamiya Masjid' },
-  { id: 3, title: 'Grand Bayan by Mufti Tariq',    type: 'BAYAN',   date: 'Jun 2',  time: 'After Maghrib', location: 'Chowk Masjid' },
+  { id: 1, title: 'Nikah Ceremony: Abdullah & Fatima', type: 'NIKAH',   date: 'May 25, 2026', time: '10:00 AM', location: 'Main Road Masjid', organizer: 'Rahman Family' },
+  { id: 2, title: 'Monthly Community Shura',         type: 'MEETING', date: 'May 28, 2026', time: '08:30 PM', location: 'Jamiya Masjid Hall', organizer: 'Masjid Council' },
+  { id: 3, title: 'Seerat-un-Nabi Bayan Session',   type: 'BAYAN',   date: 'Jun 2, 2026',  time: 'After Maghrib', location: 'Chowk Masjid', organizer: 'Dawat Hub' },
 ];
 
 const Events = () => {
@@ -16,48 +16,89 @@ const Events = () => {
   const hijri = getHijriDate();
 
   return (
-    <div className="min-h-screen bg-white dark:bg-slate-950 pb-32">
-      <header className="pt-16 pb-12 px-6 border-b border-slate-100 dark:border-slate-900">
-        <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-slate-400 font-black text-[10px] uppercase tracking-[0.2em] mb-6">
-          <ArrowLeft size={16} /> Back
-        </button>
-        <h1 className="text-4xl font-black text-slate-950 dark:text-white tracking-tight leading-none">Programs</h1>
-        <p className="text-slate-500 font-bold text-sm mt-3 uppercase tracking-wider">{hijri.full}</p>
+    <div className="min-h-screen bg-[#fcfcfd] dark:bg-[#020617] pb-40">
+      {/* ── Header ── */}
+      <header className="sticky top-0 z-50 bg-white/80 dark:bg-[#020617]/80 backdrop-blur-xl border-b border-slate-100 dark:border-slate-800 px-6 py-6">
+        <div className="w-full flex items-center justify-between">
+          <button onClick={() => navigate(-1)} className="flex items-center gap-3 text-slate-400 hover:text-emerald-500 transition-colors group">
+            <div className="w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center group-hover:-translate-x-1 transition-transform">
+              <ArrowLeft size={16} />
+            </div>
+            <span className="text-xs font-black uppercase tracking-widest">Back</span>
+          </button>
+          
+          <div className="flex flex-col items-start">
+             <h1 className="text-xl font-black text-slate-900 dark:text-white tracking-tighter">Community Events</h1>
+             <p className="text-[10px] font-black text-emerald-500 uppercase tracking-widest">{hijri.full}</p>
+          </div>
+        </div>
       </header>
 
-      <main className="px-6 -mt-8 relative z-10 space-y-8 max-w-lg mx-auto">
-        <div className="bg-white dark:bg-slate-900 p-2 rounded-[32px] border border-slate-100 dark:border-slate-800 shadow-xl shadow-slate-950/5 flex gap-2">
+      <main className="w-full px-6 py-12 space-y-10">
+        
+        {/* Toggle Filter */}
+        <div className="bg-white dark:bg-slate-900 p-2 rounded-[32px] border border-slate-100 dark:border-slate-800 shadow-xl shadow-slate-900/5 flex gap-2">
           {['upcoming', 'completed'].map(f => (
-            <button key={f} onClick={() => setFilter(f)} className={`flex-1 py-4 text-[10px] font-black uppercase tracking-[0.25em] rounded-[24px] transition-all ${filter === f ? 'bg-slate-950 text-white shadow-xl' : 'text-slate-400 hover:text-blue-600'}`}>{f}</button>
+            <button key={f} onClick={() => setFilter(f)} className={`flex-1 py-4 text-[11px] font-black uppercase tracking-[0.25em] rounded-[24px] transition-all ${filter === f ? 'bg-slate-950 text-white shadow-xl' : 'text-slate-400 hover:text-emerald-500'}`}>{f}</button>
           ))}
         </div>
 
+        {/* List */}
         <div className="space-y-6">
-          {allEvents.map(ev => (
-            <div key={ev.id} className="bg-white dark:bg-slate-900 p-8 rounded-[40px] border border-slate-100 dark:border-slate-800 shadow-sm group hover:border-blue-400 transition-all">
-              <div className="flex items-start gap-6">
-                <div className="w-16 h-16 rounded-3xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-blue-600 shadow-inner group-hover:scale-105 transition-transform border border-slate-100 dark:border-slate-700">
-                  {ev.type === 'NIKAH' ? <Heart size={28} strokeWidth={2.5} /> : ev.type === 'MEETING' ? <Users size={28} strokeWidth={2.5} /> : <Mic2 size={28} strokeWidth={2.5} />}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-[10px] font-black text-blue-600 uppercase tracking-[0.3em] bg-blue-50 px-3 py-1 rounded-xl">{ev.type}</span>
-                    <span className="text-[11px] font-black text-slate-300 uppercase tracking-widest">{ev.date}</span>
+          <AnimatePresence mode="popLayout">
+            {allEvents.map((ev, idx) => (
+              <motion.div layout initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: idx * 0.05 }}
+                key={ev.id} className="premium-card group">
+                
+                <div className="flex flex-col md:flex-row md:items-center gap-8">
+                  <div className="w-20 h-20 rounded-[32px] bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 flex flex-col items-center justify-center text-emerald-500 shadow-inner group-hover:bg-emerald-500 group-hover:text-white transition-all duration-500">
+                    <span className="text-xl font-black leading-none">{ev.date.split(',')[0].split(' ')[1]}</span>
+                    <span className="text-[9px] font-black uppercase tracking-widest opacity-60">{ev.date.split(',')[0].split(' ')[0]}</span>
                   </div>
-                  <h3 className="text-xl font-black text-slate-950 dark:text-white leading-tight mb-6 group-hover:text-blue-600 transition-colors">{ev.title}</h3>
                   
-                  <div className="grid grid-cols-2 gap-6 pt-6 border-t border-slate-100 dark:border-slate-800">
-                    <div className="flex items-center gap-2.5 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">
-                      <Clock size={14} className="text-blue-500" /> {ev.time}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="flex items-center gap-3">
+                        <span className="px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-500 text-[9px] font-black uppercase tracking-widest">{ev.type}</span>
+                        <div className="flex items-center gap-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                          <Star size={12} className="text-amber-500" fill="currentColor" /> Sponsored
+                        </div>
+                      </div>
+                      <button className="p-3 text-slate-200 hover:text-emerald-500 transition-colors"><Share2 size={18} /></button>
                     </div>
-                    <div className="flex items-center gap-2.5 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">
-                      <MapPin size={14} className="text-blue-500" /> {ev.location}
+
+                    <h3 className="text-2xl font-black text-slate-950 dark:text-white leading-tight mb-6 group-hover:text-emerald-500 transition-colors tracking-tight">{ev.title}</h3>
+                    
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-6 border-t border-slate-100 dark:border-slate-800/50">
+                      <div className="flex items-center gap-3 text-[11px] font-black text-slate-400 uppercase tracking-widest">
+                        <div className="w-8 h-8 rounded-xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-400"><Clock size={16} /></div>
+                        {ev.time}
+                      </div>
+                      <div className="flex items-center gap-3 text-[11px] font-black text-slate-400 uppercase tracking-widest">
+                        <div className="w-8 h-8 rounded-xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center text-slate-400"><MapPin size={16} /></div>
+                        {ev.location}
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </div>
-          ))}
+
+                <div className="mt-8 flex items-center justify-between">
+                   <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-500"><Users size={14} /></div>
+                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Organized by {ev.organizer}</p>
+                   </div>
+                   <button className="h-12 px-6 rounded-2xl bg-slate-950 text-white text-[10px] font-black uppercase tracking-widest hover:bg-emerald-500 transition-all flex items-center gap-2">Register Entry <ChevronRight size={14} strokeWidth={3} /></button>
+                </div>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </div>
+
+        {/* Suggest Event Card */}
+        <div className="premium-card bg-emerald-500/5 border-dashed border-emerald-500/30 text-center py-12">
+           <h4 className="text-lg font-black text-emerald-600 mb-2">Hosting an event?</h4>
+           <p className="text-slate-500 text-sm font-bold mb-6">List your mosque program or community gathering on Pernambut Connect.</p>
+           <button className="text-xs font-black text-emerald-500 uppercase tracking-widest border-b border-emerald-500/50 pb-0.5">Submit Event Proposal</button>
         </div>
       </main>
     </div>

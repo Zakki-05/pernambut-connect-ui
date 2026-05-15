@@ -18,6 +18,8 @@ import DeathNews from './pages/DeathNews';
 import AdminHub from './pages/AdminHub';
 import Notifications from './pages/Notifications';
 import LandingPage from './pages/LandingPage';
+import ScrollToTop from './components/layout/ScrollToTop';
+import ScrollToTopButton from './components/layout/ScrollToTopButton';
 
 // Wrapper to ensure user is logged in
 const AuthProtectedRoute = ({ children }) => {
@@ -57,7 +59,8 @@ function App() {
 
   return (
     <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-      <div className="min-h-screen bg-gray-50 main-container">
+      <ScrollToTop />
+      <div className="min-h-screen bg-gray-50 dark:bg-[#020617]">
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<Login />} />
@@ -154,8 +157,10 @@ function App() {
           <Route path="*" element={<Navigate to={user ? "/home" : "/"} replace />} />
         </Routes>
         
-        {/* Only show bottom nav if user logged in and mosque selected */}
-        {user && selectedMosque && <BottomNav />}
+        {/* Only show bottom nav if user logged in, mosque selected, and NOT on landing page */}
+        {user && selectedMosque && window.location.pathname !== '/' && <BottomNav />}
+        
+        <ScrollToTopButton />
       </div>
     </Router>
   );

@@ -1,5 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import api from '../services/api';
+import i18n from '../i18n';
 
 const AuthContext = createContext();
 
@@ -20,6 +21,9 @@ export const AuthProvider = ({ children }) => {
         .then(res => {
           setUser(res.data);
           localStorage.setItem('user', JSON.stringify(res.data));
+          if (res.data.language) {
+            i18n.changeLanguage(res.data.language);
+          }
         })
         .catch(() => {
           // If profile fetch fails, token is invalid or expired
@@ -39,6 +43,9 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem('access_token', accessToken);
     localStorage.setItem('refresh_token', refreshToken);
     localStorage.setItem('user', JSON.stringify(userData));
+    if (userData.language) {
+      i18n.changeLanguage(userData.language);
+    }
   };
 
   const logout = async () => {

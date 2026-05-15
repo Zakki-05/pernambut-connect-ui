@@ -106,328 +106,160 @@ const AdminHub = () => {
   };
 
   return (
-    <div className="pb-24 min-h-screen bg-gray-50 dark:bg-[#0c1410]">
-      {/* Header */}
-      <div className="page-header">
-        <div className="page-header-orb-1" /><div className="page-header-orb-2" />
-        <div className="relative z-10">
-          <button onClick={() => navigate('/profile')} className="flex items-center gap-2 text-white/70 hover:text-white text-sm font-semibold mb-4 transition-colors">
-            <ArrowLeft size={16} /> Back
-          </button>
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-2xl bg-white/15 flex items-center justify-center backdrop-blur-sm">
-                <ShieldAlert size={20} />
-              </div>
-              <div>
-                <h1 className="text-white text-2xl font-black">Admin Hub</h1>
-                <p className="text-white/60 text-xs mt-0.5">Post to the community</p>
-              </div>
-            </div>
-            <button 
-              onClick={() => navigate('/admin/users')}
-              className="bg-white/15 hover:bg-white/25 text-white px-3 py-1.5 rounded-xl text-xs font-bold flex items-center transition-all backdrop-blur-md"
-            >
-              <Users size={14} className="mr-1.5" /> Members
+    <div className="min-h-screen bg-[#fcfcfd] dark:bg-[#020617] pb-40">
+      {/* ── Premium Header ── */}
+      <header className="bg-slate-900 pt-20 pb-24 px-6 relative overflow-hidden">
+        <div className="absolute inset-0 opacity-10 pointer-events-none" 
+          style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, #10b981 1px, transparent 0)', backgroundSize: '30px 30px' }} />
+        
+        <div className="w-full flex flex-col md:flex-row items-start md:items-center justify-between gap-8 relative z-10">
+          <div className="flex items-center gap-5">
+            <button onClick={() => navigate('/profile')} className="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-all">
+              <ArrowLeft size={20} />
             </button>
+            <div>
+              <h1 className="text-3xl font-black text-white tracking-tight">Management Portal</h1>
+              <p className="text-emerald-400 text-[10px] font-black uppercase tracking-[0.3em] mt-1">Mosque Administrative Hub</p>
+            </div>
+          </div>
+          
+          <button onClick={() => navigate('/admin/users')} className="h-14 px-8 bg-emerald-500 text-white rounded-2xl font-black text-xs uppercase tracking-widest flex items-center gap-3 shadow-xl shadow-emerald-500/20 hover:scale-105 transition-all">
+            <Users size={18} /> Member Directory
+          </button>
+        </div>
+      </header>
+
+      <main className="w-full px-6 -mt-10 relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+          
+          {/* Sidebar / Tabs */}
+          <div className="lg:col-span-3 space-y-4">
+            <div className="premium-card p-3 space-y-1">
+              {[
+                { id: 'announcement', label: 'Alerts', icon: Megaphone, color: 'text-emerald-500' },
+                { id: 'wafat', label: 'Death News', icon: AlertCircle, color: 'text-amber-500' },
+                { id: 'event', label: 'Events', icon: Calendar, color: 'text-blue-500' },
+                { id: 'bayan', label: 'Bayans', icon: Mic2, color: 'text-purple-500' },
+              ].map(tab => (
+                <button key={tab.id} onClick={() => setActiveTab(tab.id)} 
+                  className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl text-xs font-black uppercase tracking-widest transition-all ${activeTab === tab.id ? 'bg-slate-950 text-white shadow-xl shadow-slate-900/20' : 'text-slate-400 hover:bg-slate-50'}`}>
+                  <tab.icon size={18} className={activeTab === tab.id ? 'text-emerald-400' : tab.color} />
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+
+            <div className="premium-card bg-amber-500/5 border-amber-500/20 p-6">
+              <ShieldAlert size={24} className="text-amber-500 mb-4" />
+              <p className="text-[10px] font-black text-amber-600 uppercase tracking-widest leading-relaxed">
+                Administrative actions are logged and visible to all committee members.
+              </p>
+            </div>
+          </div>
+
+          {/* Form Content */}
+          <div className="lg:col-span-9">
+            <form onSubmit={handleSubmit} className="premium-card space-y-10 p-10">
+              <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-8">
+                <div>
+                   <h2 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+                     Create {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}
+                   </h2>
+                   <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Fill in the details below</p>
+                </div>
+                {status === 'success' && <div className="flex items-center gap-2 px-4 py-2 bg-emerald-50 text-emerald-600 rounded-full text-[10px] font-black uppercase tracking-widest animate-reveal"><CheckCircle size={14} /> Published</div>}
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="space-y-6 md:col-span-2">
+                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Title / Subject</label>
+                  <input name="title" required value={formData.title} onChange={handleInputChange} placeholder={activeTab === 'wafat' ? "Full Name of Deceased" : "Enter a compelling title"} 
+                    className="form-input h-18 text-lg font-bold" />
+                </div>
+
+                {activeTab === 'announcement' && (
+                  <>
+                    <div className="space-y-3">
+                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Priority Level</label>
+                      <select name="priority" value={formData.priority} onChange={handleInputChange} className="form-input h-16 font-bold cursor-pointer">
+                        <option value="NORMAL">Normal</option>
+                        <option value="IMPORTANT">Important</option>
+                        <option value="URGENT">Urgent (Emergency)</option>
+                      </select>
+                    </div>
+                    <div className="space-y-3">
+                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Information Type</label>
+                      <select name="type" value={formData.type} onChange={handleInputChange} className="form-input h-16 font-bold cursor-pointer">
+                        <option value="GENERAL">General News</option>
+                        <option value="EMERGENCY">Emergency Update</option>
+                        <option value="RELIGIOUS">Religious / Fatwa</option>
+                      </select>
+                    </div>
+                  </>
+                )}
+
+                {(activeTab === 'event' || activeTab === 'bayan') && (
+                  <>
+                    <div className="space-y-3">
+                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Scheduled Date</label>
+                      <input type="date" name="date" required value={formData.date} onChange={handleInputChange} className="form-input h-16 font-bold" />
+                    </div>
+                    <div className="space-y-3">
+                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Time / Duration</label>
+                      <input type="text" name="time" required value={formData.time} onChange={handleInputChange} placeholder="e.g. 8:30 PM (After Isha)" className="form-input h-16 font-bold" />
+                    </div>
+                  </>
+                )}
+
+                {activeTab === 'event' && (
+                  <div className="space-y-3 md:col-span-2">
+                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Event Venue</label>
+                    <input name="location" required value={formData.location} onChange={handleInputChange} placeholder="Specific Masjid or Hall name" className="form-input h-16 font-bold" />
+                  </div>
+                )}
+
+                {activeTab === 'bayan' && (
+                  <>
+                    <div className="space-y-3">
+                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Speaker / Molana</label>
+                      <input name="speaker" required value={formData.speaker} onChange={handleInputChange} placeholder="Name of the Scholar" className="form-input h-16 font-bold" />
+                    </div>
+                    <div className="space-y-3">
+                      <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Media Link (URL)</label>
+                      <input name="url" value={formData.url} onChange={handleInputChange} placeholder="YouTube or SoundCloud Link" className="form-input h-16 font-bold" />
+                    </div>
+                  </>
+                )}
+              </div>
+
+              <div className="space-y-4">
+                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Detailed Content</label>
+                <textarea name="content" required rows={8} value={formData.content} onChange={handleInputChange} 
+                  placeholder="Provide comprehensive details about this update..." className="form-input p-6 font-medium leading-relaxed" />
+              </div>
+
+              {activeTab === 'wafat' && (
+                <div className="space-y-4">
+                  <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Upload Portrait (Optional)</label>
+                  <div className="flex items-center justify-center w-full">
+                    <label className="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed border-slate-100 dark:border-slate-800 rounded-3xl cursor-pointer hover:bg-slate-50 transition-all group">
+                      <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                        <Upload size={24} className="text-slate-300 group-hover:text-emerald-500 transition-colors mb-3" />
+                        <p className="text-xs font-black text-slate-400 uppercase tracking-widest">{imageFile ? imageFile.name : 'Drag and drop image here'}</p>
+                      </div>
+                      <input type="file" className="hidden" accept="image/*" onChange={handleFileChange} />
+                    </label>
+                  </div>
+                </div>
+              )}
+
+              <button type="submit" disabled={isLoading} className="btn-action w-full h-20 text-xl shadow-2xl shadow-emerald-500/20 mt-12">
+                {isLoading ? <Loader2 size={24} className="animate-spin" /> : <>Confirm & Publish Post <Send size={20} strokeWidth={3} /></>}
+              </button>
+            </form>
           </div>
         </div>
-      </div>
-
-      <div className="px-6 mt-6">
-        {/* Tabs */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-1 flex mb-6">
-          <button
-            onClick={() => setActiveTab('announcement')}
-            className={`flex-1 flex items-center justify-center py-2.5 rounded-xl text-sm font-semibold transition-all ${
-              activeTab === 'announcement' ? 'bg-red-600 text-white shadow-md' : 'text-gray-500'
-            }`}
-          >
-            <Megaphone size={16} className="mr-2" />
-            Alert
-          </button>
-          <button
-            onClick={() => setActiveTab('wafat')}
-            className={`flex-1 flex items-center justify-center py-2.5 rounded-xl text-sm font-semibold transition-all ${
-              activeTab === 'wafat' ? 'bg-red-600 text-white shadow-md' : 'text-gray-500'
-            }`}
-          >
-            <AlertCircle size={16} className="mr-2" />
-            Wafat
-          </button>
-          <button
-            onClick={() => setActiveTab('event')}
-            className={`flex-1 flex items-center justify-center py-2.5 rounded-xl text-sm font-semibold transition-all ${
-              activeTab === 'event' ? 'bg-red-600 text-white shadow-md' : 'text-gray-500'
-            }`}
-          >
-            <Calendar size={16} className="mr-2" />
-            Event
-          </button>
-          <button
-            onClick={() => setActiveTab('bayan')}
-            className={`flex-1 flex items-center justify-center py-2.5 rounded-xl text-sm font-semibold transition-all ${
-              activeTab === 'bayan' ? 'bg-red-600 text-white shadow-md' : 'text-gray-500'
-            }`}
-          >
-            <Mic2 size={16} className="mr-2" />
-            Bayan
-          </button>
-        </div>
-
-        {/* Form */}
-        <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
-          <h2 className="text-lg font-bold text-gray-800 mb-4 flex items-center">
-            {activeTab === 'announcement' && 'Post New Announcement'}
-            {activeTab === 'wafat' && 'Post Death News (Wafat)'}
-            {activeTab === 'event' && 'Schedule New Event'}
-            {activeTab === 'bayan' && 'Post Recorded Bayan'}
-            <ShieldAlert size={18} className="ml-2 text-red-500" />
-          </h2>
-
-          <div className="space-y-4">
-            {activeTab === 'bayan' ? (
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-1.5">Lecture Title</label>
-                  <input
-                    type="text"
-                    name="title"
-                    required
-                    value={formData.title}
-                    onChange={handleInputChange}
-                    placeholder="Enter Title"
-                    className="w-full border-2 border-gray-100 rounded-xl p-3 outline-none focus:border-red-500 transition-all text-gray-800"
-                  />
-                </div>
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-1.5 flex items-center">
-                      <UserCircle size={16} className="mr-2 text-primary-500" /> Speaker
-                    </label>
-                    <input
-                      type="text"
-                      name="speaker"
-                      required
-                      value={formData.speaker}
-                      onChange={handleInputChange}
-                      placeholder="Molana / Mufti Name"
-                      className="w-full border-2 border-gray-100 rounded-xl p-3 outline-none focus:border-red-500 text-gray-800"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-1.5">Date</label>
-                    <input
-                      type="date"
-                      name="date"
-                      required
-                      value={formData.date}
-                      onChange={handleInputChange}
-                      className="w-full border-2 border-gray-100 rounded-xl p-3 outline-none focus:border-red-500 text-gray-800"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-1.5 flex items-center">
-                    <Globe size={16} className="mr-2 text-blue-500" /> Video/Audio Link (Optional)
-                  </label>
-                  <input
-                    type="url"
-                    name="url"
-                    value={formData.url}
-                    onChange={handleInputChange}
-                    placeholder="https://youtube.com/..."
-                    className="w-full border-2 border-gray-100 rounded-xl p-3 outline-none focus:border-red-500 transition-all text-gray-800"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-1.5">Description</label>
-                  <textarea
-                    name="content"
-                    rows={3}
-                    value={formData.content}
-                    onChange={handleInputChange}
-                    placeholder="Brief description of the lecture topics"
-                    className="w-full border-2 border-gray-100 rounded-xl p-3 outline-none focus:border-red-500 transition-all text-gray-800"
-                  ></textarea>
-                </div>
-              </div>
-            ) : (
-              <>
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-1.5">Title</label>
-                  <input
-                    type="text"
-                    name="title"
-                    required
-                    value={formData.title}
-                    onChange={handleInputChange}
-                    placeholder={activeTab === 'wafat' ? 'Name of Deceased' : 'Enter Title'}
-                    className="w-full border-2 border-gray-100 rounded-xl p-3 outline-none focus:border-red-500 transition-all text-gray-800"
-                  />
-                </div>
-
-            {activeTab === 'announcement' && (
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-1.5">Priority</label>
-                  <select
-                    name="priority"
-                    value={formData.priority}
-                    onChange={handleInputChange}
-                    className="w-full border-2 border-gray-100 rounded-xl p-3 outline-none focus:border-red-500 text-gray-800"
-                  >
-                    <option value="NORMAL">Normal</option>
-                    <option value="IMPORTANT">Important</option>
-                    <option value="URGENT">Urgent</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-1.5">Type</label>
-                  <select
-                    name="type"
-                    value={formData.type}
-                    onChange={handleInputChange}
-                    className="w-full border-2 border-gray-100 rounded-xl p-3 outline-none focus:border-red-500 text-gray-800"
-                  >
-                    <option value="GENERAL">General</option>
-                    <option value="EMERGENCY">Emergency</option>
-                    <option value="RELIGIOUS">Religious</option>
-                  </select>
-                </div>
-              </div>
-            )}
-
-            {activeTab === 'event' && (
-              <>
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-1.5">Event Type</label>
-                  <select
-                    name="event_type"
-                    value={formData.event_type}
-                    onChange={handleInputChange}
-                    className="w-full border-2 border-gray-100 rounded-xl p-3 outline-none focus:border-red-500 text-gray-800"
-                  >
-                    <option value="NIKAH">Nikah</option>
-                    <option value="BAYAN">Bayan</option>
-                    <option value="LECTURE">Lecture</option>
-                    <option value="MEETING">Meeting</option>
-                  </select>
-                </div>
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-1.5">Date</label>
-                    <input
-                      type="date"
-                      name="date"
-                      required
-                      value={formData.date}
-                      onChange={handleInputChange}
-                      className="w-full border-2 border-gray-100 rounded-xl p-3 outline-none focus:border-red-500 text-gray-800"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-1.5">Time</label>
-                    <input
-                      type="time"
-                      name="time"
-                      required
-                      value={formData.time}
-                      onChange={handleInputChange}
-                      className="w-full border-2 border-gray-100 rounded-xl p-3 outline-none focus:border-red-500 text-gray-800"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-1.5">Location</label>
-                  <input
-                    type="text"
-                    name="location"
-                    required
-                    value={formData.location}
-                    onChange={handleInputChange}
-                    placeholder="Enter location"
-                    className="w-full border-2 border-gray-100 rounded-xl p-3 outline-none focus:border-red-500 text-gray-800"
-                  />
-                </div>
-              </>
-            )}
-
-            {activeTab === 'wafat' && (
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1.5 flex items-center">
-                  <Image size={16} className="mr-2 text-primary-500" /> Photo (Optional)
-                </label>
-                <div className="flex items-center justify-center w-full">
-                  <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-100 border-dashed rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 transition-all">
-                    <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                      <Upload size={24} className="text-gray-400 mb-2" />
-                      <p className="text-xs text-gray-500">{imageFile ? imageFile.name : 'Click to upload photo'}</p>
-                    </div>
-                    <input type="file" className="hidden" accept="image/*" onChange={handleFileChange} />
-                  </label>
-                </div>
-              </div>
-            )}
-
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1.5">Details / Content</label>
-              <textarea
-                name="content"
-                required
-                rows={activeTab === 'wafat' ? 10 : 4}
-                value={formData.content}
-                onChange={handleInputChange}
-                placeholder={activeTab === 'wafat' ? 'Paste the detailed death news format here...' : 'Enter detailed information'}
-                className="w-full border-2 border-gray-100 rounded-xl p-3 outline-none focus:border-red-500 transition-all text-gray-800"
-              ></textarea>
-            </div>
-          </>
-        )}
-      </div>
-
-          <AnimatePresence>
-            {status === 'success' && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                exit={{ opacity: 0, height: 0 }}
-                className="bg-green-50 border border-green-200 rounded-xl p-3 mt-4 flex items-center text-green-700 text-sm"
-              >
-                <CheckCircle size={18} className="mr-2" /> Posted successfully!
-              </motion.div>
-            )}
-            {status === 'error' && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                exit={{ opacity: 0, height: 0 }}
-                className="bg-red-50 border border-red-200 rounded-xl p-3 mt-4 flex items-center text-red-700 text-sm"
-              >
-                <AlertCircle size={18} className="mr-2" /> Error posting update.
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          <button
-            type="submit"
-            disabled={isLoading || !selectedMosque}
-            className="w-full bg-red-600 text-white font-bold py-4 rounded-xl mt-6 flex items-center justify-center hover:bg-red-700 transition-all shadow-lg disabled:opacity-50"
-          >
-            {isLoading ? (
-              <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
-            ) : (
-              <Send size={18} className="mr-2" />
-            )}
-            Post
-          </button>
-        </form>
-
-        <div className="mt-6 p-4 bg-gray-100 rounded-2xl text-xs text-gray-500 flex items-start">
-          <ShieldAlert size={16} className="mr-2 flex-shrink-0 mt-0.5" />
-          <p>This is an administrative portal. Posts made here will be visible to all members subscribed to your mosque. Please verify all information before posting.</p>
-        </div>
-      </div>
+      </main>
     </div>
   );
 };
