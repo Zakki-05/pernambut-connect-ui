@@ -5,7 +5,7 @@ import {
   Database, Trash2, LogOut, HelpCircle, Trash, AlertTriangle,
   Search, User, Monitor, Smartphone, Chrome, Laptop,
   Cpu, Zap, Eye, Type, Link, Fingerprint, Activity,
-  Download, MessageSquare, ShieldCheck, Heart
+  Download, MessageSquare, ShieldCheck, Heart, Star
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
