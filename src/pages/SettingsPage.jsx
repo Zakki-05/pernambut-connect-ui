@@ -231,7 +231,8 @@ const SettingsPage = () => {
         {!searchQuery && (
           <motion.section 
             initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-            className="premium-card bg-gradient-to-br from-emerald-600 to-emerald-800 border-none relative overflow-hidden"
+            className="relative overflow-hidden rounded-[32px] p-8 shadow-xl shadow-emerald-500/10 border border-emerald-500/10"
+            style={{ background: 'linear-gradient(135deg, #059669 0%, #022c22 100%)' }}
           >
             <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16 blur-2xl" />
             <div className="relative z-10 flex items-center gap-6">
