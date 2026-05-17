@@ -231,29 +231,60 @@ const SettingsPage = () => {
         {!searchQuery && (
           <motion.section 
             initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-            className="relative overflow-hidden rounded-[32px] p-8 shadow-xl shadow-emerald-500/10 border border-emerald-500/10"
-            style={{ background: 'linear-gradient(135deg, #059669 0%, #022c22 100%)' }}
+            className={`relative overflow-hidden rounded-[32px] p-8 shadow-xl border ${
+              darkMode 
+                ? 'border-emerald-500/10 shadow-emerald-950/20' 
+                : 'border-emerald-500/10 shadow-emerald-500/5'
+            }`}
+            style={{ 
+              background: darkMode 
+                ? 'linear-gradient(135deg, #022c22 0%, #0f172a 100%)' 
+                : 'linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%)' 
+            }}
           >
-            <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16 blur-2xl" />
+            <div className={`absolute top-0 right-0 w-32 h-32 rounded-full -mr-16 -mt-16 blur-2xl ${darkMode ? 'bg-white/5' : 'bg-emerald-500/5'}`} />
             <div className="relative z-10 flex items-center gap-6">
-              <div className="w-20 h-20 rounded-3xl bg-white/20 backdrop-blur-md flex items-center justify-center text-white border border-white/20 shadow-xl overflow-hidden">
-                {user?.profile_image ? <img src={user.profile_image} className="w-full h-full object-cover" /> : <User size={32} />}
+              <div className={`w-20 h-20 rounded-3xl flex items-center justify-center border shadow-xl overflow-hidden ${
+                darkMode 
+                  ? 'bg-white/20 text-white border-white/20 backdrop-blur-md' 
+                  : 'bg-emerald-600/10 text-emerald-700 border-emerald-500/20'
+              }`}>
+                {user?.profile_image ? (
+                  <img src={user.profile_image} className="w-full h-full object-cover" />
+                ) : (
+                  <User size={32} />
+                )}
               </div>
               <div className="flex-1">
-                <h3 className="text-xl font-black text-white drop-shadow-sm">{user?.name || 'Community Member'}</h3>
-                <p className="text-emerald-50/70 text-[10px] font-black uppercase tracking-[0.2em] mt-1.5">{user?.email || 'zakkiadnan05@gmail.com'}</p>
+                <h3 className={`text-xl font-black drop-shadow-sm ${darkMode ? 'text-white' : 'text-emerald-950'}`}>
+                  {user?.name || 'Community Member'}
+                </h3>
+                <p className={`text-[10px] font-black uppercase tracking-[0.2em] mt-1.5 ${
+                  darkMode ? 'text-emerald-50/70' : 'text-emerald-800/80'
+                }`}>
+                  {user?.email || 'zakkiadnan05@gmail.com'}
+                </p>
                 <div className="flex items-center gap-2 mt-4">
                   <span className="px-3 py-1 rounded-full bg-amber-400 text-[9px] font-black text-amber-950 uppercase tracking-widest shadow-lg shadow-amber-400/20 border border-amber-300">
                     <Star size={10} className="inline-block mr-1 fill-current" /> Gold Contributor
                   </span>
                   {user?.is_staff && (
-                    <span className="px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-[9px] font-black text-white uppercase tracking-widest border border-white/20">
+                    <span className={`px-3 py-1 rounded-full border text-[9px] font-black uppercase tracking-widest ${
+                      darkMode 
+                        ? 'bg-white/20 text-white border-white/20 backdrop-blur-md' 
+                        : 'bg-emerald-600/10 text-emerald-700 border-emerald-500/20'
+                    }`}>
                       <Shield size={10} className="inline-block mr-1" /> Pro User
                     </span>
                   )}
                 </div>
               </div>
-              <button onClick={() => navigate('/profile')} className="w-10 h-10 rounded-xl bg-white text-slate-900 flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
+              <button 
+                onClick={() => navigate('/profile')} 
+                className={`w-10 h-10 rounded-xl flex items-center justify-center shadow-lg hover:scale-110 transition-transform ${
+                  darkMode ? 'bg-white text-slate-900' : 'bg-emerald-600 text-white'
+                }`}
+              >
                 <ChevronRight size={20} />
               </button>
             </div>
