@@ -67,7 +67,8 @@ const DonationHistory = () => {
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-10">
             
             {/* Total Summary Banner with Emerald-Gold Gradient */}
-            <div className="relative group overflow-hidden rounded-[32px] p-8 bg-gradient-to-br from-emerald-600 to-emerald-800 dark:from-emerald-950 dark:to-slate-950 border border-emerald-500/10 shadow-2xl shadow-emerald-500/10">
+            <div className="relative group overflow-hidden rounded-[32px] p-8 border border-emerald-500/10 shadow-2xl shadow-emerald-500/10"
+              style={{ background: 'linear-gradient(135deg, #059669 0%, #022c22 100%)' }}>
               <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-400/10 rounded-full blur-[80px] -mr-20 -mt-20 pointer-events-none" />
               <div className="absolute bottom-0 left-0 w-64 h-64 bg-amber-400/5 rounded-full blur-[80px] -ml-20 -mb-20 pointer-events-none" />
 
