@@ -157,8 +157,7 @@ function App() {
           <Route path="*" element={<Navigate to={user ? "/home" : "/"} replace />} />
         </Routes>
         
-        {/* Only show bottom nav if user logged in, mosque selected, and NOT on landing page */}
-        {user && selectedMosque && window.location.pathname !== '/' && <BottomNav />}
+        <BottomNav />
         
         <ScrollToTopButton />
       </div>

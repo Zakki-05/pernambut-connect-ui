@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ChevronRight, Bell, Heart, Clock, Shield, Users, Star, 
   CheckCircle, ArrowRight, Menu, X, Twitter, Facebook, 
@@ -28,7 +28,7 @@ const LandingPage = () => {
     <div className="min-h-screen bg-white dark:bg-[#020617] selection:bg-emerald-500 selection:text-white">
       
       {/* ── Modern Navbar ── */}
-      <nav className="fixed top-6 left-1/2 -translate-x-1/2 w-[95%] max-w-7xl z-[100] bg-white/80 dark:bg-[#020617]/80 backdrop-blur-2xl border border-slate-200/50 dark:border-slate-800/50 rounded-[32px] shadow-2xl shadow-slate-900/5">
+      <nav className="fixed top-6 left-1/2 -translate-x-1/2 w-[95%] max-w-7xl z-[100] bg-white/80 dark:bg-[#020617]/80 backdrop-blur-2xl border border-slate-200/50 dark:border-slate-800/50 rounded-[32px] shadow-2xl shadow-slate-900/5 overflow-hidden transition-all duration-300">
         <div className="px-6 lg:px-10 flex justify-between items-center h-20">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-emerald-500 rounded-2xl flex items-center justify-center text-white font-black text-xl shadow-lg shadow-emerald-500/20">ﺑ</div>
@@ -45,10 +45,45 @@ const LandingPage = () => {
             </button>
           </div>
 
-          <button className="md:hidden p-3 text-slate-900 dark:text-white" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+          <button className="md:hidden p-3 text-slate-900 dark:text-white hover:text-emerald-500 transition-colors" onClick={() => setIsMenuOpen(!isMenuOpen)}>
             {isMenuOpen ? <X size={28} /> : <Menu size={28} />}
           </button>
         </div>
+
+        {/* Mobile Menu Panel */}
+        <AnimatePresence>
+          {isMenuOpen && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.3, ease: 'easeInOut' }}
+              className="md:hidden border-t border-slate-100 dark:border-slate-800/50"
+            >
+              <div className="px-6 pb-6 pt-4 flex flex-col gap-4">
+                {['Features', 'Masjids', 'About'].map(link => (
+                  <a 
+                    key={link} 
+                    href={`#${link.toLowerCase()}`} 
+                    onClick={() => setIsMenuOpen(false)}
+                    className="text-sm font-black text-slate-500 hover:text-emerald-500 dark:hover:text-emerald-400 uppercase tracking-widest transition-colors py-2 block"
+                  >
+                    {link}
+                  </a>
+                ))}
+                <button 
+                  onClick={() => {
+                    setIsMenuOpen(false);
+                    navigate('/select-mosque');
+                  }} 
+                  className="w-full py-4 bg-slate-950 dark:bg-emerald-500 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all text-center mt-2 block"
+                >
+                  Launch App
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </nav>
 
       {/* ── Hero Section ── */}

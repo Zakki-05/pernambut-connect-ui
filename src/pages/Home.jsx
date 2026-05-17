@@ -5,7 +5,7 @@ import {
   MapPin, Bell, Clock, ChevronRight, AlertCircle, 
   Calendar, Heart, Users, Megaphone, Star, ArrowRight, BookOpen, Search
 } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { getHijriDate } from '../utils/dateUtils';
 import MasjidList from '../components/mosque/MasjidList';
 import BayanSection from '../components/layout/BayanSection';
