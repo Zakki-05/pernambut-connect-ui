@@ -1,30 +1,56 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Mail, Lock, Eye, EyeOff, ArrowRight, Loader2, Sparkles, CheckCircle2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 import { loginWithEmail } from '../services/api';
 
 const Login = () => {
-  const [email, setEmail]       = useState('');
+  const location                = useLocation();
+  const [email, setEmail]       = useState(location.state?.email || '');
   const [password, setPassword] = useState('');
   const [showPass, setShowPass] = useState(false);
   const [loading, setLoading]   = useState(false);
   const [error, setError]       = useState('');
+  const [successMsg, setSuccessMsg] = useState(location.state?.message || '');
   const { login }               = useAuth();
   const navigate                = useNavigate();
+
+  useEffect(() => {
+    if (location.state?.message) {
+      setSuccessMsg(location.state.message);
+    }
+    if (location.state?.email) {
+      setEmail(location.state.email);
+    }
+  }, [location.state]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!email || !password) return setError('Please enter your credentials');
-    setLoading(true); setError('');
+    setLoading(true); 
+    setError('');
+    setSuccessMsg('');
     try {
-      const res = await loginWithEmail(email, password);
+      const res = await loginWithEmail(email.trim(), password);
       login(res.data.user, res.data.access, res.data.refresh);
       navigate('/home');
     } catch (err) {
-      setError(err.response?.data?.error || 'Invalid credentials');
-    } finally { setLoading(false); }
+      const data = err.response?.data;
+      let errMsg = 'Invalid credentials';
+      if (typeof data?.error === 'string') {
+        errMsg = data.error;
+      } else if (typeof data?.detail === 'string') {
+        errMsg = data.detail;
+      } else if (err.message === 'Network Error') {
+        errMsg = 'Unable to reach the server. Please check your network or server status.';
+      } else if (err.message) {
+        errMsg = err.message;
+      }
+      setError(errMsg);
+    } finally { 
+      setLoading(false); 
+    }
   };
 
   return (
@@ -82,6 +108,13 @@ const Login = () => {
             <h2 className="text-4xl font-black text-slate-950 dark:text-white tracking-tight mb-3">Sign in</h2>
             <p className="text-slate-500 dark:text-slate-400 font-medium">Welcome back! Please enter your details.</p>
           </div>
+
+          {successMsg && (
+            <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}
+              className="mb-8 p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-900/10 border border-emerald-100 dark:border-emerald-900/20 text-emerald-600 dark:text-emerald-400 text-xs font-black uppercase tracking-widest flex items-center gap-2">
+              <CheckCircle2 size={16} /> {successMsg}
+            </motion.div>
+          )}
 
           {error && (
             <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}

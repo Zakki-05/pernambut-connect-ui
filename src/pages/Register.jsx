@@ -1,29 +1,69 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Mail, Lock, User, ArrowRight, Loader2, Sparkles, CheckCircle2 } from 'lucide-react';
+import { Mail, Lock, User, Eye, EyeOff, ArrowRight, Loader2, Sparkles, CheckCircle2 } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useAuth } from '../context/AuthContext';
 import { registerUser } from '../services/api';
 
 const Register = () => {
   const [formData, setFormData] = useState({ name: '', email: '', password: '', confirmPassword: '' });
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading]   = useState(false);
   const [error, setError]       = useState('');
+  const { login }               = useAuth();
   const navigate                = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (formData.password !== formData.confirmPassword) return setError('Passwords do not match');
-    setLoading(true); setError('');
+    if (formData.password.length < 6) {
+      return setError('Password must be at least 6 characters long');
+    }
+    if (formData.password !== formData.confirmPassword) {
+      return setError('Passwords do not match');
+    }
+    setLoading(true); 
+    setError('');
     try {
-      await registerUser({ 
-        name: formData.name, 
-        email: formData.email, 
+      const res = await registerUser({ 
+        name: formData.name.trim(), 
+        email: formData.email.trim(), 
         password: formData.password 
       });
-      navigate('/login');
+
+      if (res.data?.access && res.data?.user) {
+        login(res.data.user, res.data.access, res.data.refresh);
+        navigate('/home');
+      } else {
+        navigate('/login', { 
+          state: { 
+            message: 'Account created successfully! Please sign in.', 
+            email: formData.email 
+          } 
+        });
+      }
     } catch (err) {
-      setError(err.response?.data?.error || 'Registration failed');
-    } finally { setLoading(false); }
+      const data = err.response?.data;
+      let errMsg = 'Registration failed. Please try again.';
+      if (typeof data?.error === 'string') {
+        errMsg = data.error;
+      } else if (typeof data?.detail === 'string') {
+        errMsg = data.detail;
+      } else if (data?.email) {
+        errMsg = Array.isArray(data.email) ? data.email[0] : data.email;
+      } else if (data?.password) {
+        errMsg = Array.isArray(data.password) ? data.password[0] : data.password;
+      } else if (data && typeof data === 'object') {
+        const firstVal = Object.values(data).flat()[0];
+        if (firstVal) errMsg = String(firstVal);
+      } else if (err.message === 'Network Error') {
+        errMsg = 'Unable to connect to the server. Please verify the server is running or check your internet connection.';
+      } else if (err.message) {
+        errMsg = err.message;
+      }
+      setError(typeof errMsg === 'string' ? errMsg : 'Registration failed');
+    } finally { 
+      setLoading(false); 
+    }
   };
 
   return (
@@ -104,8 +144,22 @@ const Register = () => {
               <label className="text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest ml-1">Password</label>
               <div className="relative">
                 <Lock className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 dark:text-slate-600" size={18} />
-                <input type="password" value={formData.password} onChange={e => setFormData({...formData, password: e.target.value})} required placeholder="••••••••"
-                  className="form-input pl-14 h-16 text-slate-900 dark:text-white font-bold" />
+                <input 
+                  type={showPassword ? 'text' : 'password'} 
+                  value={formData.password} 
+                  onChange={e => setFormData({...formData, password: e.target.value})} 
+                  required 
+                  minLength={6}
+                  placeholder="••••••••"
+                  className="form-input pl-14 pr-12 h-16 text-slate-900 dark:text-white font-bold" 
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300"
+                >
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
               </div>
             </div>
 
@@ -113,8 +167,15 @@ const Register = () => {
               <label className="text-xs font-black text-slate-400 dark:text-slate-500 uppercase tracking-widest ml-1">Confirm Password</label>
               <div className="relative">
                 <Lock className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300 dark:text-slate-600" size={18} />
-                <input type="password" value={formData.confirmPassword} onChange={e => setFormData({...formData, confirmPassword: e.target.value})} required placeholder="••••••••"
-                  className="form-input pl-14 h-16 text-slate-900 dark:text-white font-bold" />
+                <input 
+                  type={showPassword ? 'text' : 'password'} 
+                  value={formData.confirmPassword} 
+                  onChange={e => setFormData({...formData, confirmPassword: e.target.value})} 
+                  required 
+                  minLength={6}
+                  placeholder="••••••••"
+                  className="form-input pl-14 pr-12 h-16 text-slate-900 dark:text-white font-bold" 
+                />
               </div>
             </div>
 
