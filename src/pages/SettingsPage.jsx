@@ -5,7 +5,7 @@ import {
   Database, Trash2, LogOut, HelpCircle, Trash, AlertTriangle,
   Search, User, Monitor, Smartphone, Chrome, Laptop,
   Cpu, Zap, Eye, Type, Link, Fingerprint, Activity,
-  Download, MessageSquare, ShieldCheck, Heart, Star
+  Download, MessageSquare, ShieldCheck, Heart, Star, HeartHandshake
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -189,9 +189,10 @@ const SettingsPage = () => {
       title: t('support') + ' & ' + t('data_storage'),
       icon: Info,
       items: [
+        { type: 'action', label: t('about_app'), description: "Our mission, masjids & Pernambut story", icon: HeartHandshake, color: 'emerald', onClick: () => navigate('/about') },
         { type: 'action', label: t('clear_cache'), description: t('clear_cache_desc'), icon: Database, color: 'blue', onClick: handleClearCache },
-        { type: 'action', label: t('help_center'), description: "FAQs and technical support", icon: HelpCircle, color: 'blue', onClick: () => window.open('mailto:support@pernambutconnects.com') },
-        { type: 'action', label: t('report_issue'), description: t('feedback_desc'), icon: MessageSquare, color: 'amber', onClick: () => alert("Opening feedback form...") }
+        { type: 'action', label: t('help_center'), description: "FAQs and technical support", icon: HelpCircle, color: 'blue', onClick: () => navigate('/about#faq') },
+        { type: 'action', label: t('report_issue'), description: t('feedback_desc'), icon: MessageSquare, color: 'amber', onClick: () => navigate('/about') }
       ]
     }
   ];

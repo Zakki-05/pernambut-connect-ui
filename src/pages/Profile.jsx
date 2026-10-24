@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { 
   MapPin, Settings, LogOut, ChevronRight, Edit3, Heart, 
-  Calendar, Bell, BookOpen, Shield, X, Check, Users, Mail, BadgeCheck, Zap, User
+  Calendar, Bell, BookOpen, Shield, X, Check, Users, Mail, BadgeCheck, Zap, User, Info
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useMosque } from '../context/MosqueContext';
@@ -35,9 +35,10 @@ const Profile = () => {
     {
       label: 'Preferences & Hub',
       items: [
-        { id: 'mosque',  icon: MapPin,   label: 'Assigned Mosque',  desc: selectedMosque?.name || 'Set your location', action: () => navigate('/select-mosque') },
-        { id: 'history', icon: Heart,    label: 'Contribution Log', desc: 'View donation history', action: () => navigate('/donation-history') },
-        { id: 'settings',icon: Settings, label: 'App Configuration', desc: 'Notifications & Theme', action: () => navigate('/settings') },
+        { id: 'mosque',   icon: MapPin,   label: 'Assigned Mosque',  desc: selectedMosque?.name || 'Set your location', action: () => navigate('/select-mosque') },
+        { id: 'history',  icon: Heart,    label: 'Contribution Log', desc: 'View donation history', action: () => navigate('/donation-history') },
+        { id: 'about',    icon: Info,     label: 'About Pernambut Connects', desc: 'Our mission, heritage & story', action: () => navigate('/about') },
+        { id: 'settings', icon: Settings, label: 'App Configuration', desc: 'Notifications & Theme', action: () => navigate('/settings') },
       ],
     },
   ].filter(g => g.items.length > 0);

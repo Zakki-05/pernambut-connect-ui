@@ -4,8 +4,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ChevronRight, Bell, Heart, Clock, Shield, Users, Star, 
   CheckCircle, ArrowRight, Menu, X, Twitter, Facebook, 
-  Instagram, MapPin, Compass, Sparkles, Zap
+  Instagram, MapPin, Compass, Sparkles, Zap, HeartHandshake,
+  BookOpen, Building2, ExternalLink, Globe2
 } from 'lucide-react';
+import ourStoryImg from '../our-story.png';
 
 const masjidsList = [
   { id: 1, name: "Chowk Masjid", location: "Central Pernambut", description: "The historic spiritual anchor of Pernambut, facilitating daily prayers and major community gatherings since generations.", image: "https://images.unsplash.com/photo-1564683214965-3619addd900d?q=80&w=800&auto=format&fit=crop" },
@@ -105,7 +107,13 @@ const LandingPage = () => {
               <button onClick={() => navigate('/select-mosque')} className="w-full sm:w-auto h-18 px-12 bg-emerald-500 text-white rounded-[24px] font-black text-lg shadow-2xl shadow-emerald-500/30 hover:scale-105 transition-all flex items-center justify-center gap-3">
                 Get Started <ArrowRight size={20} strokeWidth={3} />
               </button>
-              <button className="w-full sm:w-auto h-18 px-12 bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 text-slate-900 dark:text-white rounded-[24px] font-black text-lg hover:bg-white transition-all">
+              <button 
+                onClick={() => {
+                  const el = document.getElementById('about');
+                  el?.scrollIntoView({ behavior: 'smooth' });
+                }} 
+                className="w-full sm:w-auto h-18 px-12 bg-slate-50 dark:bg-slate-900 border border-slate-100 dark:border-slate-800 text-slate-900 dark:text-white rounded-[24px] font-black text-lg hover:bg-white dark:hover:bg-slate-800 transition-all cursor-pointer"
+              >
                 Learn More
               </button>
             </div>
@@ -193,6 +201,168 @@ const LandingPage = () => {
         </div>
       </section>
 
+      {/* ── About Section ── */}
+      <section id="about" className="py-36 px-6 lg:px-10 bg-gradient-to-b from-white via-slate-50/70 to-white dark:from-[#020617] dark:via-[#0b1329]/30 dark:to-[#020617] relative overflow-hidden border-t border-slate-100 dark:border-slate-800/80">
+        <div className="w-full max-w-7xl mx-auto relative z-10">
+          
+          {/* Section Header */}
+          <div className="text-center max-w-3xl mx-auto mb-20">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[10px] font-black uppercase tracking-[0.3em] mb-6 border border-emerald-500/20 shadow-sm">
+              <HeartHandshake size={14} /> Our Heritage & Mission
+            </div>
+            <h2 className="text-5xl lg:text-6xl font-black dark:text-white tracking-tighter mb-6 leading-tight">
+              The Story Behind <br />
+              <span className="gradient-text">Pernambut Connects</span>
+            </h2>
+            <p className="text-slate-500 dark:text-slate-400 font-medium text-lg leading-relaxed">
+              Uniting over 23 neighborhood masjids and thousands of families across Pernambut, Tamil Nadu into one digital heartbeat for prayer, welfare, and community solidarity.
+            </p>
+          </div>
+
+          {/* Two-Column Showcase */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center mb-24">
+            
+            {/* Left Column: Narrative & Values */}
+            <motion.div 
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7 }}
+              className="lg:col-span-6 space-y-8"
+            >
+              <div className="space-y-5 text-slate-600 dark:text-slate-400 font-medium text-base sm:text-lg leading-relaxed">
+                <p>
+                  Rooted in the historic artisan and leathercraft town of Pernambut, our community has flourished for generations around our sacred houses of Allah. With over 23 masjids spanning historic landmarks like <strong className="text-slate-900 dark:text-white font-black">Chowk Masjid</strong>, <strong className="text-slate-900 dark:text-white font-black">Jamiya Masjid</strong>, and <strong className="text-slate-900 dark:text-white font-black">Road Masjid</strong>, our town's pulse is guided by the five daily calls to prayer.
+                </p>
+                <p>
+                  Yet, coordinating Jama'at timings across seasons, sharing urgent Janaza bereavements, and organizing charity traditionally relied on word of mouth or fragmented groups. Pernambut Connects was born as a non-profit, volunteer-led bridge ensuring every resident—at home, at work, or abroad—stays synchronized with their neighborhood masjid.
+                </p>
+              </div>
+
+              {/* 4 Pillars Mini-Cards */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/70 dark:border-slate-800 shadow-sm hover:border-emerald-500/50 transition-colors">
+                  <div className="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 flex items-center justify-center font-black mb-3">
+                    <Clock size={20} />
+                  </div>
+                  <h4 className="font-black text-slate-900 dark:text-white text-sm mb-1">Spiritual Synchrony</h4>
+                  <p className="text-[11px] font-bold text-slate-400 leading-relaxed">Live Jama'at timetables updated directly by local imams & committees.</p>
+                </div>
+
+                <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/70 dark:border-slate-800 shadow-sm hover:border-amber-500/50 transition-colors">
+                  <div className="w-10 h-10 rounded-xl bg-amber-50 dark:bg-amber-500/10 text-amber-600 flex items-center justify-center font-black mb-3">
+                    <Bell size={20} />
+                  </div>
+                  <h4 className="font-black text-slate-900 dark:text-white text-sm mb-1">Instant Janaza Alerts</h4>
+                  <p className="text-[11px] font-bold text-slate-400 leading-relaxed">Verified bereavement notices so the community can join the funeral prayer.</p>
+                </div>
+
+                <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/70 dark:border-slate-800 shadow-sm hover:border-rose-500/50 transition-colors">
+                  <div className="w-10 h-10 rounded-xl bg-rose-50 dark:bg-rose-500/10 text-rose-600 flex items-center justify-center font-black mb-3">
+                    <Heart size={20} />
+                  </div>
+                  <h4 className="font-black text-slate-900 dark:text-white text-sm mb-1">Direct Sadaqah Hub</h4>
+                  <p className="text-[11px] font-bold text-slate-400 leading-relaxed">100% direct mosque contributions with zero platform deductions.</p>
+                </div>
+
+                <div className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/70 dark:border-slate-800 shadow-sm hover:border-blue-500/50 transition-colors">
+                  <div className="w-10 h-10 rounded-xl bg-blue-50 dark:bg-blue-500/10 text-blue-600 flex items-center justify-center font-black mb-3">
+                    <Globe2 size={20} />
+                  </div>
+                  <h4 className="font-black text-slate-900 dark:text-white text-sm mb-1">Trilingual Access</h4>
+                  <p className="text-[11px] font-bold text-slate-400 leading-relaxed">Native English, தமிழ் (Tamil), and اردو (Urdu) for all generations.</p>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex flex-col sm:flex-row items-center gap-4 pt-4">
+                <Link 
+                  to="/about"
+                  className="w-full sm:w-auto px-8 py-4 bg-slate-950 dark:bg-emerald-500 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-xl hover:scale-105 active:scale-95 transition-all text-center flex items-center justify-center gap-2"
+                >
+                  Read Full Story & FAQs <ArrowRight size={16} />
+                </Link>
+                <button 
+                  onClick={() => navigate('/select-mosque')}
+                  className="w-full sm:w-auto px-8 py-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-900 dark:text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] hover:border-emerald-500 transition-all text-center"
+                >
+                  Explore Masjids
+                </button>
+              </div>
+            </motion.div>
+
+            {/* Right Column: Visual Artwork */}
+            <motion.div 
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7 }}
+              className="lg:col-span-6 relative"
+            >
+              <div className="relative group">
+                <div className="absolute inset-0 bg-emerald-500/20 rounded-[50px] blur-[80px] group-hover:scale-105 transition-transform duration-700" />
+                
+                <div className="relative rounded-[48px] p-3 sm:p-5 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800 shadow-2xl overflow-hidden">
+                  
+                  {/* Floating Top Badge */}
+                  <div className="absolute top-6 left-6 z-20 flex items-center gap-2 px-4 py-2 rounded-full bg-slate-950/80 backdrop-blur-md text-white text-[11px] font-black uppercase tracking-widest border border-white/20 shadow-lg">
+                    <Building2 size={14} className="text-emerald-400" /> 23+ Mosques Synchronized
+                  </div>
+
+                  {/* Floating Corner Badge */}
+                  <div className="absolute top-6 right-6 z-20 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-500 text-white text-[10px] font-black uppercase tracking-widest shadow-lg">
+                    <Sparkles size={12} /> Community Hub
+                  </div>
+
+                  <div className="rounded-[36px] overflow-hidden border border-slate-100 dark:border-slate-800">
+                    <img 
+                      src={ourStoryImg} 
+                      alt="Pernambut Community & Mosque Ecosystem" 
+                      className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-700" 
+                    />
+                  </div>
+
+                  <div className="p-6 text-center">
+                    <p className="text-xs sm:text-sm font-bold text-slate-600 dark:text-slate-300">
+                      "Connecting and empowering the Muslim community through technology, unity, education, support, and local digital services."
+                    </p>
+                    <div className="mt-3 flex items-center justify-center gap-3 text-[10px] font-black uppercase tracking-widest text-emerald-600 dark:text-emerald-400">
+                      <MapPin size={12} /> Pernambut, Tamil Nadu • 100% Community Initiative
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+          </div>
+
+          {/* Stats Ribbon */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 p-8 rounded-[36px] bg-white dark:bg-slate-900/60 border border-slate-200/60 dark:border-slate-800 shadow-sm">
+            <div className="text-center p-4">
+              <div className="text-4xl lg:text-5xl font-black gradient-text mb-2">23+</div>
+              <p className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-wider">Active Masjids</p>
+              <p className="text-[10px] font-bold text-slate-400 mt-0.5">Across Pernambut Mohallas</p>
+            </div>
+            <div className="text-center p-4 border-l border-slate-200 dark:border-slate-800">
+              <div className="text-4xl lg:text-5xl font-black gold-text mb-2">5,000+</div>
+              <p className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-wider">Local Residents</p>
+              <p className="text-[10px] font-bold text-slate-400 mt-0.5">Connected Daily</p>
+            </div>
+            <div className="text-center p-4 border-l border-slate-200 dark:border-slate-800">
+              <div className="text-4xl lg:text-5xl font-black text-emerald-500 mb-2">100%</div>
+              <p className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-wider">Verified Bulletins</p>
+              <p className="text-[10px] font-bold text-slate-400 mt-0.5">Direct From Mosques</p>
+            </div>
+            <div className="text-center p-4 border-l border-slate-200 dark:border-slate-800">
+              <div className="text-4xl lg:text-5xl font-black text-blue-500 mb-2">3</div>
+              <p className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-wider">Languages</p>
+              <p className="text-[10px] font-bold text-slate-400 mt-0.5">English • தமிழ் • اردو</p>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
       {/* ── CTA Block ── */}
       <section className="py-40 px-6">
          <div className="w-full bg-slate-950 rounded-[80px] p-16 lg:p-32 text-center relative overflow-hidden shadow-2xl">
@@ -211,7 +381,7 @@ const LandingPage = () => {
 
       {/* ── Footer ── */}
       <footer className="bg-white dark:bg-[#020617] pt-32 pb-20 px-6 lg:px-10 border-t border-slate-100 dark:border-slate-800">
-        <div className="w-full">
+        <div className="w-full max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-20 mb-32">
              <div className="col-span-2">
                 <div className="flex items-center gap-3 mb-8">
@@ -226,13 +396,38 @@ const LandingPage = () => {
              <div>
                 <h5 className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-[0.4em] mb-10">Navigation</h5>
                 <ul className="space-y-6">
-                   {['Features', 'Masjids', 'Support', 'Contact'].map(l => <li key={l} className="text-sm font-black text-slate-400 hover:text-emerald-500 uppercase tracking-widest cursor-pointer transition-colors">{l}</li>)}
+                   {[
+                     { label: 'Features', to: '#features' },
+                     { label: 'Masjids', to: '#masjids' },
+                     { label: 'About Us', to: '/about' },
+                     { label: 'Community FAQ', to: '/about#faq' }
+                   ].map(item => (
+                     <li key={item.label}>
+                       {item.to.startsWith('#') ? (
+                         <a href={item.to} className="text-sm font-black text-slate-400 hover:text-emerald-500 uppercase tracking-widest cursor-pointer transition-colors">
+                           {item.label}
+                         </a>
+                       ) : (
+                         <Link to={item.to} className="text-sm font-black text-slate-400 hover:text-emerald-500 uppercase tracking-widest cursor-pointer transition-colors">
+                           {item.label}
+                         </Link>
+                       )}
+                     </li>
+                   ))}
                 </ul>
              </div>
              <div>
-                <h5 className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-[0.4em] mb-10">Legal</h5>
+                <h5 className="text-[10px] font-black text-slate-900 dark:text-white uppercase tracking-[0.4em] mb-10">Legal & Support</h5>
                 <ul className="space-y-6">
-                   {['Privacy', 'Terms', 'Credits'].map(l => <li key={l} className="text-sm font-black text-slate-400 hover:text-emerald-500 uppercase tracking-widest cursor-pointer transition-colors">{l}</li>)}
+                   <li className="text-sm font-black text-slate-400 hover:text-emerald-500 uppercase tracking-widest cursor-pointer transition-colors">
+                     <Link to="/about">Privacy & Trust</Link>
+                   </li>
+                   <li className="text-sm font-black text-slate-400 hover:text-emerald-500 uppercase tracking-widest cursor-pointer transition-colors">
+                     <Link to="/about">Terms of Service</Link>
+                   </li>
+                   <li className="text-sm font-black text-slate-400 hover:text-emerald-500 uppercase tracking-widest cursor-pointer transition-colors">
+                     <a href="mailto:zakkiadnan05@gmail.com">Contact Helpline</a>
+                   </li>
                 </ul>
              </div>
           </div>

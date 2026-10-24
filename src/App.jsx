@@ -18,6 +18,7 @@ import DeathNews from './pages/DeathNews';
 import AdminHub from './pages/AdminHub';
 import Notifications from './pages/Notifications';
 import LandingPage from './pages/LandingPage';
+import About from './pages/About';
 import ScrollToTop from './components/layout/ScrollToTop';
 import ScrollToTopButton from './components/layout/ScrollToTopButton';
 
@@ -63,6 +64,7 @@ function App() {
       <div className="min-h-screen bg-gray-50 dark:bg-[#020617]">
         <Routes>
           <Route path="/" element={<LandingPage />} />
+          <Route path="/about" element={<About />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/select-mosque" element={

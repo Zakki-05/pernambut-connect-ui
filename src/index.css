@@ -27,6 +27,10 @@
 }
 
 /* ── Base Styles ── */
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   font-family: 'Manrope', 'Inter', sans-serif;
   background-color: var(--bg-light);
