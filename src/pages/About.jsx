@@ -9,7 +9,7 @@ import {
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../context/AuthContext';
-import ourStoryImg from '../our-story.png';
+import ourStoryImg from '../our-story.jpg';
 
 const faqs = [
   {

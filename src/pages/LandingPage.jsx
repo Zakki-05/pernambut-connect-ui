@@ -7,7 +7,7 @@ import {
   Instagram, MapPin, Compass, Sparkles, Zap, HeartHandshake,
   BookOpen, Building2, ExternalLink, Globe2
 } from 'lucide-react';
-import ourStoryImg from '../our-story.png';
+import ourStoryImg from '../our-story.jpg';
 
 const masjidsList = [
   { id: 1, name: "Chowk Masjid", location: "Central Pernambut", description: "The historic spiritual anchor of Pernambut, facilitating daily prayers and major community gatherings since generations.", image: "https://images.unsplash.com/photo-1564683214965-3619addd900d?q=80&w=800&auto=format&fit=crop" },
